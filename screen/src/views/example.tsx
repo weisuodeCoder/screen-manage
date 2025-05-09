@@ -46,9 +46,9 @@ function Center() {
   ];
 
   return (
-    <>
+    <div style={{ width: "500px", height: "300px" }}>
       <ChartMap elementId="mapContainer" datas={datas} />
-    </>
+    </div>
   );
 }
 

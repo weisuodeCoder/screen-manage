@@ -5,6 +5,7 @@ import FadeLine from "./components/fadeInLine/FadeLine";
 import ReleaseBar from "./components/releaseBar/ReleaseBar";
 import HorizontalBar from "./components/horizontalBar/HorizontalBar";
 import ThreeDPie from "./components/3dPie/ThreeDPie";
+import Example from "./views/example";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <ReleaseBar />
       <HorizontalBar />
       <ThreeDPie />
+      <Example />
     </>
   );
 }
