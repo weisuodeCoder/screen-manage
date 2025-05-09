@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="292" height="125" viewBox="0 0 292 125" fill="none">
+<path     fill="url(#linear_fill_0_163_0)" fill-opacity="0.4000000059604645" d="M0 3L292 3L292 117L284 125L0 125L0 3Z">
+</path>
+<path fill-rule="evenodd"  fill="rgba(31, 198, 255, 0.24)"  d="M0 3L0 125L284 125L292 117L292 3L0 3ZM1 4L1 124L283.586 124L291 116.586L291 4L1 4Z">
+</path>
+<path d="M0 0L16 0L20 4L0 4L0 0Z"   fill="#1FC6FF" >
+</path>
+<path d="M21 0L25 0L29 4L25 4L21 0Z"   fill="#1FC6FF" >
+</path>
+<path d="M30 0L34 0L38 4L34 4L30 0Z"   fill="#1FC6FF" >
+</path>
+<path d="M39 0L43 0L47 4L43 4L39 0Z"   fill="#1FC6FF" >
+</path>
+<rect x="260" y="3" width="32" height="1"   fill="#1FC6FF" >
+</rect>
+<rect x="0" y="124" width="32" height="1"   fill="#1FC6FF" >
+</rect>
+<path d="M292 119L292 125L286 125L292 119Z"   fill="#1FC6FF" >
+</path>
+<defs>
+<linearGradient id="linear_fill_0_163_0" x1="146" y1="3" x2="146" y2="127" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#1FC6FF" stop-opacity="0" />
+<stop offset="1" stop-color="#1FC6FF"  />
+</linearGradient>
+</defs>
+</svg>
