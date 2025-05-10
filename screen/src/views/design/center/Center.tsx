@@ -4,7 +4,7 @@ import Card, { DirectionEnum } from "../card/Card";
 import { SlotListImpl } from "../types";
 
 interface PropsImpl {
-  slotList: [SlotListImpl];
+  slotList: [SlotListImpl, SlotListImpl];
 }
 
 export default function Center({ slotList }: PropsImpl) {
@@ -12,13 +12,14 @@ export default function Center({ slotList }: PropsImpl) {
     <div className="center_main">
       <div className="center_one">{slotList[0].slot}</div>
       <div className="center_two">
-        <Card
+        {slotList[1].slot}
+        {/* <Card
           style={{ height: "100%" }}
           direction={DirectionEnum.CENTER}
-          title="这是中间"
-          subtitle=""
-          slot={<></>}
-        />
+          title={slotList[1].title}
+          subtitle={slotList[1].subtitle}
+          slot={slotList[1].slot}
+        /> */}
       </div>
     </div>
   );

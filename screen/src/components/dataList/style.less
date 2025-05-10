@@ -1,0 +1,45 @@
+.data_list_card_main {
+    padding: 1vh 0;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    .item {
+        position: relative;
+        width: 24%;
+        height: 5vh;
+
+
+        &::after {
+            content: '';
+            flex: auto;
+        }
+        .item_icon {
+            position: absolute;
+            width: 5vh;
+            height: 5vh;
+            background: url(@/assets/images/datas.png) no-repeat center center;
+            background-size: 100% 100%;
+        }
+        .item_name {
+            position: absolute;
+            top: 1.7vh;
+            left: 6vh;
+            color: #4abefd;
+            font-weight: bold;
+            font-size: 1vw;
+            line-height: 1vw;
+        }
+        .item_value {
+            position: absolute;
+            color: #f3a33c;
+            top: 1.8vh;
+            width: 5vh;
+            text-align: center;
+            font-size: .9vw;
+            line-height: .9vw;
+            font-weight: bold;
+            text-shadow: .2vh .2vw .3vw #000000;
+        }
+    }
+}

@@ -13,7 +13,10 @@ import ReleaseBar from "@/components/releaseBar/ReleaseBar";
 import HorizontalBar from "@/components/horizontalBar/HorizontalBar";
 import ChartMap from "@/components/map/ChartMap";
 import ThreeDPie from "@/components/3dPie/ThreeDPie";
+import DataListCard from "@/components/dataList/DataListCard";
+import DataCard from "@/components/dataCard/DataCard";
 import { centerDatas } from "./datas";
+import { title } from "process";
 
 // 队伍教育
 // 分班情况
@@ -44,11 +47,16 @@ export default function Home() {
     },
   ]);
 
-  const [centerList, setCenterList] = useState<[SlotListImpl]>([
+  const [centerList, setCenterList] = useState<[SlotListImpl, SlotListImpl]>([
     {
       title: "地图",
       subtitle: "副标题",
       slot: <ChartMap elementId="mapContainer" datas={centerDatas} />,
+    },
+    {
+      title: "我是中间的数据",
+      subtitle: "",
+      slot: <DataListCard />,
     },
   ]);
 
@@ -56,7 +64,7 @@ export default function Home() {
     {
       title: "智慧功鉴",
       subtitle: "智能管控平台，提升监督效能",
-      slot: <Pie />,
+      slot: <DataCard />,
     },
     {
       title: "技能培训",

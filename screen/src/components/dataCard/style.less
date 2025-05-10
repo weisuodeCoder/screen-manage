@@ -1,0 +1,75 @@
+.data_card_main {
+    padding: 0 0.5vw;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .data_card_1 {
+        position: relative;
+        width: 100%;
+        height: 20%;
+        background: url(@/assets/images/border_1.png) no-repeat;
+        background-size: 100% 100%;
+        .c_1_title {
+            position: absolute;
+            top: 1.2vh;
+            left: 4vw;
+            font-size: 1vw;
+            line-height: 1vw;
+            color: #83abcf;
+        }
+        .c_1_content {
+            position: absolute;
+            top: .9vh;
+            left: 14vw;
+            font-size: 1.5vw;
+            line-height: 1.5vw;
+            color: #67acdf;
+        }
+    }
+    .data_card_2 {
+        width: 100%;
+        height: 20%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .card_item {
+            position: relative;
+            width: 48.5%;
+            height: 100%;
+            background: url(@/assets/images/border_2.png) no-repeat;
+            background-size: 100% 100%;
+            .i_title {
+                position: absolute;
+                top: 1.4vh;
+                left: 1.5vw;
+                font-size: .7vw;
+                line-height: .7vw;
+                color: #83abcf;
+            }
+            .i_content {
+                position: absolute;
+                top: 1.3vh;
+                left: 5.5vw;
+                font-size: 1.1vw;
+                line-height: 1.1vw;
+                color: #67acdf;
+            }
+        }
+    }
+    .data_card_3 {
+        position: relative;
+        width: 100%;
+        height: 50%;
+        background: url(@/assets/images/border_3.png) no-repeat;
+        background-size: 100% 100%;
+        .c_3_chart {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 90%;
+            height: 80%;
+        }
+    }
+}
