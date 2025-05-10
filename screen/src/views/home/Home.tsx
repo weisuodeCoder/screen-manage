@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./style.less";
-import Title from "../design/title/Title";
-import Left from "../design/left/Left";
-import Center from "../design/center/Center";
-import Right from "../design/right/Right";
-import { SlotListImpl } from "../design/types";
+
 // 组件
 import Pie from "@/components/pie/Pie";
 import GradientLine from "@/components/gradientLine/GradientLine";
@@ -16,15 +12,12 @@ import ThreeDPie from "@/components/3dPie/ThreeDPie";
 import DataListCard from "@/components/dataList/DataListCard";
 import DataCard from "@/components/dataCard/DataCard";
 import { centerDatas } from "./datas";
-import { title } from "process";
 
-// 队伍教育
-// 分班情况
-// 三学成绩
-
-// 智慧功监
-// 技能培训
-// 大走访、大回访
+import Title from "../design/title/Title";
+import Left from "../design/left/Left";
+import Center from "../design/center/Center";
+import Right from "../design/right/Right";
+import { SlotListImpl } from "../design/types";
 
 type SlotListType = [SlotListImpl, SlotListImpl, SlotListImpl];
 
