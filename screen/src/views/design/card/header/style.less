@@ -1,0 +1,63 @@
+.card_header_main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .header_bg {
+        position: absolute;
+        top: 0;
+        width: 70%;
+        height: 100%;
+        background-size: contain;
+    }
+    .header_bg_left {
+        background: url(@/assets/images/sub_title_l.png) no-repeat left;
+        left: .5vw;
+    }
+    .header_bg_center {
+        background: url(@/assets/images/sub_title_cc.png) no-repeat center;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .header_bg_right {
+        background: url(@/assets/images/sub_title_r.png) no-repeat right;
+        right: .5vw;
+    }
+    .header_title {
+        position: absolute;
+        top: 1vh;
+        font-family: 'YouSheBiaoTiHei-2';
+        font-size: 1.3vw;
+        line-height: 1.3vw;
+    }
+    .header_title_left {
+        left: 3.5vw;
+    }
+    .header_title_center {
+        text-align: center;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .header_title_right {
+        right: 3.5vw;
+    }
+    .header_sub_title {
+        position: absolute;
+        top: 1vh;
+        width: 10vw;
+        font-family: 'YouSheBiaoTiHei-2';
+        font-size: .7vw;
+        line-height: .7vw;
+    }
+    .header_sub_title_left {
+        text-align: left;
+        left: 100%;
+        margin-left: 2vw;
+    }
+    .header_sub_title_left {
+    }
+    .header_sub_title_right {
+        text-align: right;
+        right: 100%;
+        margin-right: 2vw;
+    }
+}

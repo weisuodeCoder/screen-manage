@@ -1,0 +1,56 @@
+.title_main {
+    position: relative;
+    height: 100%;
+    .title_center {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 75vh;
+        height: 90%;
+        text-align: center;
+        .bg_light {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(
+                ellipse at top center,
+                #019afa55 0%,
+                #1e8cd855 40%,
+                #0e7cc400 70%,
+                #066cae00 100%
+              );
+        }
+        .center_text {
+            position: absolute;
+            top: 1vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: 'YouSheBiaoTiHei-2';
+            font-size: 2vw;
+            line-height: 2vw;
+        }
+        .center_sub_text {
+            position: absolute;
+            top: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: 'YouSheBiaoTiHei-2';
+            font-size: .8vw;
+            line-height: .8vw;
+        }
+        .title_dress {
+            position: absolute;
+            top: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75vw;
+            height: 2vw;
+            background: url(@/assets/images/title.dress.png) no-repeat;
+            background-size: 100%;
+        }
+    }
+}
