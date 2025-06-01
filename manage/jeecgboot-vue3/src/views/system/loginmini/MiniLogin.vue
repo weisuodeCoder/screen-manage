@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls" class="login-background-img">
-    <AppLocalePicker class="absolute top-4 right-4 enter-x xl:text-gray-600" :showText="false"/>
+    <AppLocalePicker class="absolute top-4 right-4 enter-x xl:text-gray-600" :showText="false" />
     <AppDarkModeToggle class="absolute top-3 right-7 enter-x" />
     <div class="aui-logo" v-if="!getIsMobile">
       <div>
@@ -27,9 +27,6 @@
                   <div class="aui-flex-box" :class="activeIndex === 'accountLogin' ? 'activeNav on' : ''" @click="loginClick('accountLogin')"
                     >{{ t('sys.login.signInFormTitle') }}
                   </div>
-                  <div class="aui-flex-box" :class="activeIndex === 'phoneLogin' ? 'activeNav on' : ''" @click="loginClick('phoneLogin')"
-                    >{{ t('sys.login.mobileSignInFormTitle') }}
-                  </div>
                 </div>
                 <div class="aui-form-box" style="height: 180px">
                   <a-form ref="loginRef" :model="formData" v-if="activeIndex === 'accountLogin'" @keyup.enter.native="loginHandleClick">
@@ -46,16 +43,6 @@
                           <a-input class="fix-auto-fill" type="password" :placeholder="t('sys.login.password')" v-model:value="formData.password" />
                         </a-form-item>
                       </div>
-                      <div class="aui-inputClear">
-                        <i class="icon icon-code"></i>
-                        <a-form-item>
-                          <a-input class="fix-auto-fill" type="text" :placeholder="t('sys.login.inputCode')" v-model:value="formData.inputCode" />
-                        </a-form-item>
-                        <div class="aui-code">
-                          <img v-if="randCodeData.requestCodeSuccess" :src="randCodeData.randCodeImage" @click="handleChangeCheckCode" />
-                          <img v-else style="margin-top: 2px; max-width: initial" :src="codeImg" @click="handleChangeCheckCode" />
-                        </div>
-                      </div>
                       <div class="aui-flex">
                         <div class="aui-flex-box">
                           <div class="aui-choice">
@@ -69,65 +56,15 @@
                       </div>
                     </div>
                   </a-form>
-                  <a-form v-else ref="phoneFormRef" :model="phoneFormData" @keyup.enter.native="loginHandleClick">
-                    <div class="aui-account phone">
-                      <div class="aui-inputClear phoneClear">
-                        <a-input class="fix-auto-fill" :placeholder="t('sys.login.mobile')" v-model:value="phoneFormData.mobile" />
-                      </div>
-                      <div class="aui-inputClear">
-                        <a-input class="fix-auto-fill" :maxlength="6" :placeholder="t('sys.login.smsCode')" v-model:value="phoneFormData.smscode" />
-                        <div v-if="showInterval" class="aui-code" @click="getLoginCode">
-                          <a>{{ t('component.countdown.normalText') }}</a>
-                        </div>
-                        <div v-else class="aui-code">
-                          <span class="aui-get-code code-shape">{{ t('component.countdown.sendText', [unref(timeRuning)]) }}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </a-form>
                 </div>
                 <div class="aui-formButton">
                   <div class="aui-flex">
                     <a-button :loading="loginLoading" class="aui-link-login" type="primary" @click="loginHandleClick">
-                      {{ t('sys.login.loginButton') }}</a-button>
-                  </div>
-                  <div class="aui-flex">
-                    <a class="aui-linek-code aui-flex-box" @click="codeHandleClick">{{ t('sys.login.qrSignInFormTitle') }}</a>
-                  </div>
-                  <div class="aui-flex">
-                    <a class="aui-linek-code aui-flex-box" @click="registerHandleClick">{{ t('sys.login.registerButton') }}</a>
+                      {{ t('sys.login.loginButton') }}</a-button
+                    >
                   </div>
                 </div>
               </div>
-              <a-form @keyup.enter.native="loginHandleClick">
-                <div class="aui-flex aui-third-text">
-                  <div class="aui-flex-box aui-third-border">
-                    <span>{{ t('sys.login.otherSignIn') }}</span>
-                  </div>
-                </div>
-                <div class="aui-flex" :class="`${prefixCls}-sign-in-way`">
-                  <div class="aui-flex-box">
-                    <div class="aui-third-login">
-                      <a title="github" @click="onThirdLogin('github')"><GithubFilled /></a>
-                    </div>
-                  </div>
-                  <div class="aui-flex-box">
-                    <div class="aui-third-login">
-                      <a title="企业微信" @click="onThirdLogin('wechat_enterprise')"><icon-font class="item-icon" type="icon-qiyeweixin3" /></a>
-                    </div>
-                  </div>
-                  <div class="aui-flex-box">
-                    <div class="aui-third-login">
-                      <a title="钉钉" @click="onThirdLogin('dingtalk')"><DingtalkCircleFilled /></a>
-                    </div>
-                  </div>
-                  <div class="aui-flex-box">
-                    <div class="aui-third-login">
-                      <a title="微信" @click="onThirdLogin('wechat_open')"><WechatFilled /></a>
-                    </div>
-                  </div>
-                </div>
-              </a-form>
             </div>
           </div>
         </div>
@@ -144,7 +81,7 @@
     </div>
     <!-- 第三方登录相关弹框 -->
     <ThirdModal ref="thirdModalRef"></ThirdModal>
-    
+
     <!-- 图片验证码弹窗 -->
     <CaptchaModal @register="captchaRegisterModal" @ok="getLoginCode" />
   </div>
@@ -166,12 +103,12 @@
   import adTextImg from '/@/assets/loginmini/icon/jeecg_ad_text.png';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import { useLocaleStore } from '/@/store/modules/locale';
-  import { useDesign } from "/@/hooks/web/useDesign";
-  import { useAppInject } from "/@/hooks/web/useAppInject";
+  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useAppInject } from '/@/hooks/web/useAppInject';
   import { GithubFilled, WechatFilled, DingtalkCircleFilled, createFromIconfontCN } from '@ant-design/icons-vue';
   import CaptchaModal from '@/components/jeecg/captcha/CaptchaModal.vue';
-  import { useModal } from "@/components/Modal";
-  import { ExceptionEnum } from "@/enums/exceptionEnum";
+  import { useModal } from '@/components/Modal';
+  import { ExceptionEnum } from '@/enums/exceptionEnum';
 
   const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_2316098_umqusozousr.js',
@@ -182,18 +119,18 @@
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const showLocale = localeStore.getShowPicker;
-  const randCodeData = reactive<any>({
-    randCodeImage: '',
-    requestCodeSuccess: false,
-    checkKey: null,
-  });
+  // const randCodeData = reactive<any>({
+  //   randCodeImage: '',
+  //   requestCodeSuccess: false,
+  //   checkKey: null,
+  // });
   const rememberMe = ref<string>('0');
   //手机号登录还是账号登录
   const activeIndex = ref<string>('accountLogin');
   const type = ref<string>('login');
   //账号登录表单字段
   const formData = reactive<any>({
-    inputCode: '',
+    // inputCode: '',
     username: 'admin',
     password: '123456',
   });
@@ -230,14 +167,14 @@
    * 获取验证码
    */
   function handleChangeCheckCode() {
-    formData.inputCode = '';
-    //update-begin---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]验证码可以复用 #7674------------
-    randCodeData.checkKey = new Date().getTime() + Math.random().toString(36).slice(-4); // 1629428467008;
-    //update-end---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]验证码可以复用 #7674------------
-    getCodeInfo(randCodeData.checkKey).then((res) => {
-      randCodeData.randCodeImage = res;
-      randCodeData.requestCodeSuccess = true;
-    });
+    // formData.inputCode = '';
+    // //update-begin---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]验证码可以复用 #7674------------
+    // randCodeData.checkKey = new Date().getTime() + Math.random().toString(36).slice(-4); // 1629428467008;
+    // //update-end---author:chenrui ---date:2025/1/7  for：[QQYUN-10775]验证码可以复用 #7674------------
+    // getCodeInfo(randCodeData.checkKey).then((res) => {
+    //   randCodeData.randCodeImage = res;
+    //   randCodeData.requestCodeSuccess = true;
+    // });
   }
 
   /**
@@ -255,7 +192,6 @@
       accountLogin();
     } else {
       //手机号登录
-      phoneLogin();
     }
   }
 
@@ -270,12 +206,13 @@
     }
     try {
       loginLoading.value = true;
+      // @ts-ignore
       const { userInfo } = await userStore.login(
         toRaw({
           password: formData.password,
           username: formData.username,
-          captcha: formData.inputCode,
-          checkKey: randCodeData.checkKey,
+          // captcha: formData.inputCode,
+          // checkKey: randCodeData.checkKey,
           mode: 'none', //不要默认的错误提示
         })
       );
@@ -286,50 +223,13 @@
           duration: 3,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       notification.error({
         message: t('sys.api.errorTip'),
         description: error.message || t('sys.login.networkExceptionMsg'),
         duration: 3,
       });
       handleChangeCheckCode();
-    } finally {
-      loginLoading.value = false;
-    }
-  }
-
-  /**
-   * 手机号登录
-   */
-  async function phoneLogin() {
-    if (!phoneFormData.mobile) {
-      createMessage.warn(t('sys.login.mobilePlaceholder'));
-      return;
-    }
-    if (!phoneFormData.smscode) {
-      createMessage.warn(t('sys.login.smsPlaceholder'));
-      return;
-    }
-    try {
-      loginLoading.value = true;
-      const { userInfo }: any = await userStore.phoneLogin({
-        mobile: phoneFormData.mobile,
-        captcha: phoneFormData.smscode,
-        mode: 'none', //不要默认的错误提示
-      });
-      if (userInfo) {
-        notification.success({
-          message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realname}`,
-          duration: 3,
-        });
-      }
-    } catch (error) {
-      notification.error({
-        message: t('sys.api.errorTip'),
-        description: error.message || t('sys.login.networkExceptionMsg'),
-        duration: 3,
-      });
     } finally {
       loginLoading.value = false;
     }
@@ -344,8 +244,8 @@
       return;
     }
     //update-begin---author:wangshuai---date:2024-04-18---for:【QQYUN-9005】同一个IP，1分钟超过5次短信，则提示需要验证码---
-    const result = await getCaptcha({ mobile: phoneFormData.mobile, smsmode: SmsEnum.FORGET_PASSWORD }).catch((res) =>{
-      if(res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE){
+    const result = await getCaptcha({ mobile: phoneFormData.mobile, smsmode: SmsEnum.FORGET_PASSWORD }).catch((res) => {
+      if (res.code === ExceptionEnum.PHONE_SMS_FAIL_CODE) {
         openCaptchaModal(true, {});
       }
     });
@@ -400,7 +300,7 @@
    */
   function handleSuccess(value) {
     Object.assign(formData, value);
-    Object.assign(phoneFormData, { mobile: "", smscode: "" });
+    Object.assign(phoneFormData, { mobile: '', smscode: '' });
     type.value = 'login';
     activeIndex.value = 'accountLogin';
     handleChangeCheckCode();
@@ -461,11 +361,11 @@
     color: #aaa !important;
   }
 
-  :deep(.jeecg-dark-switch){
-    position:absolute;
+  :deep(.jeecg-dark-switch) {
+    position: absolute;
     margin-right: 10px;
   }
-  .aui-link-login{
+  .aui-link-login {
     height: 42px;
     padding: 10px 15px;
     font-size: 14px;
@@ -475,100 +375,103 @@
     flex: 1;
     color: #fff;
   }
-  .aui-phone-logo{
+  .aui-phone-logo {
     position: absolute;
     margin-left: 10px;
     width: 60px;
-    top:2px;
+    top: 2px;
     z-index: 4;
   }
-  .top-3{
+  .top-3 {
     top: 0.45rem;
   }
 </style>
 
 <style lang="less">
-@prefix-cls: ~'@{namespace}-mini-login';
-@dark-bg: #293146;
+  @prefix-cls: ~'@{namespace}-mini-login';
+  @dark-bg: #293146;
 
-html[data-theme='dark'] {
-  .@{prefix-cls} {
-    background-color: @dark-bg !important;
-    background-image: none;
-
-    &::before {
-      background-image: url(/@/assets/svg/login-bg-dark.svg);
-    }
-    .aui-inputClear{
-      background-color: #232a3b !important;
-    }
-    .ant-input,
-    .ant-input-password {
-      background-color: #232a3b !important;
-    }
-
-    .ant-btn:not(.ant-btn-link):not(.ant-btn-primary) {
-      border: 1px solid #4a5569 !important;
-    }
-
-    &-form {
-      background: @dark-bg !important;
-    }
-
-    .app-iconify {
-      color: #fff !important;
-    }
-    .aui-inputClear input,.aui-input-line input,.aui-choice{
-      color: #c9d1d9 !important;
-    }
-
-    .aui-formBox{
+  html[data-theme='dark'] {
+    .@{prefix-cls} {
       background-color: @dark-bg !important;
-    }
-    .aui-third-text span{
-      background-color: @dark-bg !important;
-    }
-    .aui-form-nav .aui-flex-box{
-      color: #c9d1d9 !important;
-    }
+      background-image: none;
 
-    .aui-formButton .aui-linek-code{
-      background:  @dark-bg !important;
-      color: white !important;
-    }
-    .aui-code-line{
-      border-left: none !important;
-    }
-    .ant-checkbox-inner,.aui-success h3{
-      border-color: #c9d1d9;
-    }
-    //update-begin---author:wangshuai ---date:20230828  for：【QQYUN-6363】这个样式代码有问题，不在里面，导致表达式有问题------------
-    &-sign-in-way {
-      .anticon {
-        font-size: 22px !important;
-        color: #888 !important;
-        cursor: pointer !important;
+      &::before {
+        background-image: url(/@/assets/svg/login-bg-dark.svg);
+      }
+      .aui-inputClear {
+        background-color: #232a3b !important;
+      }
+      .ant-input,
+      .ant-input-password {
+        background-color: #232a3b !important;
+      }
 
-        &:hover {
-          color: @primary-color !important;
+      .ant-btn:not(.ant-btn-link):not(.ant-btn-primary) {
+        border: 1px solid #4a5569 !important;
+      }
+
+      &-form {
+        background: @dark-bg !important;
+      }
+
+      .app-iconify {
+        color: #fff !important;
+      }
+      .aui-inputClear input,
+      .aui-input-line input,
+      .aui-choice {
+        color: #c9d1d9 !important;
+      }
+
+      .aui-formBox {
+        background-color: @dark-bg !important;
+      }
+      .aui-third-text span {
+        background-color: @dark-bg !important;
+      }
+      .aui-form-nav .aui-flex-box {
+        color: #c9d1d9 !important;
+      }
+
+      .aui-formButton .aui-linek-code {
+        background: @dark-bg !important;
+        color: white !important;
+      }
+      .aui-code-line {
+        border-left: none !important;
+      }
+      .ant-checkbox-inner,
+      .aui-success h3 {
+        border-color: #c9d1d9;
+      }
+      //update-begin---author:wangshuai ---date:20230828  for：【QQYUN-6363】这个样式代码有问题，不在里面，导致表达式有问题------------
+      &-sign-in-way {
+        .anticon {
+          font-size: 22px !important;
+          color: #888 !important;
+          cursor: pointer !important;
+
+          &:hover {
+            color: @primary-color !important;
+          }
         }
       }
+      //update-end---author:wangshuai ---date:20230828  for：【QQYUN-6363】这个样式代码有问题，不在里面，导致表达式有问题------------
     }
-    //update-end---author:wangshuai ---date:20230828  for：【QQYUN-6363】这个样式代码有问题，不在里面，导致表达式有问题------------
-  }
 
-  input.fix-auto-fill,
-  .fix-auto-fill input {
-    -webkit-text-fill-color: #c9d1d9 !important;
-    box-shadow: inherit !important;
+    input.fix-auto-fill,
+    .fix-auto-fill input {
+      -webkit-text-fill-color: #c9d1d9 !important;
+      box-shadow: inherit !important;
+    }
+
+    .ant-divider-inner-text {
+      font-size: 12px !important;
+      color: @text-color-secondary !important;
+    }
+    .aui-third-login a {
+      background: transparent;
+    }
   }
-  
-  .ant-divider-inner-text {
-    font-size: 12px !important;
-    color: @text-color-secondary !important;
-  }
-  .aui-third-login a{
-    background: transparent;
-  }
-}
 </style>

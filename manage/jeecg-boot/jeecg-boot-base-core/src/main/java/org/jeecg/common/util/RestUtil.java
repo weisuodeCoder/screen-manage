@@ -36,7 +36,6 @@ public class RestUtil {
         }
         return domain;
     }
-
     private static String getPath() {
         if (path == null) {
             path = SpringContextUtils.getApplicationContext().getEnvironment().getProperty("server.servlet.context-path");
