@@ -21,13 +21,14 @@ export default function DataListCard() {
     { name: "数据3", value: 383 },
     { name: "数据3", value: 383 },
   ]);
+
   return (
     <div
       style={{ width: "100%", height: "100%" }}
       className="data_list_card_main"
     >
-      {datas.map((item) => (
-        <div className="item">
+      {datas.map((item, index) => (
+        <div className="item" key={index}>
           <div className="item_icon"></div>
           <div className="item_name">{item.name}</div>
           <div className="item_value">{item.value}</div>

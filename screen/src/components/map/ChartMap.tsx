@@ -223,19 +223,22 @@ const ChartMap = forwardRef(
       let instance: any;
 
       const setup = async () => {
-        await setOptions("china");
+        // await setOptions("china");
+        await setOptions(650000);
         instance = chartInstance.current;
         if (!instance) return;
 
-        instance.off("dblclick"); // 防止重复绑定
-        instance.on("dblclick", async (e: any) => {
-          const adcode = e.data?.value;
-          if (currentMap.current === "china" && adcode) {
-            await setOptions(adcode); // 进入省地图
-          } else {
-            await setOptions("china"); // 返回全国
-          }
-        });
+        // instance.off("dblclick"); // 防止重复绑定
+        // instance.on("dblclick", async (e: any) => {
+        //   const adcode = e.data?.value;
+        //   if (currentMap.current === "china" && adcode) {
+        //     console.log(adcode);
+
+        //     await setOptions(adcode); // 进入省地图
+        //   } else {
+        //     await setOptions("china"); // 返回全国
+        //   }
+        // });
       };
 
       setup();

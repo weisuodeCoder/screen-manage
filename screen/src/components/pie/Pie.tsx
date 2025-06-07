@@ -1,55 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 import pieMidCircle from "../../assets/pie/pie-mid-circle.png";
+import { pieDatas } from "./data";
+import { usePieHooks } from "./hook";
 
 export default function Pie() {
+  const { setChartColor } = usePieHooks();
   const chartRef = useRef<HTMLDivElement>(null);
-  const [data, setData] = useState([
-    {
-      value: 25,
-      name: "体育",
-      itemStyle: {
-        //颜色渐变
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-          { offset: 0, color: "rgba(11, 77, 44, 1)" },
-          { offset: 1, color: "rgba(77, 255, 181, 1)" },
-        ]),
-      },
-    },
-    {
-      value: 40,
-      name: "美术",
-      itemStyle: {
-        //颜色渐变
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-          { offset: 0, color: "rgba(3,65,128,1)" },
-          { offset: 1, color: "rgba(115,208,255,1)" },
-        ]),
-      },
-    },
-    {
-      value: 20,
-      name: "数学",
-      itemStyle: {
-        //颜色渐变
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-          { offset: 0, color: "rgba(255, 0, 0, 1)" },
-          { offset: 1, color: "rgba(255, 100, 100, 1)" },
-        ]),
-      },
-    },
-    {
-      value: 15,
-      name: "语文",
-      itemStyle: {
-        //颜色渐变
-        color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-          { offset: 0, color: "rgba(153, 105, 38, 1)" },
-          { offset: 1, color: "rgba(255, 200, 89, 1)" },
-        ]),
-      },
-    },
-  ]);
+  pieDatas.forEach((item) => {
+    const [color1, color2] = item.itemStyle.colors;
+    item.itemStyle.color = setChartColor(color1, color2);
+  });
+  const [data, setData] = useState(pieDatas);
   const total = data.reduce((sum, item) => sum + item.value, 0);
   const [option, setOption] = useState({
     backgroundColor: "transparent",
