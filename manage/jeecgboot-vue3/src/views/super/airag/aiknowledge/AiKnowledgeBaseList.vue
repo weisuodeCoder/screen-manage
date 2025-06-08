@@ -38,7 +38,7 @@
           </div>
         </a-card>
       </a-col>
-      <a-col v-if="knowledgeList && knowledgeList.length>0" :xxl="4" :xl="6" :lg="6" :md="6" :sm="12" :xs="24" v-for="item in knowledgeList">
+      <a-col v-if="knowledgeList && knowledgeList.length > 0" :xxl="4" :xl="6" :lg="6" :md="6" :sm="12" :xs="24" v-for="item in knowledgeList">
         <a-card class="knowledge-card pointer" @click="handleDocClick(item.id)">
           <div class="knowledge-header">
             <div class="flex">
@@ -112,7 +112,7 @@
   import JDictSelectTag from '@/components/Form/src/jeecg/components/JDictSelectTag.vue';
   import AiragKnowledgeDocListModal from './components/AiragKnowledgeDocListModal.vue';
   import Icon from '@/components/Icon';
-  import { useMessage } from "@/hooks/web/useMessage";
+  import { useMessage } from '@/hooks/web/useMessage';
 
   export default {
     name: 'KnowledgeBaseList',
@@ -175,7 +175,6 @@
        * @param item
        */
       function handleEditClick(item) {
-        console.log(item);
         openModal(true, {
           id: item.id,
           isUpdate: true,
@@ -190,10 +189,10 @@
           pageNo: pageNo.value,
           pageSize: pageSize.value,
           column: 'createTime',
-          order: 'desc'
+          order: 'desc',
         };
         Object.assign(params, queryParam);
-      
+
         list(params).then((res) => {
           if (res.success) {
             knowledgeList.value = res.result.records;
@@ -255,16 +254,18 @@
        * @param id
        */
       async function handleVectorization(id) {
-        rebuild({ knowIds: id }).then((res) =>{
-          if(res.success){
-            createMessage.success("向量化成功！");
-            reload();
-          }else{
-            createMessage.warning("向量化失败！");
-          }
-        }).catch(err=>{
-          createMessage.warning("向量化失败！");
-        });
+        rebuild({ knowIds: id })
+          .then((res) => {
+            if (res.success) {
+              createMessage.success('向量化成功！');
+              reload();
+            } else {
+              createMessage.warning('向量化失败！');
+            }
+          })
+          .catch((err) => {
+            createMessage.warning('向量化失败！');
+          });
       }
 
       return {
@@ -345,18 +346,18 @@
     font-size: 12px;
     color: #676f83;
   }
-  
-  .knowledge-footer{
+
+  .knowledge-footer {
     font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-top: 16px;
-    .knowledge-footer-icon{
+    .knowledge-footer-icon {
       position: relative;
-      top: 2px
+      top: 2px;
     }
-    span{
+    span {
       margin-left: 2px;
     }
   }
@@ -389,7 +390,7 @@
     margin-bottom: 20px;
     background: #fcfcfd;
     border: 1px solid #f0f0f0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border-radius: 10px;
     display: inline-flex;
@@ -407,14 +408,14 @@
     }
     .add-knowledge-card-title {
       font-size: 16px;
-      color:#1f2329;
+      color: #1f2329;
       font-weight: 400;
       align-self: center;
     }
   }
 
   .add-knowledge-card:hover {
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 
   .knowledge-card {
@@ -424,11 +425,11 @@
     border-radius: 10px;
     background: #fcfcfd;
     border: 1px solid #f0f0f0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
   }
   .knowledge-card:hover {
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     .knowledge-btn {
       display: block;
     }
@@ -451,18 +452,18 @@
       white-space: nowrap;
     }
   }
-  
-  .model-icon{
+
+  .model-icon {
     background-color: unset;
     border: none;
     margin-right: 2px;
   }
-  .model-icon:hover{
+  .model-icon:hover {
     color: #000000;
-    background-color: rgba(0,0,0,0.05);
+    background-color: rgba(0, 0, 0, 0.05);
     border: none;
   }
-  .ant-dropdown-link{
+  .ant-dropdown-link {
     font-size: 14px;
     height: 24px;
     padding: 0 7px;
@@ -470,8 +471,8 @@
     align-content: center;
     text-align: center;
   }
-  
-  .ellipsis{
+
+  .ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

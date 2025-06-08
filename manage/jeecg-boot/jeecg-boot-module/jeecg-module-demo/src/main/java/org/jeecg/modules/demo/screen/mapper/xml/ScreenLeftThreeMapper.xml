@@ -1,28 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftOneMapper">
-    <select id="selectScreenLeftOne" resultType="java.util.Map">
+<mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftThreeMapper">
+    <select id="selectScreenLeftThreeX_1" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
+        WITH year_range AS (
+            SELECT MIN(YEAR(TIME)) AS min_year, YEAR(CURDATE()) AS max_year
+        FROM screen_left_three_data
+            )
+        SELECT
+            min_year + n AS `value`,
+            CONCAT(min_year + n, '年') AS `name`
+        FROM year_range
+                 JOIN (
+            SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+            UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+        ) numbers
+        WHERE min_year + n &lt;= max_year
+        ORDER BY `value`;
+    </select>
+    <select id="selectScreenLeftThreeX_2" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
+        SELECT
+            DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y-%m') AS `value`,
+            DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y年%m月') AS `name`
+        FROM (
+                 SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+                 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+                 UNION SELECT 10 UNION SELECT 11
+             ) numbers
+        ORDER BY `value`;
+    </select>
+    <select id="selectScreenLeftThreeX_3" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
+        SELECT
+            DATE_FORMAT(DATE(CONCAT(YEAR(CURDATE()), '-', n, '-01')), '%Y-%m') AS `value`,
+            DATE_FORMAT(DATE(CONCAT(YEAR(CURDATE()), '-', n, '-01')), '%Y年%m月') AS `name`
+        FROM (
+                 SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+                 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+                 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12
+             ) numbers
+        WHERE n &lt;= MONTH(CURDATE())
+        ORDER BY `value`;
+    </select>
+    <select id="selectScreenLeftThreeY_1" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
+        WITH year_range AS (
+            SELECT MIN(YEAR(TIME)) AS min_year, YEAR(CURDATE()) AS max_year
+        FROM screen_left_three_data
+            ),
+            all_years AS (
+        SELECT min_year + n AS `year`
+        FROM year_range
+            JOIN (
+            SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+            UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+            ) numbers
+        WHERE min_year + n &lt;= max_year
+            ),
+            group_data AS (
         SELECT
             m.id,
             m.title,
-            m.unit,
-            JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                            'value', d.value,
-                            'name', d.name,
-                            'unit', m.unit,
-                            'itemStyle', JSON_OBJECT(
-                                    'colors', JSON_ARRAY(d.color_one, d.color_two)
-                                )
-                        )
-                ) AS datas
+            m.color_one AS color,
+            y.year,
+            IFNULL(ROUND(AVG(d.value), 2), 0) AS year_value
         FROM
-            `screen_left_one_main` m
-                JOIN
-            `screen_left_one_data` d ON m.id= d.group_id
+            screen_left_three_main m
+            CROSS JOIN
+            all_years Y
+            LEFT JOIN
+            screen_left_three_data d ON d.group_id = m.id AND YEAR(d.time) = y.year
+        WHERE
+            m.id IN (SELECT DISTINCT group_id FROM screen_left_three_data)
         GROUP BY
-            m.id, m.title,m.unit
+            m.id, m.title, m.color_one, y.year
         ORDER BY
-            m.sort ASC;
+            m.id, y.year
+            )
+        SELECT
+            id,
+            title AS `name`,
+            JSON_ARRAYAGG(year_value) AS datas,
+            color
+        FROM
+            group_data
+        GROUP BY
+            id, title, color;
+    </select>
+    <select id="selectScreenLeftThreeY_2" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
+        WITH last_12_months AS (
+            SELECT
+                DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y-%m-01') AS month_start
+            FROM (
+                     SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+                     UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+                     UNION SELECT 10 UNION SELECT 11
+                 ) numbers
+            ORDER BY month_start DESC
+        ),
+             group_data AS (
+                 SELECT
+                     m.id,
+                     m.title,
+                     m.color_one as color,
+                     l.month_start,
+                     IFNULL(ROUND(AVG(d.value), 2), 0) AS month_value
+                 FROM
+                     screen_left_three_main m
+                         CROSS JOIN
+                     last_12_months l
+                         LEFT JOIN
+                     screen_left_three_data d ON d.group_id = m.id
+                         AND DATE_FORMAT(d.time, '%Y-%m-01') = l.month_start
+                 WHERE
+                     m.id IN (SELECT DISTINCT group_id FROM screen_left_three_data)
+                 GROUP BY
+                     m.id, m.title, m.color_one, l.month_start
+                 ORDER BY
+                     m.id, l.month_start
+             )
+        SELECT
+            id,
+            title AS name,
+            JSON_ARRAYAGG(month_value) AS datas,
+            color
+        FROM
+            group_data
+        GROUP BY
+            id, title, color;
+    </select>
+    <select id="selectScreenLeftThreeY_3" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
+        WITH current_year_months AS (
+            SELECT DATE_FORMAT(DATE(CONCAT(YEAR(CURDATE()), '-', n, '-01')), '%Y-%m-01') AS month_start
+            FROM (
+                     SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
+                     UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+                     UNION SELECT 10 UNION SELECT 11 UNION SELECT 12
+                 ) numbers
+            WHERE n &lt;= MONTH(CURDATE())
+        ORDER BY month_start
+            ),
+            group_data AS (
+        SELECT
+            m.id,
+            m.title,
+            m.color_one as color,
+            c.month_start,
+            IFNULL(ROUND(AVG(d.value), 2), 0) AS month_value
+        FROM
+            screen_left_three_main m
+            CROSS JOIN
+            current_year_months c
+            LEFT JOIN
+            screen_left_three_data d ON d.group_id = m.id
+            AND DATE_FORMAT(d.time, '%Y-%m-01') = c.month_start
+        WHERE
+            m.id IN (SELECT DISTINCT group_id FROM screen_left_three_data)
+        GROUP BY
+            m.id, m.title, m.color_one, c.month_start
+        ORDER BY
+            m.id, c.month_start
+            )
+        SELECT
+            id,
+            title AS name,
+            JSON_ARRAYAGG(month_value) AS datas,
+            color
+        FROM
+            group_data
+        GROUP BY
+            id, title, color;
     </select>
 </mapper>

@@ -1,9 +1,8 @@
 package org.jeecg.modules.demo.screen.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.jeecg.modules.demo.screen.entity.ScreenLeftTwoX;
-import org.jeecg.modules.demo.screen.entity.ScreenLeftTwoY;
+import org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX;
+import org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY;
 
 import java.util.List;
 
@@ -14,9 +13,12 @@ import java.util.List;
  * @Version: V1.0
  */
 @Mapper // 添加注解
-public interface ScreenLeftTwoMapper {
-    List<ScreenLeftTwoX> selectScreenLeftOneX();
+public interface ScreenLeftThreeMapper {
+    List<ScreenLeftThreeX> selectScreenLeftThreeX_1();
+    List<ScreenLeftThreeX> selectScreenLeftThreeX_2();
+    List<ScreenLeftThreeX> selectScreenLeftThreeX_3();
 
-    // 添加参数timeRange，用于指定时间区间
-    List<ScreenLeftTwoY> selectScreenLeftOneY(@Param("timeRange") String timeRange);
+    List<ScreenLeftThreeY> selectScreenLeftThreeY_1();
+    List<ScreenLeftThreeY> selectScreenLeftThreeY_2();
+    List<ScreenLeftThreeY> selectScreenLeftThreeY_3();
 }

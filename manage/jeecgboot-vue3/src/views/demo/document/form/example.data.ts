@@ -28,9 +28,7 @@ export const schemas: FormSchema[] = [
     field: 'searchBox',
     component: 'InputSearch',
     componentProps: {
-      onSearch: (value) => {
-        console.log(value);
-      },
+      onSearch: (value) => {},
     },
   },
   {

@@ -80,9 +80,7 @@
         record.onEdit?.(false, true);
       }
 
-      function handleEditChange(data: Recordable) {
-        console.log(data);
-      }
+      function handleEditChange(data: Recordable) {}
 
       function handleAdd() {
         const data = getDataSource();

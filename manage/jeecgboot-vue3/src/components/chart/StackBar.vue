@@ -73,7 +73,6 @@
       watch(
         () => props.size,
         () => {
-          console.log('props.size', props.size);
           resize();
         },
         {

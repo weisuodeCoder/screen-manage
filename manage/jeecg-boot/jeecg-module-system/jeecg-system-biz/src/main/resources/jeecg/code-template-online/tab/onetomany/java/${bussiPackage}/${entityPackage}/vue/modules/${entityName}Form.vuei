@@ -464,7 +464,6 @@ export default {
          if (typeof this.classifyIntoFormData !== 'function') {
            throw this.throwNotFunction('classifyIntoFormData')
          }
-         console.log("this.classifyIntoFormData",typeof this.classifyIntoFormData)
          let formData = this.classifyIntoFormData(allValues)
 
          // 发起请求

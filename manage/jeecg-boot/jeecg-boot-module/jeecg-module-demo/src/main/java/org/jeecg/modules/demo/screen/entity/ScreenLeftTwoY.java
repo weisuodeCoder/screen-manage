@@ -3,10 +3,10 @@ package org.jeecg.modules.demo.screen.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class ScreenLeftTwoX {
+public class ScreenLeftTwoY {
+    private String xData;
     private String name;
     private String value;
+    private String colors;
 }

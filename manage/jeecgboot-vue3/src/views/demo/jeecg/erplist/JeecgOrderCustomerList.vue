@@ -56,8 +56,8 @@
   const { prefixCls, tableContext } = useListPage({
     tableProps: {
       api: getCustomList,
-      tableSetting:{
-        cacheKey:'customer'
+      tableSetting: {
+        cacheKey: 'customer',
       },
       columns: customColumns,
       canResize: false,
@@ -96,7 +96,6 @@
    * 新增事件
    */
   function handleCreate() {
-    console.log('orderId=====》', orderId);
     if (isEmpty(unref(orderId))) {
       $message.createMessage.warning('请选择一个订单信息');
       return;

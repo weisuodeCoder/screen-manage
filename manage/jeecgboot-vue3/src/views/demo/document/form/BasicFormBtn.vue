@@ -43,24 +43,18 @@
   /**
    * 查询按钮点击事件
    */
-  async function customSubmitFunc() {
-    console.log('查询按钮点击事件，此处处理查询按钮的逻辑');
-  }
+  async function customSubmitFunc() {}
 
   /**
    * 重置按钮点击事件
    */
-  async function customResetFunc() {
-    console.log('重置按钮点击事件，此处处理重置按钮的逻辑');
-  }
+  async function customResetFunc() {}
 
   /**
    * 点击提交按钮的value值
    * @param values
    */
-  function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
-  }
+  function handleSubmit(values: any) {}
 </script>
 
 <style scoped></style>

@@ -76,7 +76,6 @@
       //表单赋值
       const [registerModal, { closeModal }] = useModalInner(async (data) => {
         loading.value = true;
-        console.log('izBind：：', izBind);
         if (!data.izBind) {
           await getUnboundData();
         } else {
@@ -157,7 +156,6 @@
           okText: '确认',
           onOk: () => {
             let json = JSON.stringify(params);
-            console.log('json：：', json);
             wechatEnterpriseToLocal({ jwUserDepartJson: json })
               .then((res) => {
                 let options = {};

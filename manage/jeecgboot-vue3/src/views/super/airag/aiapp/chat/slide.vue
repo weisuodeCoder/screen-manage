@@ -91,7 +91,7 @@
     props.dataSource.history.unshift({ title: '新建聊天', id: uuid, isEdit: false, disabled: true });
     // 新建第一个(需要高亮选中)
     props.dataSource.active = uuid;
-    emit('click', "新建聊天", 0);
+    emit('click', '新建聊天', 0);
   };
   // 切换聊天
   const handleToggleChat = (item, index) => {
@@ -119,7 +119,6 @@
   };
   // 编辑
   const handleEdit = (item) => {
-    console.log(item);
     item.isEdit = true;
     inputValue = item.title;
   };
@@ -150,17 +149,20 @@
       } else {
         //  删没了（删除了最后一个）
         props.dataSource.active = null;
-        emit('click', "", -1);
+        emit('click', '', -1);
       }
     }
     //update-begin---author:wangshuai---date:2025-03-12---for:【QQYUN-11560】新建聊天内容为空，无法删除---
-    if(data.disabled){
+    if (data.disabled) {
       return;
     }
     //update-end---author:wangshuai---date:2025-03-12---for:【QQYUN-11560】新建聊天内容为空，无法删除---
-    defHttp.delete({
-      url: '/airag/chat/conversation/' + data.id,
-    },{ isTransformResponse: false });
+    defHttp.delete(
+      {
+        url: '/airag/chat/conversation/' + data.id,
+      },
+      { isTransformResponse: false }
+    );
   }
 
   /**

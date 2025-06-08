@@ -56,7 +56,6 @@
       });
 
       function onDataReceive(data) {
-        console.log('Data Received', data);
         // 方式1;
         // setFieldsValue({
         //   field2: data.data,

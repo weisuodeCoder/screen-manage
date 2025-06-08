@@ -138,7 +138,6 @@
               const $table = xTable.value;
               const { fullData } = $table.getTableData();
               orderMainModel.jeecgOrderCustomerList = fullData;
-              console.log('formData', JSON.stringify(orderMainModel));
               setModalProps({ confirmLoading: true });
               closeModal();
               emit('success', { isUpdate: unref(isUpdate), values: { id: rowId.value } });
@@ -147,7 +146,7 @@
             }
           })
           .catch((error: ValidateErrorEntity<any>) => {
-            console.log('error', error);
+            console.error('error', error);
           });
       }
 

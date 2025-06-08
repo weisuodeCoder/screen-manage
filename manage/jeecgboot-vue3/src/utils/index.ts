@@ -1,6 +1,6 @@
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router';
 import type { App, Plugin } from 'vue';
-import type { FormSchema } from "@/components/Form";
+import type { FormSchema } from '@/components/Form';
 
 import { unref } from 'vue';
 import { isObject, isFunction, isString } from '/@/utils/is';
@@ -143,8 +143,6 @@ export function cloneObject(obj) {
 }
 
 export const withInstall = <T>(component: T, alias?: string) => {
-  //console.log("---初始化---", component)
-
   const comp = component as any;
   comp.install = (app: App) => {
     // @ts-ignore
@@ -325,7 +323,6 @@ export function importViewsFile(path): Promise<any> {
       if (path == page) {
         flag = false;
         allModules[path]().then((mod) => {
-          console.log(path, mod);
           resolve(mod);
         });
       }
@@ -337,7 +334,6 @@ export function importViewsFile(path): Promise<any> {
 }
 //update-end-author:taoyan date:2022-6-8 for:解决老的vue2动态导入文件语法 vite不支持的问题
 
-
 /**
  * 跳转至积木报表的 预览页面
  * @param url
@@ -347,23 +343,22 @@ export function importViewsFile(path): Promise<any> {
 export function goJmReportViewPage(url, id, token) {
   // update-begin--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
   // URL支持{{ window.xxx }}占位符变量
-  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => _eval(s2))
+  url = url.replace(/{{([^}]+)?}}/g, (_s1, s2) => _eval(s2));
   // update-end--author:liaozhiyang---date:20230904---for：【QQYUN-6390】eval替换成new Function，解决build警告
   if (url.includes('?')) {
-    url += '&'
+    url += '&';
   } else {
-    url += '?'
+    url += '?';
   }
-  url += `id=${id}`
-  url += `&token=${token}`
-  window.open(url)
+  url += `id=${id}`;
+  url += `&token=${token}`;
+  window.open(url);
 }
 
 /**
  * 获取随机颜色
  */
 export function getRandomColor(index?) {
-
   const colors = [
     'rgb(100, 181, 246)',
     'rgb(77, 182, 172)',
@@ -386,7 +381,7 @@ export function getRandomColor(index?) {
     'rgb(254, 161, 172)',
     'rgb(194, 163, 205)',
   ];
-  return index && index < 19 ? colors[index] : colors[Math.floor((Math.random()*(colors.length-1)))];
+  return index && index < 19 ? colors[index] : colors[Math.floor(Math.random() * (colors.length - 1))];
 }
 
 export function getRefPromise(componentRef) {
@@ -410,7 +405,7 @@ export function getRefPromise(componentRef) {
  * 用new Function替换eval
  */
 export function _eval(str: string) {
- return new Function(`return ${str}`)();
+  return new Function(`return ${str}`)();
 }
 
 /**
@@ -455,7 +450,7 @@ export const setPopContainer = (node, selector) => {
       const retrospect = (node, elems) => {
         let ele = node.parentNode;
         while (ele) {
-          const findParentNode = elems.find(item => item === ele);
+          const findParentNode = elems.find((item) => item === ele);
           if (findParentNode) {
             ele = null;
             return findParentNode;
@@ -486,12 +481,11 @@ export const setPopContainer = (node, selector) => {
  * label、value通用，title、val给权限管理用的
  */
 export function useConditionFilter() {
-
   // 通用条件
   const commonConditionOptions = [
-    {label: '为空', value: 'empty', val: 'EMPTY'},
-    {label: '不为空', value: 'not_empty', val: 'NOT_EMPTY'},
-  ]
+    { label: '为空', value: 'empty', val: 'EMPTY' },
+    { label: '不为空', value: 'not_empty', val: 'NOT_EMPTY' },
+  ];
 
   // 数值、日期
   const numberConditionOptions = [

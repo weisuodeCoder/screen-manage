@@ -78,7 +78,6 @@
    * 编辑事件
    */
   function handleEdit(record) {
-    console.log('record....', record);
     openModal(true, {
       record,
       isUpdate: true,
@@ -89,7 +88,6 @@
    * 删除事件
    */
   async function handleDelete(record) {
-    console.log(12345, record);
     await deleteFillRule({ id: record.id }, reload);
   }
 

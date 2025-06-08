@@ -174,7 +174,6 @@
             // tableAction只适用于在表格内开启表单的例子
             // const { reload } = tableAction;
             const res = await validate();
-            console.log(res);
           },
         };
       },

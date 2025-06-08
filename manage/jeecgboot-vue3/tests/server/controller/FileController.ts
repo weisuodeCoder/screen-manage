@@ -5,7 +5,6 @@ class FileController {
 
   upload = async (ctx) => {
     const files = ctx.request.files.file;
-    console.log(files);
 
     if (files.length === undefined) {
       this.service.upload(ctx, files, false);

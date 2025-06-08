@@ -1,10 +1,11 @@
 package org.jeecg.modules.demo.screen.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.jeecg.modules.demo.screen.entity.ScreenLeftTwoX;
+import org.jeecg.modules.demo.screen.entity.ScreenLeftTwoY;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 左1分组
@@ -13,6 +14,9 @@ import java.util.Map;
  * @Version: V1.0
  */
 @Mapper // 添加注解
-public interface ScreenLeftOneMapper {
-    List<Map<String, Object>> selectScreenLeftOne();
+public interface ScreenLeftTwoMapper {
+    List<ScreenLeftTwoX> selectScreenLeftOneX();
+
+    // 添加参数timeRange，用于指定时间区间
+    List<ScreenLeftTwoY> selectScreenLeftOneY(@Param("timeRange") String timeRange);
 }

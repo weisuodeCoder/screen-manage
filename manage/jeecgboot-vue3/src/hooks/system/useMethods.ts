@@ -29,11 +29,11 @@ export function useMethods() {
       return;
     }
     //update-begin---author:wangshuai---date:2024-04-18---for: 导出excel失败提示，不进行导出---
-    let reader = new FileReader()
-    reader.readAsText(data, 'utf-8')
+    let reader = new FileReader();
+    reader.readAsText(data, 'utf-8');
     reader.onload = async () => {
-      if(reader.result){
-        if(reader.result.toString().indexOf("success") !=-1){
+      if (reader.result) {
+        if (reader.result.toString().indexOf('success') != -1) {
           // update-begin---author:liaozhiyang---date:2025-02-11---for:【issues/7738】文件中带"success"导出报错 ---
           try {
             const { success, message } = JSON.parse(reader.result.toString());
@@ -51,7 +51,7 @@ export function useMethods() {
       }
       exportExcel(name, isXlsx, data);
       //update-end---author:wangshuai---date:2024-04-18---for: 导出excel失败提示，不进行导出---
-    }
+    };
   }
 
   /**
@@ -85,7 +85,7 @@ export function useMethods() {
           createMessage.success(fileInfo.message || `${data.file.name} 文件上传成功`);
         }
       } catch (error) {
-        console.log('导入的数据异常', error);
+        console.error('导入的数据异常', error);
       } finally {
         typeof success === 'function' ? success(fileInfo) : '';
       }

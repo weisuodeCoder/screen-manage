@@ -131,7 +131,7 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <JOnlineSearchSelect v-model:value="queryParam[item.field]" :placeholder="'请选择'+item.label" :fieldId="item.fieldId"/>
+    <JOnlineSearchSelect v-model:value="queryParam[item.field]" :placeholder="'请选择' + item.label" :fieldId="item.fieldId" />
   </a-form-item>
 
   <a-form-item v-else-if="item.view === CompTypeEnum.SelUser" :labelCol="labelCol" :class="'jeecg-online-search'">
@@ -193,7 +193,7 @@
     <template #label>
       <span :title="item.label" class="label-text">{{ item.label }}</span>
     </template>
-    <template v-if="single_mode === item.mode && 'string'== item.view">
+    <template v-if="single_mode === item.mode && 'string' == item.view">
       <j-input :placeholder="'请输入' + item.label" v-model:value="queryParam[item.field]"></j-input>
     </template>
     <template v-else-if="single_mode === item.mode">
@@ -212,7 +212,17 @@
   import { defineComponent, ref } from 'vue';
   import { DateTypeEnum } from '/@/enums/DateTypeEnum.ts';
   import { CompTypeEnum } from '/@/enums/CompTypeEnum.ts';
-  import { JDictSelectTag, JTreeSelect, JCategorySelect, JSelectUserByDept, JSelectDept, JPopup, JAreaLinkage,JInput,JSearchSelect } from '/@/components/Form';
+  import {
+    JDictSelectTag,
+    JTreeSelect,
+    JCategorySelect,
+    JSelectUserByDept,
+    JSelectDept,
+    JPopup,
+    JAreaLinkage,
+    JInput,
+    JSearchSelect,
+  } from '/@/components/Form';
   export default defineComponent({
     name: 'SearchFormItem',
     components: {
@@ -249,7 +259,6 @@
     },
     setup(props) {
       const single_mode = ref('single');
-      console.log('dictOptions===>', props.dictOptions);
       function getDictCode(item) {
         if (item.dictTable && item.dictTable.length > 0) {
           return item.dictTable + ',' + item.dictText + ',' + item.dictCode;
@@ -267,7 +276,6 @@
           condition = ' where' + arr[1];
         }
         let sql = 'select ' + dictCode + " as 'value', " + dictText + " as 'text' from " + arr[0] + condition;
-        console.log('sql', sql);
         return sql;
       }
 

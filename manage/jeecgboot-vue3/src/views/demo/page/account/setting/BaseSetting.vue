@@ -68,13 +68,12 @@
       });
 
       function updateAvatar(src: string, data: string) {
-        console.log('data====》', data);
         const userinfo = userStore.getUserInfo;
         userinfo.avatar = data;
         userStore.setUserInfo(userinfo);
         //update-begin---author:wangshuai ---date:20220909  for：[VUEN-2161]用户设置上传头像成功之后直接保存------------
-        if(data){
-          defHttp.post({ url: '/sys/user/appEdit', params:{avatar:data} });
+        if (data) {
+          defHttp.post({ url: '/sys/user/appEdit', params: { avatar: data } });
         }
         //update-end---author:wangshuai ---date:20220909  for：[VUEN-2161]用户设置上传头像成功之后直接保存--------------
       }
@@ -84,8 +83,7 @@
       async function handleSubmit() {
         try {
           let values = await validate();
-          values.avatar = userStore.getUserInfo.avatar
-          console.log('values', values);
+          values.avatar = userStore.getUserInfo.avatar;
           //提交表单
           defHttp.post({ url: '/sys/user/appEdit', params: values });
           const userinfo = userStore.getUserInfo;
@@ -93,7 +91,7 @@
           userStore.setUserInfo(userinfo);
           createMessage.success('更新成功');
         } catch (e) {
-          console.log('e', e);
+          console.error('e', e);
         }
       }
 

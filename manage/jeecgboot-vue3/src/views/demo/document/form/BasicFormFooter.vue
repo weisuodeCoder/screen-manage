@@ -72,7 +72,6 @@
   async function save() {
     //使用useForm方法获取表单值
     let values = await validate();
-    console.log(values);
   }
 
   /**
@@ -81,7 +80,6 @@
   async function saveDraft() {
     //使用useForm方法validate获取表单值
     let values = await validate();
-    console.log(values);
   }
 
   /**

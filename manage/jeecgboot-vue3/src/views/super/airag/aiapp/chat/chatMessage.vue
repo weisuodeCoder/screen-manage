@@ -2,23 +2,23 @@
   <div class="chat" :class="[inversion === 'user' ? 'self' : 'chatgpt']">
     <div class="avatar">
       <img v-if="inversion === 'user'" :src="avatar()" />
-      <img v-else :src="getAiImg()">
+      <img v-else :src="getAiImg()" />
     </div>
     <div class="content">
       <p class="date">
-        <span v-if="inversion === 'ai'" style="margin-right: 10px">{{appData.name || 'AI助手'}}</span>
+        <span v-if="inversion === 'ai'" style="margin-right: 10px">{{ appData.name || 'AI助手' }}</span>
         <span>{{ dateTime }}</span>
       </p>
-      <div v-if="inversion === 'user' && images && images.length>0" class="images">
-          <div v-for="(item,index) in images" :key="index" class="image" @click="handlePreview(item)">
-            <img :src="getImageUrl(item)"/>
-          </div>
+      <div v-if="inversion === 'user' && images && images.length > 0" class="images">
+        <div v-for="(item, index) in images" :key="index" class="image" @click="handlePreview(item)">
+          <img :src="getImageUrl(item)" />
+        </div>
       </div>
       <div class="msgArea">
         <chatText :text="text" :inversion="inversion" :error="error" :loading="loading"></chatText>
       </div>
       <div v-if="presetQuestion" v-for="item in presetQuestion" class="question" @click="presetQuestionClick(item.descr)">
-        <span>{{item.descr}}</span>
+        <span>{{ item.descr }}</span>
       </div>
     </div>
   </div>
@@ -29,10 +29,10 @@
   import defaultAvatar from '/@/assets/images/ai/avatar.jpg';
   import { useUserStore } from '/@/store/modules/user';
   import defaultImg from '../img/ailogo.png';
-  
-  const props = defineProps(['dateTime', 'text', 'inversion', 'error', 'loading','appData','presetQuestion','images']);
+
+  const props = defineProps(['dateTime', 'text', 'inversion', 'error', 'loading', 'appData', 'presetQuestion', 'images']);
   import { getFileAccessHttpUrl } from '/@/utils/common/compUtils';
-  import { createImgPreview } from "@/components/Preview";
+  import { createImgPreview } from '@/components/Preview';
   const { userInfo } = useUserStore();
   const avatar = () => {
     return getFileAccessHttpUrl(userInfo?.avatar) || defaultAvatar;
@@ -44,23 +44,23 @@
 
   /**
    * 预设问题点击事件
-   * 
+   *
    */
   function presetQuestionClick(descr) {
-    emit("send",descr)
+    emit('send', descr);
   }
 
   /**
    * 获取图片
-   * 
+   *
    * @param item
    */
   function getImageUrl(item) {
     let url = item;
-    if(item.hasOwnProperty('url')){
+    if (item.hasOwnProperty('url')) {
       url = item.url;
     }
-    if(item.hasOwnProperty('base64Data') && item.base64Data){
+    if (item.hasOwnProperty('base64Data') && item.base64Data) {
       return item.base64Data;
     }
     return getFileAccessHttpUrl(url);
@@ -70,14 +70,11 @@
    * 图片预览
    * @param url
    */
-  function handlePreview(url){
-    const onImgLoad = ({ index, url, dom }) => {
-      console.log(`第${index + 1}张图片已加载，URL为：${url}`, dom);
-    };
+  function handlePreview(url) {
+    const onImgLoad = ({ index, url, dom }) => {};
     let imageList = [getImageUrl(url)];
     createImgPreview({ imageList: imageList, defaultWidth: 700, rememberState: true, onImgLoad });
   }
-  
 </script>
 
 <style lang="less" scoped>
@@ -122,7 +119,7 @@
     }
   }
 
-  .question{
+  .question {
     margin-top: 10px;
     border-radius: 0.375rem;
     padding-top: 0.5rem;
@@ -136,17 +133,17 @@
     border: 1px solid #f0f0f0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
-  .images{
+
+  .images {
     margin-bottom: 10px;
     flex-wrap: wrap;
     display: flex;
     gap: 10px;
-    .image{
+    .image {
       width: 120px;
       height: 80px;
       cursor: pointer;
-      img{
+      img {
         width: 100%;
         height: 100%;
         object-fit: cover;

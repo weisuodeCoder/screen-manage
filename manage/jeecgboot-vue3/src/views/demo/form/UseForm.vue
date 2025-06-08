@@ -67,9 +67,7 @@
       },
       componentProps: {
         placeholder: '自定义placeholder',
-        onChange: (e: any) => {
-          console.log(e);
-        },
+        onChange: (e: any) => {},
       },
     },
     {
@@ -92,7 +90,7 @@
       field: 'fieldTime',
       component: 'RangePicker',
       label: '时间字段',
-      defaultValue: [new Date("2024-03-21"), new Date("2024-03-27")],
+      defaultValue: [new Date('2024-03-21'), new Date('2024-03-27')],
       componentProps: {
         valueType: 'Date',
       },

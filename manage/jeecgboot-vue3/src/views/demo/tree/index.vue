@@ -53,9 +53,7 @@
       const tree2 = ref<TreeItem[]>([]);
       const treeLoading = ref(false);
 
-      function handleCheck(checkedKeys, e) {
-        console.log('onChecked', checkedKeys, e);
-      }
+      function handleCheck(checkedKeys, e) {}
 
       function loadTreeData() {
         treeLoading.value = true;
@@ -66,7 +64,6 @@
           treeLoading.value = false;
           // 展开全部
           nextTick(() => {
-            console.log(unref(asyncExpandTreeRef));
             unref(asyncExpandTreeRef)?.expandAll(true);
           });
         }, 2000);

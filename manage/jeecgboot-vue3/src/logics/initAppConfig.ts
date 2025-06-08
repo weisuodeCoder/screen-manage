@@ -45,7 +45,7 @@ export function initAppConfigStore() {
     grayMode && updateGrayMode(grayMode);
     colorWeak && updateColorWeak(colorWeak);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   appStore.setProjectConfig(projCfg);
 

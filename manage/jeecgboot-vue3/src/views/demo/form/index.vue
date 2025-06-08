@@ -145,13 +145,9 @@
       // componentProps:{},
       // can func
       componentProps: ({ schema, formModel }) => {
-        console.log('form:', schema);
-        console.log('formModel:', formModel);
         return {
           placeholder: '自定义placeholder',
-          onChange: (e: any) => {
-            console.log(e);
-          },
+          onChange: (e: any) => {},
         };
       },
       renderComponentContent: () => {
@@ -170,9 +166,7 @@
         span: 8,
       },
       componentProps: {
-        onChange: (e: any) => {
-          console.log(e);
-        },
+        onChange: (e: any) => {},
       },
       suffix: '天',
     },
@@ -350,13 +344,9 @@
         valueField: 'id',
         // not request untill to select
         immediate: false,
-        onChange: (e) => {
-          console.log('selected:', e);
-        },
+        onChange: (e) => {},
         // atfer request callback
-        onOptionsChange: (options) => {
-          console.log('get options', options.length, options);
-        },
+        onOptionsChange: (options) => {},
       },
       colProps: {
         span: 8,
@@ -474,9 +464,7 @@
           options: provincesOptions,
           placeholder: '省份与城市联动',
           onChange: (e: any) => {
-            // console.log(e)
             let citiesOptions = e == 1 ? citiesOptionsData[provincesOptions[0].id] : citiesOptionsData[provincesOptions[1].id];
-            // console.log(citiesOptions)
             if (e === undefined) {
               citiesOptions = [];
             }

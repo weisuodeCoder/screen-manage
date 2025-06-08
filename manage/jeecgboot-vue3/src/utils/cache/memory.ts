@@ -96,7 +96,6 @@ export class Memory<T = any, V = any> {
   }
 
   clear() {
-    console.log('------clear------进入clear方法');
     Object.keys(this.cache).forEach((key) => {
       const item = this.cache[key];
       item.timeoutId && clearTimeout(item.timeoutId);

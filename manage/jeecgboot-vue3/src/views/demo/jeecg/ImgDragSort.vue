@@ -47,10 +47,7 @@
    * 拖动结束事件
    * @param evt
    */
-  function end(evt) {
-    console.log('拖动前的位置' + evt.oldIndex);
-    console.log('拖动后的位置' + evt.newIndex);
-  }
+  function end(evt) {}
 
   /**
    * 确认更改事件

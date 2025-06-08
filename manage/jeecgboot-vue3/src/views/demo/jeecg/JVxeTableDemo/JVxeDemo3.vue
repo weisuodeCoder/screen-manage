@@ -119,11 +119,9 @@
 
   function onGetData1() {
     createMessage.info('请看控制台');
-    console.log(tableRef1.value!.getTableData());
   }
 
   function onGetData2() {
     createMessage.info('请看控制台');
-    console.log(tableRef2.value!.getTableData());
   }
 </script>

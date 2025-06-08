@@ -115,15 +115,9 @@
       //注册table数据
       const [registerTable] = tableContext;
 
-      function handleEdit(record: Recordable) {
-        console.log('点击了编辑', record);
-      }
-      function handleDelete(record: Recordable) {
-        console.log('点击了删除', record);
-      }
-      function handleOpen(record: Recordable) {
-        console.log('点击了启用', record);
-      }
+      function handleEdit(record: Recordable) {}
+      function handleDelete(record: Recordable) {}
+      function handleOpen(record: Recordable) {}
       return {
         registerTable,
         handleEdit,

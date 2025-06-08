@@ -200,7 +200,6 @@
         if (valid) {
           try {
             const data = cloneDeep(record.editValueRefs);
-            console.log(data);
             //TODO 此处将数据提交给服务器保存
             // ...
             // 保存之后提交编辑状态
@@ -247,7 +246,6 @@
         if (column.dataIndex === 'id') {
           record.editValueRefs.name4.value = `${value}`;
         }
-        console.log(column, value, record);
       }
 
       return {

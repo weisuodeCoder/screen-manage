@@ -272,7 +272,6 @@
       const findIndex = breadcrumb.value.findIndex((o) => o.id === item.id);
       if (findIndex != -1) {
         breadcrumb.value = breadcrumb.value.filter((item, index) => {
-          console.log(item);
           return index <= findIndex;
         });
       }

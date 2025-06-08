@@ -70,13 +70,12 @@ export function useListPage(options: ListPageOptions) {
     if (realUrl) {
       let title = typeof name === 'function' ? name() : name;
       //update-begin-author:taoyan date:20220507 for: erp代码生成 子表 导出报错，原因未知-
-      let paramsForm:any = {};
+      let paramsForm: any = {};
       try {
         //update-begin-author:liusq---date:2025-03-20--for: [QQYUN-11627]代码生成原生表单，数据导出，前端报错，并且范围参数没有转换 #7962
         //当useSearchFor不等于false的时候，才去触发validate
         if (options?.tableProps?.useSearchForm !== false) {
           paramsForm = await getForm().validate();
-          console.log('paramsForm', paramsForm);
         }
         //update-end-author:liusq---date:2025-03-20--for:[QQYUN-11627]代码生成原生表单，数据导出，前端报错，并且范围参数没有转换 #7962
       } catch (e) {
@@ -85,8 +84,8 @@ export function useListPage(options: ListPageOptions) {
       //update-end-author:taoyan date:20220507 for: erp代码生成 子表 导出报错，原因未知-
 
       //update-begin-author:liusq date:20230410 for:[/issues/409]导出功能没有按排序结果导出,设置导出默认排序，创建时间倒序
-      if(!paramsForm?.column){
-         Object.assign(paramsForm,{column:'createTime',order:'desc'});
+      if (!paramsForm?.column) {
+        Object.assign(paramsForm, { column: 'createTime', order: 'desc' });
       }
       //update-begin-author:liusq date:20230410 for: [/issues/409]导出功能没有按排序结果导出,设置导出默认排序，创建时间倒序
 
@@ -107,7 +106,6 @@ export function useListPage(options: ListPageOptions) {
       if (selectedRowKeys.value && selectedRowKeys.value.length > 0) {
         paramsForm['selections'] = selectedRowKeys.value.join(',');
       }
-      console.log()
       return handleExportXls(title as string, realUrl, filterObj(paramsForm));
       //update-end---author:wangshuai ---date:20220411  for：导出新增自定义参数--------------
     } else {
@@ -204,7 +202,7 @@ export function useListTable(tableProps: TableProps): [
     rowSelection: any;
     selectedRows: Ref<Recordable[]>;
     selectedRowKeys: Ref<any[]>;
-  }
+  },
 ] {
   // 自适应列配置
   const adaptiveColProps: Partial<ColEx> = {
@@ -287,7 +285,7 @@ export function useListTable(tableProps: TableProps): [
   // 合并用户个性化配置
   if (tableProps) {
     //update-begin---author:wangshuai---date:2024-04-28---for:【issues/6180】前端代码配置表变查询条件显示列不生效---
-    if(tableProps.formConfig){
+    if (tableProps.formConfig) {
       setTableProps(tableProps.formConfig);
     }
     //update-end---author:wangshuai---date:2024-04-28---for:【issues/6180】前端代码配置表变查询条件显示列不生效---
@@ -342,11 +340,11 @@ export function useListTable(tableProps: TableProps): [
    * @param formConfig
    */
   function setTableProps(formConfig: any) {
-    const replaceAttributeArray: string[] = ['baseColProps','labelCol'];
+    const replaceAttributeArray: string[] = ['baseColProps', 'labelCol'];
     for (let item of replaceAttributeArray) {
-      if(formConfig && formConfig[item]){
-        if(defaultTableProps.formConfig){
-          let defaultFormConfig:any = defaultTableProps.formConfig;
+      if (formConfig && formConfig[item]) {
+        if (defaultTableProps.formConfig) {
+          let defaultFormConfig: any = defaultTableProps.formConfig;
           defaultFormConfig[item] = formConfig[item];
         }
         formConfig[item] = {};

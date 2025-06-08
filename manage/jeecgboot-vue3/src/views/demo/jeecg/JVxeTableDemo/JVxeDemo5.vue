@@ -106,7 +106,6 @@
         // props.scrolling      是否正在滚动
         // props.reloadEffect   是否开启了数据刷新特效
         // props.triggerChange  触发change事件，用于更改slot的值
-        console.log('props: ', props);
       }
 
       function handleDelete({ row }) {
@@ -115,7 +114,6 @@
       }
 
       onMounted(async () => {
-        console.log(tableRef.value);
         await nextTick();
         // 默认添加五行数据
         tableRef.value!.addRows([{ input: 'input_1' }, { input: 'input_2' }, { input: 'input_3' }, { input: 'input_4' }, { input: 'input_5' }], {

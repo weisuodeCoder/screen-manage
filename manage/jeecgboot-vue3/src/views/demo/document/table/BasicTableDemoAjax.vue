@@ -149,8 +149,6 @@
 
   function handleEdit(record) {
     let { getFieldsValue } = getForm();
-    console.log('查询form的数据', getFieldsValue());
-    console.log(record);
   }
 </script>
 

@@ -193,7 +193,7 @@
         searchState.searchData = filter(
           unref(treeDataRef),
           (node) => {
-            const result = filterFn ? filterFn(searchValue, node, unref(getReplaceFields)) : node[titleField]?.includes(searchValue) ?? false;
+            const result = filterFn ? filterFn(searchValue, node, unref(getReplaceFields)) : (node[titleField]?.includes(searchValue) ?? false);
             if (result) {
               searchKeys.push(node[keyField]);
             }
@@ -268,9 +268,6 @@
       );
 
       // watchEffect(() => {
-      //   console.log('======================');
-      //   console.log(props.value);
-      //   console.log('======================');
       //   if (props.value) {
       //     state.checkedKeys = props.value;
       //   }

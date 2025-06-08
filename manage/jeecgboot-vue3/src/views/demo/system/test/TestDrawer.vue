@@ -39,8 +39,6 @@
         try {
           const values = await validate();
           setDrawerProps({ confirmLoading: true });
-          // TODO custom api
-          console.log(values);
           closeDrawer();
           emit('success');
         } finally {

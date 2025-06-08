@@ -8,7 +8,7 @@ export const columns: BasicColumn[] = [
    {
     title: '分组id',
     align:"center",
-    dataIndex: 'groupId'
+    dataIndex: 'groupId_dictText'
    },
    {
     title: '日期',
@@ -32,13 +32,30 @@ export const columns: BasicColumn[] = [
 ];
 //查询数据
 export const searchFormSchema: FormSchema[] = [
+	{
+      label: "分组id",
+      field: 'groupId',
+      component: 'JSelectMultiple',
+      componentProps:{
+          dictCode:"screen_left_three_main,title,id"
+      },
+      //colProps: {span: 6},
+ 	},
 ];
 //表单数据
 export const formSchema: FormSchema[] = [
   {
     label: '分组id',
     field: 'groupId',
-    component: 'Input',
+    component: 'JDictSelectTag',
+    componentProps:{
+        dictCode:"screen_left_three_main,title,id"
+     },
+    dynamicRules: ({model,schema}) => {
+          return [
+                 { required: true, message: '请输入分组id!'},
+          ];
+     },
   },
   {
     label: '日期',
@@ -47,11 +64,21 @@ export const formSchema: FormSchema[] = [
     componentProps: {
       valueFormat: 'YYYY-MM-DD'
     },
+    dynamicRules: ({model,schema}) => {
+          return [
+                 { required: true, message: '请输入日期!'},
+          ];
+     },
   },
   {
     label: '数值',
     field: 'value',
     component: 'InputNumber',
+    dynamicRules: ({model,schema}) => {
+          return [
+                 { required: true, message: '请输入数值!'},
+          ];
+     },
   },
   {
     label: '单位',
@@ -69,7 +96,7 @@ export const formSchema: FormSchema[] = [
 
 // 高级查询数据
 export const superQuerySchema = {
-  groupId: {title: '分组id',order: 0,view: 'text', type: 'string',},
+  groupId: {title: '分组id',order: 0,view: 'list', type: 'string',dictTable: "screen_left_three_main", dictCode: 'id', dictText: 'title',},
   time: {title: '日期',order: 1,view: 'date', type: 'string',},
   value: {title: '数值',order: 2,view: 'number', type: 'number',},
   unit: {title: '单位',order: 3,view: 'text', type: 'string',},

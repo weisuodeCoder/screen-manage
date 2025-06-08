@@ -29,7 +29,6 @@ export function useColumnsCache({ cacheColumnsKey, refs }: any) {
   //   let columnCache = $ls.get(cacheKey.value);
   //   if (columnCache) {
   //     const $grid = refs.gridRef.value!.getRefMaps().refTable.value;
-  //     console.log('refs.gridRef', $grid);
   //     const { fullColumn } = $grid.getTableColumn();
   //     const hideColumns = getHideColumn(fullColumn, columnCache);
   //     if (hideColumns?.length) {
@@ -38,10 +37,8 @@ export function useColumnsCache({ cacheColumnsKey, refs }: any) {
   //       });
   //     }
   //   }
-  //   console.log(columnCache);
   // };
   function saveSetting($grid: any) {
-    console.log($grid);
     const { fullColumn, visibleColumn } = $grid.getTableColumn();
     const hideColumnKey = getHideColumnKey(fullColumn, visibleColumn);
     if (hideColumnKey.length) {
@@ -68,7 +65,6 @@ export function useColumnsCache({ cacheColumnsKey, refs }: any) {
   const getHideColumn = (fullColumn, columnCache) => {
     const result: any = [];
     if (columnCache?.length) {
-    console.log('--fullColumn:',fullColumn);
       columnCache.forEach((key) => {
         const column = fullColumn.find((item) => item?.params?.key === key);
         if (column) {

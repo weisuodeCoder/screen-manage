@@ -1,7 +1,7 @@
 <!-- 标题与字段布局 -->
 <template>
   <!-- 自定义表单 -->
-  <BasicForm @register="registerForm" @submit="handleSubmit" style="margin: 20px auto"/>
+  <BasicForm @register="registerForm" @submit="handleSubmit" style="margin: 20px auto" />
 </template>
 
 <script lang="ts" setup>
@@ -64,9 +64,7 @@
    * 点击提交按钮的value值
    * @param values
    */
-  function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
-  }
+  function handleSubmit(values: any) {}
 </script>
 
 <style scoped>

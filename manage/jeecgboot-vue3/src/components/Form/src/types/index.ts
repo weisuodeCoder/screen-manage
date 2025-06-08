@@ -157,5 +157,5 @@ export type ComponentType =
   | 'linkRecordSelect'
   | 'RangeTime'
   | 'JRangeNumber'
-  | 'JInputSelect';
-  
+  | 'JInputSelect'
+  | 'JColorPicker';

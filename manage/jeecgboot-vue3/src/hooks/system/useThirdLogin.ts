@@ -84,7 +84,6 @@ export function useThirdLogin() {
     if (unref(thirdLoginState) === false) {
       thirdLoginState.value = true;
       userStore.ThirdLogin({ token, thirdType: unref(thirdType) }).then((res) => {
-        console.log('res====>doThirdLogin', res);
         if (res && res.userInfo) {
           notification.success({
             message: t('sys.login.loginSuccessTitle'),

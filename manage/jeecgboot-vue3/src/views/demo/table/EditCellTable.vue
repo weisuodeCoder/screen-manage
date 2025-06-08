@@ -11,7 +11,7 @@
   import { demoListApi } from '/@/api/demo/table';
   import { treeOptionsListApi } from '/@/api/demo/tree';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { mapTableTotalSummary } from "@/utils/common/compUtils";
+  import { mapTableTotalSummary } from '@/utils/common/compUtils';
   const columns: BasicColumn[] = [
     {
       title: '输入框',
@@ -154,13 +154,12 @@
         showIndexColumn: false,
         bordered: true,
         showSummary: true,
-        summaryFunc: onSummary
-      }); 
+        summaryFunc: onSummary,
+      });
 
       const { createMessage } = useMessage();
 
       function handleEditEnd({ record, index, key, value }: Recordable) {
-        console.log(record, index, key, value);
         return false;
       }
 
@@ -193,20 +192,15 @@
       }
 
       async function beforeEditSubmit({ record, index, key, value }) {
-        console.log('单元格数据正在准备提交', { record, index, key, value });
         return await feakSave({ id: record.id, key, value });
       }
 
-      function handleEditCancel() {
-        console.log('cancel');
-      }
+      function handleEditCancel() {}
 
       function onSummary(tableData: Recordable[]) {
         // 可用工具方法自动计算合计
         const totals = mapTableTotalSummary(tableData, ['id']);
-        return [
-          totals
-        ];
+        return [totals];
       }
       return {
         registerTable,

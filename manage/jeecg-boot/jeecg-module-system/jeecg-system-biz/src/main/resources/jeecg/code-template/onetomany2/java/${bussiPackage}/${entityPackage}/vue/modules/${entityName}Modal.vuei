@@ -85,7 +85,6 @@
         this.form.resetFields();
         this.model = Object.assign({}, record);
         //初始化明细表数据
-        console.log(this.model.id)
         this.visible = true;
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, <#list columns as col>'${col.fieldName}', </#list>))

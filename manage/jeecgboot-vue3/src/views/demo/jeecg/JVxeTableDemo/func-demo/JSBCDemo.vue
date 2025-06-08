@@ -133,13 +133,10 @@
       if (!errMap) {
         // 获取所有数据
         let tableData = target.getTableData();
-        console.log('当前保存的数据是：', tableData);
         // 获取新增的数据
         let newData = target.getNewData();
-        console.log('-- 新增的数据：', newData);
         // 获取删除的数据
         let deleteData = target.getDeleteData();
-        console.log('-- 删除的数据：', deleteData);
         // 【模拟保存】
         loading.value = true;
         defHttp
@@ -160,10 +157,8 @@
   // 触发单元格删除事件
   function handleTableRemove(event) {
     // 把 event.deleteRows 传给后台进行删除（注意：这里不会传递前端逻辑新增的数据，因为不需要请求后台删除）
-    console.log('待删除的数据: ', event.deleteRows);
     // 也可以只传ID，因为可以根据ID删除
     let deleteIds = event.deleteRows.map((row) => row.id);
-    console.log('待删除的数据ids: ', deleteIds);
 
     // 模拟请求后台删除
     loading.value = true;
@@ -187,7 +182,6 @@
         if (!errMap) {
           // 【模拟保存】
           let hideLoading = createMessage.loading(`正在保存"${column.title}"`, 0);
-          console.log('即时保存数据：', row);
           defHttp
             .put({
               url: Api.saveRow,

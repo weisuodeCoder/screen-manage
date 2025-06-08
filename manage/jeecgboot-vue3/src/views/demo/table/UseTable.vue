@@ -29,9 +29,7 @@
     components: { BasicTable },
     setup() {
       const { createMessage } = useMessage();
-      function onChange() {
-        console.log('onChange', arguments);
-      }
+      function onChange() {}
       const [
         registerTable,
         {
@@ -64,9 +62,7 @@
         rowSelection: {
           type: 'checkbox',
         },
-        onColumnsChange: (data: ColumnChangeParam[]) => {
-          console.log('ColumnsChanged', data);
-        },
+        onColumnsChange: (data: ColumnChangeParam[]) => {},
       });
 
       function changeLoading() {
@@ -87,22 +83,18 @@
       }
       function getColumn() {
         createMessage.info('请在控制台查看！');
-        console.log(getColumns());
       }
 
       function getTableData() {
         createMessage.info('请在控制台查看！');
-        console.log(getDataSource());
       }
 
       function getTableRawData() {
         createMessage.info('请在控制台查看！');
-        console.log(getRawDataSource());
       }
 
       function getPagination() {
         createMessage.info('请在控制台查看！');
-        console.log(getPaginationRef());
       }
 
       function setPaginationInfo() {
@@ -113,11 +105,9 @@
       }
       function getSelectRowList() {
         createMessage.info('请在控制台查看！');
-        console.log(getSelectRows());
       }
       function getSelectRowKeyList() {
         createMessage.info('请在控制台查看！');
-        console.log(getSelectRowKeys());
       }
       function setSelectedRowKeyList() {
         setSelectedRowKeys(['0', '1', '2']);

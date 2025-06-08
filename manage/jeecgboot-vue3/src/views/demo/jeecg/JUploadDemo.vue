@@ -67,9 +67,7 @@
     disabled: false,
   });
 
-  function handleSubmit(values) {
-    console.log(values);
-  }
+  function handleSubmit(values) {}
 
   function setDisabled(flag) {
     setProps({ disabled: !!flag });

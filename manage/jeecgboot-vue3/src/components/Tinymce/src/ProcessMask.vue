@@ -8,7 +8,7 @@
 </template>
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
-  import {useDesign} from "@/hooks/web/useDesign";
+  import { useDesign } from '@/hooks/web/useDesign';
 
   const props = defineProps({
     backColor: {
@@ -52,8 +52,6 @@
     !showMask.value && (showMask.value = true);
     currentNum.value += 1;
     progressValue.value = ((currentNum.value / totalNum) * 100).toFixed(2);
-    console.log('currentNum.value', currentNum.value);
-    console.log('totalNum.value', totalNum);
     if (currentNum.value == totalNum) {
       showMask.value = false;
       currentNum.value = 0;
@@ -67,44 +65,42 @@
 </script>
 
 <style lang="less">
-//noinspection LessUnresolvedVariable
-@prefix-cls: ~'@{namespace}-tinymce-process-mask';
+  //noinspection LessUnresolvedVariable
+  @prefix-cls: ~'@{namespace}-tinymce-process-mask';
 
-.@{prefix-cls} {
+  .@{prefix-cls} {
+    & {
+      position: absolute; /* 或者使用固定定位等其他方式 */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5); /* 半透明遮罩 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      z-index: 99;
+    }
 
-  & {
-    position: absolute; /* 或者使用固定定位等其他方式 */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明遮罩 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    z-index: 99;
+    .progress-bar-rear {
+      width: 100px; /* 进度条宽度 */
+      height: 10px; /* 进度条高度 */
+      background-color: v-bind(rearColor); /* 进度条颜色 */
+      border-radius: 4px;
+    }
+
+    .progress-bar-front {
+      height: 10px; /* 进度条高度 */
+      background-color: v-bind(frontColor); /* 进度条颜色 */
+      border-radius: 4px;
+    }
+
+    .value {
+      color: #fff;
+      margin-left: 5px;
+      font-size: 16px;
+      font-weight: 600;
+    }
   }
-
-  .progress-bar-rear {
-    width: 100px; /* 进度条宽度 */
-    height: 10px; /* 进度条高度 */
-    background-color: v-bind(rearColor); /* 进度条颜色 */
-    border-radius: 4px;
-  }
-
-  .progress-bar-front {
-    height: 10px; /* 进度条高度 */
-    background-color: v-bind(frontColor); /* 进度条颜色 */
-    border-radius: 4px;
-  }
-
-  .value {
-    color: #fff;
-    margin-left: 5px;
-    font-size: 16px;
-    font-weight: 600;
-  }
-}
-
 </style>

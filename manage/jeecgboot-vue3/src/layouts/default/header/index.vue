@@ -11,7 +11,12 @@
       />
       <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
       <!-- 欢迎语 -->
-      <span v-if="getShowContent && getShowBreadTitle && !getIsMobile" :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`,'headerIntroductionClass']"> {{t('layout.header.welcomeIn')}} {{ title }} </span>
+      <span
+        v-if="getShowContent && getShowBreadTitle && !getIsMobile"
+        :class="[prefixCls, `${prefixCls}--${getHeaderTheme}`, 'headerIntroductionClass']"
+      >
+        {{ t('layout.header.welcomeIn') }} {{ title }}
+      </span>
     </div>
     <!-- left end -->
 
@@ -74,7 +79,7 @@
   import LoginSelect from '/@/views/sys/login/LoginSelect.vue';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import Aide from "@/views/dashboard/ai/components/aide/index.vue"
+  import Aide from '@/views/dashboard/ai/components/aide/index.vue';
   const { t } = useI18n();
 
   export default defineComponent({
@@ -96,7 +101,7 @@
       SettingDrawer: createAsyncComponent(() => import('/@/layouts/default/setting/index.vue'), {
         loading: true,
       }),
-      Aide
+      Aide,
     },
     props: {
       fixed: propTypes.bool,
@@ -180,9 +185,7 @@
         //update-end---author:liusq  Date:20220101  for：判断登录进来是否需要弹窗选择租户----
       }
 
-      function loginSelectOk() {
-        console.log('成功。。。。。');
-      }
+      function loginSelectOk() {}
 
       onMounted(() => {
         showLoginSelect();
@@ -215,7 +218,7 @@
         loginSelectOk,
         loginSelectRef,
         title,
-        t
+        t,
       };
     },
   });
@@ -225,7 +228,7 @@
   //update-begin---author:scott ---date:2022-09-30  for：默认隐藏顶部菜单面包屑-----------
   //顶部欢迎语展示样式
   @prefix-cls: ~'@{namespace}-layout-header';
-  
+
   .ant-layout .@{prefix-cls} {
     display: flex;
     padding: 0 8px;
@@ -233,14 +236,14 @@
     height: @header-height;
     // update-end--author:liaozhiyang---date:20240407---for：【QQYUN-8762】顶栏高度
     align-items: center;
-    
+
     .headerIntroductionClass {
       margin-right: 4px;
       margin-bottom: 2px;
       border-bottom: 0px;
       border-left: 0px;
     }
-    
+
     &--light {
       .headerIntroductionClass {
         color: #000;
@@ -251,7 +254,8 @@
       .headerIntroductionClass {
         color: rgba(255, 255, 255, 1);
       }
-      .anticon, .truncate {
+      .anticon,
+      .truncate {
         color: rgba(255, 255, 255, 1);
       }
     }

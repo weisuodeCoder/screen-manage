@@ -58,9 +58,7 @@
         border.value = !border.value;
       }
 
-      function handleColumnChange(data: ColumnChangeParam[]) {
-        console.log('ColumnChanged', data);
-      }
+      function handleColumnChange(data: ColumnChangeParam[]) {}
 
       return {
         columns: getBasicColumns(),

@@ -70,7 +70,6 @@
                     let dataId = this.formData.dataId;
                     this.$http.get(this.url.queryById,{params:{id:dataId}}).then((res)=>{
                         if(res.data.success){
-                            console.log("表单数据",res);
                             this.model = res.data.result;
                         }
                     })
@@ -81,7 +80,6 @@
                 this.loading = true;
                 let url = myForm.id?this.url.edit:this.url.add;
 				this.$http.post(url,myForm).then(res=>{
-				   console.log("res",res)
 				   this.loading = false
 				   this.$Router.push({name:this.backRouteName})
 				}).catch(()=>{

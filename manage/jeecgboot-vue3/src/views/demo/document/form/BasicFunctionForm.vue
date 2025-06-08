@@ -55,9 +55,7 @@
    * 点击提交按钮的value值
    * @param values
    */
-  function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
-  }
+  function handleSubmit(values: any) {}
 </script>
 
 <style scoped></style>

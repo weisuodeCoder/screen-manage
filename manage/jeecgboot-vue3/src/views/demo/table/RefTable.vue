@@ -65,21 +65,17 @@
       }
       function getColumn() {
         createMessage.info('请在控制台查看！');
-        console.log(getTableAction().getColumns());
       }
 
       function getTableData() {
         createMessage.info('请在控制台查看！');
-        console.log(getTableAction().getDataSource());
       }
       function getTableRawData() {
         createMessage.info('请在控制台查看！');
-        console.log(getTableAction().getRawDataSource());
       }
 
       function getPagination() {
         createMessage.info('请在控制台查看！');
-        console.log(getTableAction().getPaginationRef());
       }
 
       function setPaginationInfo() {
@@ -90,11 +86,9 @@
       }
       function getSelectRowList() {
         createMessage.info('请在控制台查看！');
-        console.log(getTableAction().getSelectRows());
       }
       function getSelectRowKeyList() {
         createMessage.info('请在控制台查看！');
-        console.log(getTableAction().getSelectRowKeys());
       }
       function setSelectedRowKeyList() {
         getTableAction().setSelectedRowKeys(['0', '1', '2']);

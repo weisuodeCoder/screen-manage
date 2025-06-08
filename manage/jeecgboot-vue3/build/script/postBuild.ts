@@ -13,10 +13,8 @@ export const runBuild = async () => {
     if (!argvList.includes('disabled-config')) {
       runBuildConfig();
     }
-
-    console.log(`✨ ${colors.cyan(`[${pkg.name}]`)}` + ' - build successfully!');
   } catch (error) {
-    console.log(colors.red('vite build error:\n' + error));
+    console.error(colors.red('vite build error:\n' + error));
     process.exit(1);
   }
 };

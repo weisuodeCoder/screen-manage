@@ -84,7 +84,6 @@ export const formSchema: FormSchema[] = [
       return !!values.id;
     },
     dynamicRules: ({ values, model }) => {
-      console.log('values:', values);
       return [
         {
           required: true,
@@ -166,7 +165,7 @@ export const roleIndexFormSchema: FormSchema[] = [
     label: '是否路由菜单',
     helpMessage: '非路由菜单设置成首页，需开启',
     component: 'Switch',
-    defaultValue: true
+    defaultValue: true,
   },
   {
     label: '优先级',

@@ -29,7 +29,6 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
     // linkageConfig变化时也需要执行
     const linkageConfig = toRaw(props.linkageConfig);
     if (linkageConfig) {
-      // console.log(linkageConfig);
     }
     // update-end--author:liaozhiyang---date:20250403---for：【issues/7812】linkageConfig改变了，vxetable没更新
     let columns: JVxeColumn[] = [];
@@ -104,7 +103,7 @@ export function useColumns(props: JVxeTableProps, data: JVxeDataProps, methods: 
           args.columns = container;
           handlerCol(args);
         }
-      }
+      };
 
       props.columns.forEach((column: JVxeColumn) => handleColumn(column, columns));
 

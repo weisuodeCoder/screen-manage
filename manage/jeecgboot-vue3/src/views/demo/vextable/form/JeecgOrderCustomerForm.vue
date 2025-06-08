@@ -37,7 +37,6 @@
       async function initFormData(mainId) {
         let params = { id: mainId };
         const data = await defHttp.get({ url: queryByIdUrl, params });
-        console.log('data', data);
         if (data && data.length > 0) {
           let temp = data[0];
           orderCustomerFormData = { ...temp };

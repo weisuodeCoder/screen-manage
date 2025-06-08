@@ -34,10 +34,16 @@
       <BasicDragVerify v-model:value="model[field]" />
     </template>
     <template #superQuery="{ model, field }">
-      <super-query :config="superQueryConfig" @search="(value)=>handleSuperQuery(value, model, field)"/>
+      <super-query :config="superQueryConfig" @search="(value) => handleSuperQuery(value, model, field)" />
     </template>
     <template #superQuery1="{ model, field }">
-      <super-query :config="superQueryConfig" @search="(value)=>handleSuperQuery(value, model, field)" :isCustomSave="true" :saveSearchData="saveSearchData" :save="handleSuperQuerySave"/>
+      <super-query
+        :config="superQueryConfig"
+        @search="(value) => handleSuperQuery(value, model, field)"
+        :isCustomSave="true"
+        :saveSearchData="saveSearchData"
+        :save="handleSuperQuerySave"
+      />
     </template>
   </BasicForm>
 </template>
@@ -80,19 +86,18 @@
       function onSearch(value: string) {
         keyword.value = value;
       }
-      
+
       const superQueryConfig = {
-        name:{ title: "名称", view: "text", type: "string", order: 1 },
-        birthday:{ title: "生日", view: "date", type: "string", order: 2 },
-        age:{ title: "年龄", view: "number", type: "number", order: 4 },
-        sex:{ title: "性别", view: "list", type: "string", dictCode: "sex", order: 5 },
-        bpmStatus:{ title: "流程状态", view: "list_multi", type: "string",  dictCode: "bpm_status", order: 6 },
-      }
-      function handleSuperQuery(value, model, field){
-        if(value){
-          let str = decodeURI(value.superQueryParams)
-          console.log(str)
-          model[field] = str
+        name: { title: '名称', view: 'text', type: 'string', order: 1 },
+        birthday: { title: '生日', view: 'date', type: 'string', order: 2 },
+        age: { title: '年龄', view: 'number', type: 'number', order: 4 },
+        sex: { title: '性别', view: 'list', type: 'string', dictCode: 'sex', order: 5 },
+        bpmStatus: { title: '流程状态', view: 'list_multi', type: 'string', dictCode: 'bpm_status', order: 6 },
+      };
+      function handleSuperQuery(value, model, field) {
+        if (value) {
+          let str = decodeURI(value.superQueryParams);
+          model[field] = str;
         }
       }
       const saveSearchData = ref([
@@ -113,16 +118,14 @@
           // 模拟接口
           setTimeout(() => {
             if (Math.random() > 0.5) {
-              console.log('接口成功~');
               saveSearchData.value = data;
               resolve();
             } else {
-              console.log('接口失败~');
               reject();
             }
           }, 1e3);
         });
-      }
+      };
       return {
         schemas,
         formElRef,
@@ -137,7 +140,6 @@
           keyword.value = '';
         },
         handleSubmit: (values: any) => {
-          console.log('values:', values);
           createMessage.success('click search,values:' + JSON.stringify(values));
         },
         check,

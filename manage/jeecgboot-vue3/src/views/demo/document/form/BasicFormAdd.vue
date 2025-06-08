@@ -1,7 +1,7 @@
 <!-- 动态增减表单 -->
 <template>
   <!-- 自定义表单 -->
-  <BasicForm @register="registerForm" style="margin-top: 20px;" @submit="handleSubmit">
+  <BasicForm @register="registerForm" style="margin-top: 20px" @submit="handleSubmit">
     <!--  添加input的插槽  -->
     <template #addForm="{ field }">
       <a-button v-if="Number(field) === 0" @click="addField" style="width: 50px">+</a-button>
@@ -130,9 +130,7 @@
    * 点击提交按钮的value值
    * @param values
    */
-  function handleSubmit(values: any) {
-    console.log('提交按钮数据::::', values);
-  }
+  function handleSubmit(values: any) {}
 </script>
 
 <style scoped>

@@ -61,7 +61,6 @@ async function generateIcon() {
         }
       }
       fs.emptyDir(path.join(process.cwd(), 'node_modules/.vite'));
-      console.log(`✨ ${colors.cyan(`[${pkg.name}]`)}` + ' - Icon generated successfully:' + `[${prefixSet}]`);
     });
 }
 

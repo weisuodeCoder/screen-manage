@@ -1,22 +1,12 @@
 package org.jeecg.modules.demo.screen.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.jeecg.modules.demo.screen.entity.ScreenLeftOne;
-import org.jeecg.modules.demo.screen.entity.ScreenLeftTwo;
-import org.jeecg.modules.demo.screen.entity.ScreenLeftTwoX;
-import org.jeecg.modules.demo.screen.entity.ScreenLeftTwoY;
-import org.jeecg.modules.demo.screen.mapper.ScreenLeftOneMapper;
-import org.jeecg.modules.demo.screen.mapper.ScreenLeftTwoMapper;
-import org.jeecg.modules.demo.screen.service.IScreenLeftOneService;
-import org.jeecg.modules.demo.screen.service.IScreenLeftTwoService;
+import org.jeecg.modules.demo.screen.entity.*;
+import org.jeecg.modules.demo.screen.mapper.ScreenLeftThreeMapper;
+import org.jeecg.modules.demo.screen.service.IScreenLeftThreeService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @Description: 左1分组
@@ -26,18 +16,34 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class ScreenLeftTwoServiceImpl implements IScreenLeftTwoService {
-    private final ScreenLeftTwoMapper screenLeftTwoMapper;
+public class ScreenLeftThreeServiceImpl implements IScreenLeftThreeService {
+    private final ScreenLeftThreeMapper screenLeftThreeMapper;
 
     @Override
-    public ScreenLeftTwo getLeftTwoDatas(String timeRange) {
-        System.out.println(timeRange);
-        List<ScreenLeftTwoX> screenLeftTwoXES = screenLeftTwoMapper.selectScreenLeftOneX();
-        List<ScreenLeftTwoY> screenLeftTwoYS = screenLeftTwoMapper.selectScreenLeftOneY(timeRange);
-        System.out.println(screenLeftTwoYS);
-        ScreenLeftTwo screenLeftTwo = new ScreenLeftTwo();
-        screenLeftTwo.setScreenLeftTwoXs(screenLeftTwoXES);
-        screenLeftTwo.setScreenLeftTwoYs(screenLeftTwoYS);
-        return screenLeftTwo;
+    public ScreenLeftThree getLeftThreeDatas(String timeRange) {
+        // 'year', 'last12', 'currentYear'
+        ScreenLeftThree screenLeftThree = new ScreenLeftThree();
+        if(timeRange.equals("year")) {
+            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_1();
+            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_1();
+            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
+            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
+        }else if(timeRange.equals("last12")) {
+            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_2();
+            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_2();
+            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
+            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
+        }else if(timeRange.equals("currentYear")) {
+            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_3();
+            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_3();
+            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
+            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
+        }else {
+            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_1();
+            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_1();
+            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
+            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
+        }
+        return screenLeftThree;
     }
 }

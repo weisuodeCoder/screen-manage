@@ -297,7 +297,6 @@
         const mainData = await getFormData();
         const subData = await getSubFormAndTableData();
         const values = Object.assign({}, dbData, mainData, subData);
-        console.log('表单提交数据', values)
         const isUpdate = values.id ? true : false
         await saveOrUpdate(values, isUpdate);
         //关闭弹窗

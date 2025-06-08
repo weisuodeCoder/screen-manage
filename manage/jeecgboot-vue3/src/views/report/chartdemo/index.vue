@@ -71,15 +71,13 @@
   import BarAndLine from '/@/components/chart/BarAndLine.vue';
 
   const activeKey = ref('1');
-  const { barDataSource, barMultiData, pieData, barLineData, radarData,barLineColors } = getData;
+  const { barDataSource, barMultiData, pieData, barLineData, radarData, barLineColors } = getData;
   const multiBarOption = {
     title: { text: '多列柱状图', left: 'center' },
   };
   const rankList = loadData('name', 'total', 2000, 100, '北京朝阳 ', ' 号店');
   //tab切换
-  function tabChange(key) {
-    console.log('切换的key:', key);
-  }
+  function tabChange(key) {}
   function loadData(x, y, max, min, before = '', after = '月') {
     let data = [];
     for (let i = 0; i < 12; i += 1) {

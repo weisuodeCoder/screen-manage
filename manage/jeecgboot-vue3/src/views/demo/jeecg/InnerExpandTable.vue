@@ -92,8 +92,6 @@
       align: 'center',
       dataIndex: 'sex',
       customRender: function (text) {
-        //console.log(typeof  text )
-        //console.log(text)
         if (text.value == '1') {
           return '男';
         } else if (text.value == '2') {

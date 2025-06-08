@@ -107,7 +107,6 @@
 
       //update-begin-author:taoyan date:2022-6-1 for: VUEN-1144 online 配置成菜单后，打开菜单，显示名称未展示为菜单名称
       function storePathTitle(path) {
-        console.log('storePathTitle', path);
         let title = '';
         if (instance!.attrs) {
           let item: any = instance!.attrs.item;

@@ -128,8 +128,6 @@
     }
   }
   //tab切换
-  function tabChange(key) {
-    console.log('切换的key:', key);
-  }
+  function tabChange(key) {}
   loadDate(url.getYearCountInfo, 'year', {});
 </script>

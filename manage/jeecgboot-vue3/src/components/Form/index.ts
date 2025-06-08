@@ -32,5 +32,6 @@ export { default as JEditor } from './src/jeecg/components/JEditor.vue';
 export { default as JImageUpload } from './src/jeecg/components/JImageUpload.vue';
 // Jeecg自定义校验
 export { JCronValidator } from '/@/components/Form/src/jeecg/components/JEasyCron';
+export { default as JColorPicker } from './src/jeecg/components/JColorPicker.vue';
 
 export { BasicForm };

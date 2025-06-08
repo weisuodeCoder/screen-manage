@@ -161,7 +161,6 @@
       }
 
       async function setModalHeight(option?) {
-        console.log("---------性能监控--------setModalHeight----------")
         const options = option || {};
         const source = options.source;
         const callBack = options.callBack;
@@ -208,10 +207,10 @@
             callBack(realHeightRef.value);
           }
           // update-end--author:liaozhiyang---date:2024-04-18---for：【QQYUN-9035】basicModal不设置maxHeight或height会一直执行setModalHeight，需即使销毁MutationObserver
-          
+
           emit('height-change', unref(realHeightRef));
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
 

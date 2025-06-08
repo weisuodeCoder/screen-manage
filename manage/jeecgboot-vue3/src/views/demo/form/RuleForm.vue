@@ -218,9 +218,8 @@
       async function validateForm() {
         try {
           const res = await validateFields();
-          console.log('passing', res);
         } catch (error) {
-          console.log('not passing', error);
+          console.error('not passing', error);
         }
       }
 

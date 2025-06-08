@@ -215,7 +215,6 @@
           .validate()
           .then(async () => {
             try {
-              console.log('formData', JSON.stringify(orderMainModel));
               setModalProps({ confirmLoading: true });
               await saveOrUpdate(orderMainModel, unref(isUpdate));
               closeModal();
@@ -225,7 +224,7 @@
             }
           })
           .catch((error: ValidateErrorEntity<any>) => {
-            console.log('error', error);
+            console.error('error', error);
           });
       }
 

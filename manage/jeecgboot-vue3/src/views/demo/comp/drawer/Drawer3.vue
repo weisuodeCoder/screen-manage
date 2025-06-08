@@ -24,11 +24,7 @@
     components: { BasicDrawer },
     setup() {
       return {
-        handleOk: () => {
-          console.log('=====================');
-          console.log('ok');
-          console.log('======================');
-        },
+        handleOk: () => {},
       };
     },
   });

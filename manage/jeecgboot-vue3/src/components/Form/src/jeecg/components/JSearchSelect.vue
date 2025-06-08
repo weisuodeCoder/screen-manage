@@ -31,7 +31,7 @@
     :placeholder="placeholder"
     :filterOption="filterOption"
     :notFoundContent="loading ? undefined : null"
-    :dropdownAlign="{overflow: {adjustY: adjustY }}"
+    :dropdownAlign="{ overflow: { adjustY: adjustY } }"
     @change="handleChange"
   >
     <template #notFoundContent>
@@ -72,15 +72,15 @@
       },
       //默认开启Y轴溢出位置调整，因此在可视空间不足时下拉框位置会自动上移，导致Select的输入框被遮挡。需要注意的是，默认情况是是可视空间，而不是所拥有的空间
       //update-begin-author:liusq date:2023-04-04 for:[issue/286]下拉搜索框遮挡问题
-      adjustY:propTypes.bool.def(true),
+      adjustY: propTypes.bool.def(true),
       //update-end-author:liusq date:2023-04-04 for:[issue/286]下拉搜索框遮挡问题
       //是否在有值后立即触发change
       immediateChange: propTypes.bool.def(false),
       //update-begin-author:taoyan date:2022-8-15 for: VUEN-1971 【online 专项测试】关联记录和他表字段 1
       //支持传入查询参数，如排序信息
-      params:{
+      params: {
         type: Object,
-        default: ()=>{}
+        default: () => {},
       },
       //update-end-author:taoyan date:2022-8-15 for: VUEN-1971 【online 专项测试】关联记录和他表字段 1
     },
@@ -89,7 +89,7 @@
       const options = ref<any[]>([]);
       const loading = ref(false);
       // update-begin--author:liaozhiyang---date:20231205---for：【issues/897】JSearchSelect组件添加class/style样式不生效
-      const attrs = useAttrs({'excludeDefaultKeys': false});
+      const attrs = useAttrs({ excludeDefaultKeys: false });
       // update-end--author:liaozhiyang---date:20231205---for：【issues/897】JSearchSelect组件添加class/style样式不生效
       const selectedValue = ref([]);
       const selectedAsyncValue = ref([]);
@@ -105,24 +105,28 @@
       // 是否是字典表
       const isDictTable = computed(() => {
         if (props.dict) {
-          return props.dict.split(',').length >= 2
+          return props.dict.split(',').length >= 2;
         }
         return false;
-      })
+      });
 
       /**
        * 监听字典code
        */
-      watch(() => props.dict, () => {
-        if (!props.dict) {
-          return
-        }
-        if (isDictTable.value) {
-          initDictTableData();
-        } else {
-          initDictCodeData();
-        }
-      }, {immediate: true});
+      watch(
+        () => props.dict,
+        () => {
+          if (!props.dict) {
+            return;
+          }
+          if (isDictTable.value) {
+            initDictTableData();
+          } else {
+            initDictCodeData();
+          }
+        },
+        { immediate: true }
+      );
 
       /**
        * 监听value
@@ -163,7 +167,7 @@
         isHasData = true;
         searchKeyword = value;
         // update-end--author:liaozhiyang---date:20240731---for：【TV360X-1898】JsearchSelect组件传入字典表格式则支持滚动加载
- 
+
         lastLoad.value += 1;
         const currentLoad = unref(lastLoad);
         options.value = [];
@@ -218,7 +222,7 @@
                   selectedAsyncValue.value = { ...obj };
                 }
                 //update-begin-author:taoyan date:2022-8-11 for: 值改变触发change事件--用于online关联记录配置页面
-                if(props.immediateChange == true){
+                if (props.immediateChange == true) {
                   emit('change', props.value);
                 }
                 //update-end-author:taoyan date:2022-8-11 for: 值改变触发change事件--用于online关联记录配置页面
@@ -228,7 +232,7 @@
         } else {
           selectedValue.value = value.toString();
           //update-begin-author:taoyan date:2022-8-11 for: 值改变触发change事件--用于online他表字段配置界面
-          if(props.immediateChange == true){
+          if (props.immediateChange == true) {
             emit('change', value.toString());
           }
           //update-end-author:taoyan date:2022-8-11 for: 值改变触发change事件--用于online他表字段配置界面
@@ -341,12 +345,13 @@
        */
       function filterOption(input, option) {
         //update-begin-author:taoyan date:2022-11-8 for: issues/218 所有功能表单的下拉搜索框搜索无效
-        let value = '', label = '';
+        let value = '',
+          label = '';
         try {
           value = option.value;
           label = option.children()[0].children;
-        }catch (e) {
-          console.log('获取下拉项失败', e)
+        } catch (e) {
+          console.error('获取下拉项失败', e);
         }
         let str = input.toLowerCase();
         return value.toLowerCase().indexOf(str) >= 0 || label.toLowerCase().indexOf(str) >= 0;
@@ -371,17 +376,16 @@
 
       //update-begin-author:taoyan date:2022-8-15 for: VUEN-1971 【online 专项测试】关联记录和他表字段 1
       //获取关键词参数 支持设置排序信息
-      function getKeywordParam(text){
+      function getKeywordParam(text) {
         // 如果设定了排序信息，需要写入排序信息，在关键词后加 [orderby:create_time,desc]
-        if(props.params && props.params.column && props.params.order){
-          let temp = text||''
-          
+        if (props.params && props.params.column && props.params.order) {
+          let temp = text || '';
+
           //update-begin-author:taoyan date:2023-5-22 for: /issues/4905 表单生成器字段配置时，选择关联字段，在进行高级配置时，无法加载数据库列表，提示 Sgin签名校验错误！ #4905
-          temp = temp+'[orderby:'+props.params.column+','+props.params.order+']'
+          temp = temp + '[orderby:' + props.params.column + ',' + props.params.order + ']';
           return encodeURI(temp);
           //update-end-author:taoyan date:2023-5-22 for: /issues/4905 表单生成器字段配置时，选择关联字段，在进行高级配置时，无法加载数据库列表，提示 Sgin签名校验错误！ #4905
-          
-        }else{
+        } else {
           return text;
         }
       }
@@ -428,7 +432,7 @@
                 if (res?.length > 0) {
                   // 防止开源只更新了前端代码没更新后端代码（第一页和第二页面的第一条数据相同则是后端代码没更新，没分页）
                   if (JSON.stringify(res[0]) === JSON.stringify(options.value[0])) {
-                    isHasData =  false;
+                    isHasData = false;
                     return;
                   }
                   options.value.push(...res);

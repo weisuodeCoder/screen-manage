@@ -225,14 +225,12 @@ var OPS = PDFJS.OPS = {
 // end users.
 function info(msg) {
   if (PDFJS.verbosity >= PDFJS.VERBOSITY_LEVELS.infos) {
-    console.log('Info: ' + msg);
   }
 }
 
 // Non-fatal warnings.
 function warn(msg) {
   if (PDFJS.verbosity >= PDFJS.VERBOSITY_LEVELS.warnings) {
-    console.log('Warning: ' + msg);
   }
 }
 
@@ -240,8 +238,8 @@ function warn(msg) {
 // throwing an exception.
 function error(msg) {
   if (PDFJS.verbosity >= PDFJS.VERBOSITY_LEVELS.errors) {
-    console.log('Error: ' + msg);
-    console.log(backtrace());
+    console.error('Error: ' + msg);
+    console.error(backtrace());
   }
   UnsupportedManager.notify(UNSUPPORTED_FEATURES.unknown);
   throw new Error(msg);
@@ -1483,7 +1481,6 @@ function MessageHandler(name, comObj) {
   var ah = this.actionHandler = {};
 
   ah['console_log'] = [function ahConsoleLog(data) {
-    console.log.apply(console, data);
   }];
   ah['console_error'] = [function ahConsoleError(data) {
     console.error.apply(console, data);

@@ -194,7 +194,7 @@
                   resolve();
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
                 });
             } else {
               resolve();
@@ -233,7 +233,17 @@
         return (table as any)?.wrapRef?.value ?? document.body;
       };
       // update-end--author:liaozhiyang---date:20240814---for：【issues/7028】表格全屏后操作列中的下拉菜单和气泡确认框不显示
-      return { prefixCls, getActions, getDropdownList, getDropdownSlotList, getAlign, onCellClick, getTooltip, dropdownCls, dropdownGetPopupContainer };
+      return {
+        prefixCls,
+        getActions,
+        getDropdownList,
+        getDropdownSlotList,
+        getAlign,
+        onCellClick,
+        getTooltip,
+        dropdownCls,
+        dropdownGetPopupContainer,
+      };
     },
   });
 </script>

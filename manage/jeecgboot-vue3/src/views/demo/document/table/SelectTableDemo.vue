@@ -70,11 +70,7 @@
     ];
   }
 
-  function handleEdit(record) {
-    console.log(record);
-    console.log(selectedRows.value);
-    console.log(selectedRowKeys.value);
-  }
+  function handleEdit(record) {}
 </script>
 
 <style scoped></style>

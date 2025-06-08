@@ -34,7 +34,7 @@
       try {
         data.record.paramterType = isJsonObjectString(data?.record?.parameter) ? 'json' : 'string';
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
       //表单赋值
       await setFieldsValue({

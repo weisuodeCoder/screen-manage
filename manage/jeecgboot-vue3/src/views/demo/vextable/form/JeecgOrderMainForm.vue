@@ -7,7 +7,18 @@
       </a-tab-pane>
 
       <a-tab-pane tab="机票信息" key="jeecgOrderTicket" :forceRender="true">
-        <JVxeTable v-if="ok" ref="jeecgOrderTicketRef" stripe rowSelection keepSource :maxHeight="300" :loading="table2.loading" :columns="table2.columns" :dataSource="table2.dataSource"> </JVxeTable>
+        <JVxeTable
+          v-if="ok"
+          ref="jeecgOrderTicketRef"
+          stripe
+          rowSelection
+          keepSource
+          :maxHeight="300"
+          :loading="table2.loading"
+          :columns="table2.columns"
+          :dataSource="table2.dataSource"
+        >
+        </JVxeTable>
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -53,10 +64,8 @@
       let formData = {};
       const queryByIdUrl = '/test/jeecgOrderMain/queryById';
       async function initFormData() {
-        console.log('props.formData', props.formData);
         let params = { id: props.formData.dataId };
         const data = await defHttp.get({ url: queryByIdUrl, params });
-        console.log('data', data);
         formData = { ...data };
         //设置表单的值
         await setFieldsValue(formData);
@@ -70,7 +79,6 @@
       async function submitForm() {
         let data = getFieldsValue();
         let params = Object.assign({}, formData, data);
-        console.log('表单数据', params);
         await saveOrUpdate(params, true);
       }
 

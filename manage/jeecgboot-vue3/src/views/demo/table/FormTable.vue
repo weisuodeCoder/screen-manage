@@ -43,12 +43,9 @@
         rowKey: 'id',
       });
 
-      function getFormValues() {
-        console.log(getForm().getFieldsValue());
-      }
+      function getFormValues() {}
 
       function onSelectChange(selectedRowKeys: (string | number)[]) {
-        console.log(selectedRowKeys);
         checkedKeys.value = selectedRowKeys;
       }
 

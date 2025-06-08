@@ -47,7 +47,6 @@
           const values = await validate();
           setModalProps({ confirmLoading: true });
           // TODO custom api
-          console.log(values);
           closeModal();
           emit('success');
         } finally {

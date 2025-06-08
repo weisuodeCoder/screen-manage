@@ -71,11 +71,12 @@ import JAddInput from './jeecg/components/JAddInput.vue';
 import { Time } from '/@/components/Time';
 import JRangeNumber from './jeecg/components/JRangeNumber.vue';
 import UserSelect from './jeecg/components/userSelect/index.vue';
-import JRangeDate from './jeecg/components/JRangeDate.vue'
-import JRangeTime from './jeecg/components/JRangeTime.vue'
-import JInputSelect from './jeecg/components/JInputSelect.vue'
+import JRangeDate from './jeecg/components/JRangeDate.vue';
+import JRangeTime from './jeecg/components/JRangeTime.vue';
+import JInputSelect from './jeecg/components/JInputSelect.vue';
 import RoleSelectInput from './jeecg/components/roleSelect/RoleSelectInput.vue';
-import {DatePickerInFilter, CascaderPcaInFilter} from "@/components/InFilter";
+import JColorPicker from './jeecg/components/JColorPicker.vue';
+import { DatePickerInFilter, CascaderPcaInFilter } from '@/components/InFilter';
 
 const componentMap = new Map<ComponentType, Component>();
 
@@ -171,8 +172,7 @@ componentMap.set('RangeDate', JRangeDate);
 componentMap.set('RangeTime', JRangeTime);
 componentMap.set('RoleSelect', RoleSelectInput);
 componentMap.set('JInputSelect', JInputSelect);
-
-
+componentMap.set('JColorPicker', JColorPicker);
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, component);

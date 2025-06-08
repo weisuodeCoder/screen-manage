@@ -67,7 +67,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
   import { getTenantId } from '@/utils/auth';
   import ThirdAppBindWeEnterpriseModal from './ThirdAppBindWeEnterpriseModal.vue';
-  import { Modal } from "ant-design-vue";
+  import { Modal } from 'ant-design-vue';
 
   export default defineComponent({
     name: 'ThirdAppWeEnterpriseConfigForm',
@@ -133,8 +133,6 @@
        * @param item
        */
       function handleBindSuccess(options, item) {
-        console.log("options:::",options)
-        console.log("item:::",item)
         if (item.success) {
           if (options != null) {
             Modal.success(options);
@@ -152,14 +150,14 @@
           }
         }
       }
-      
+
       /**
        * 查看已绑定的企业微信
        */
       function seeBindWeChat() {
-        openBindModal(true,{ izBind: true })
+        openBindModal(true, { izBind: true });
       }
-      
+
       onMounted(() => {
         let tenantId = getTenantId();
         initThirdAppConfigData({ tenantId: tenantId, thirdType: 'wechat_enterprise' });

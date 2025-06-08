@@ -412,7 +412,6 @@ const dataId = ref('')
 const backRouteName = ref('${entityName}List')
 // 定义 initForm 方法
 const initForm = (item) => {
-  console.log('initForm item', item)
   if(item?.dataId){
     dataId.value = item.dataId;
     navTitle.value = item.dataId?'编辑':'新增';
@@ -454,7 +453,7 @@ const handleSubmit = () => {
       }
     })
     .catch((error) => {
-      console.log(error, 'error')
+      console.error(error, 'error')
       loading.value = false;
     })
 }

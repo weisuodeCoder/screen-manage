@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftTwoMapper">
-    <select id="selectScreenLeftOneX" resultType="java.util.Map">
+    <select id="selectScreenLeftOneX" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftTwoX">
         SELECT i.item_text AS 'name', i.item_value AS 'value'
         FROM sys_dict d
                  LEFT JOIN sys_dict_item i
                            ON d.id = i.dict_id
         WHERE d.dict_code = 'screen_left_two_class_name'
     </select>
-    <select id="selectScreenLeftOneY" resultType="java.util.Map">
+    <select id="selectScreenLeftOneY" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftTwoY">
         SELECT
-            sltd.class_name AS xData,
-            sltm.title AS NAME,
-            SUM(sltd.value) AS total_value,
-            CONCAT( sltm.color_one, ',', sltm.color_two) AS colors
+        d.class_name AS xData,
+        m.title AS `name`,
+        SUM(d.value) AS `value`,
+        CONCAT( m.color_one, ',', m.color_two) AS colors
         FROM
-            screen_left_two_data sltd
-                JOIN
-            screen_left_two_main sltm ON sltd.group_id = sltm.id
-        WHERE
-            sltd.year >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+        screen_left_two_data d
+        JOIN
+        screen_left_two_main m ON d.group_id = m.id
+        WHERE 1=1
+        <choose>
+            <when test="timeRange == 'Y3'">
+                AND d.year >= DATE_SUB(CURDATE(), INTERVAL 3 YEAR)
+            </when>
+            <when test="timeRange == 'Y1'">
+                AND d.year >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+            </when>
+            <when test="timeRange == 'M6'">
+                AND d.year >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+            </when>
+            <when test="timeRange == 'M3'">
+                AND d.year >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+            </when>
+            <when test="timeRange == 'M1'">
+                AND d.year >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+            </when>
+            <otherwise>
+                AND d.year >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) <!-- 默认1个月 -->
+            </otherwise>
+        </choose>
         GROUP BY
-            sltd.class_name, sltm.title, sltm.color_one, sltm.color_two
+        d.class_name, m.title, m.color_one, m.color_two
         ORDER BY
-            sltd.class_name, sltm.title;
+        d.class_name, m.title
     </select>
 </mapper>

@@ -160,7 +160,6 @@
   // 表单提交请求
   async function saveOrUpdateFormData(formData) {
     try {
-      console.log('表单提交数据', formData);
       setModalProps({ confirmLoading: true });
       if (isUpdate.value) {
         await updateCheckRule(formData);

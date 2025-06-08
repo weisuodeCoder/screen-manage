@@ -12,9 +12,7 @@
     components: { Tinymce, PageWrapper },
     setup() {
       const value = ref('hello world!');
-      function handleChange(value: string) {
-        console.log(value);
-      }
+      function handleChange(value: string) {}
       return { handleChange, value };
     },
   });

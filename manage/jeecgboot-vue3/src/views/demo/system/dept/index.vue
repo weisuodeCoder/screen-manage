@@ -79,9 +79,7 @@
         });
       }
 
-      function handleDelete(record: Recordable) {
-        console.log(record);
-      }
+      function handleDelete(record: Recordable) {}
 
       function handleSuccess() {
         reload();

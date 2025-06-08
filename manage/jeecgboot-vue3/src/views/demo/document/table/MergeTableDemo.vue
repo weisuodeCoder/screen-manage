@@ -136,9 +136,7 @@
     ];
   }
 
-  function handleEdit(record) {
-    console.log(record);
-  }
+  function handleEdit(record) {}
 </script>
 
 <style scoped></style>

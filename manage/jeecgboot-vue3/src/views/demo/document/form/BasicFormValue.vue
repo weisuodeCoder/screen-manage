@@ -57,13 +57,10 @@
   async function getFormValue() {
     //获取所有值
     let fieldsValue = await getFieldsValue();
-    console.log('fieldsValue:::', fieldsValue);
     //表单验证通过后获取所有字段值
     fieldsValue = await validate();
-    console.log('fieldsValue:::', fieldsValue);
     //表单验`visitor来访人员`通过后获取的值
     fieldsValue = await validate(['visitor']);
-    console.log('fieldsValue:::', fieldsValue);
   }
 
   /**
@@ -77,7 +74,6 @@
    * 更新表单值
    */
   async function updateFormValue() {
-    console.log('我进来了');
     await setFieldsValue({ visitor: '李四' });
   }
 </script>

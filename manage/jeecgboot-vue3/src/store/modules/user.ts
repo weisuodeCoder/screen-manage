@@ -18,8 +18,8 @@ import { isArray } from '/@/utils/is';
 import { useGlobSetting } from '/@/hooks/setting';
 import { JDragConfigEnum } from '/@/enums/jeecgEnum';
 import { useSso } from '/@/hooks/web/useSso';
-import { isOAuth2AppEnv } from "/@/views/sys/login/useLogin";
-import { getUrlParam } from "@/utils";
+import { isOAuth2AppEnv } from '/@/views/sys/login/useLogin';
+import { getUrlParam } from '@/utils';
 interface dictType {
   [key: string]: any;
 }
@@ -60,8 +60,8 @@ export const useUserStore = defineStore({
   }),
   getters: {
     getUserInfo(): UserInfo {
-      if(this.userInfo == null){
-        this.userInfo = getAuthCache<UserInfo>(USER_INFO_KEY)!=null ? getAuthCache<UserInfo>(USER_INFO_KEY) : null;
+      if (this.userInfo == null) {
+        this.userInfo = getAuthCache<UserInfo>(USER_INFO_KEY) != null ? getAuthCache<UserInfo>(USER_INFO_KEY) : null;
       }
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
@@ -197,7 +197,7 @@ export const useUserStore = defineStore({
         //   permissionStore.setDynamicAddedRoute(true);
         // }
         //update-end---author:scott ---date::2024-02-21  for：【QQYUN-8326】登录不需要构建路由，进入首页有构建---
-        
+
         await this.setLoginInfo({ ...data, isLogin: true });
         //update-begin-author:liusq date:2022-5-5 for:登录成功后缓存拖拽模块的接口前缀
         localStorage.setItem(JDragConfigEnum.DRAG_BASE_URL, useGlobSetting().domainUrl);
@@ -208,7 +208,7 @@ export const useUserStore = defineStore({
         // 判断是否有 redirect 重定向地址
         //update-begin---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
         if (redirect && goHome) {
-        //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
+          //update-end---author:wangshuai ---date:20230424  for：【QQYUN-5195】登录之后直接刷新页面导致没有进入创建组织页面------------
           // update-begin--author:liaozhiyang---date:20250407---for：【issues/8034】hash模式下退出重登录默认跳转地址异常
           // router.options.history.base可替代之前的publicPath
           // 当前页面打开
@@ -220,9 +220,9 @@ export const useUserStore = defineStore({
 
         //update-begin---author:wangshuai---date:2024-04-03---for:【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
         let ticket = getUrlParam('ticket');
-        if(ticket){
-          goHome && (window.location.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
-        }else{
+        if (ticket) {
+          goHome && window.location.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME);
+        } else {
           goHome && (await router.replace((userInfo && userInfo.homePath) || PageEnum.BASE_HOME));
         }
         //update-end---author:wangshuai---date:2024-04-03---for:【issues/1102】设置单点登录后页面，进入首页提示404，也没有绘制侧边栏 #1102---
@@ -243,7 +243,7 @@ export const useUserStore = defineStore({
         const { goHome = true, mode, ...loginParams } = params;
         const data = await phoneLoginApi(loginParams, mode);
         //update-begin---author:wangshuai---date:2024-11-25---for:【issues/7488】手机号码登录，在请求头中无法获取租户id---
-        const { token , userInfo } = data;
+        const { token, userInfo } = data;
         this.setTenant(userInfo!.loginTenantId);
         //update-end---author:wangshuai---date:2024-11-25---for:【issues/7488】手机号码登录，在请求头中无法获取租户id---
         // save token
@@ -290,7 +290,7 @@ export const useUserStore = defineStore({
         try {
           await doLogout();
         } catch {
-          console.log('注销Token失败');
+          console.error('注销Token失败');
         }
       }
 
@@ -323,21 +323,21 @@ export const useUserStore = defineStore({
       }
       //update-begin---author:wangshuai ---date:20230224  for：[QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
       //退出登录的时候需要用的应用id
-      if(isOAuth2AppEnv()){
+      if (isOAuth2AppEnv()) {
         let tenantId = getAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID);
         removeAuthCache(OAUTH2_THIRD_LOGIN_TENANT_ID);
-        goLogin && await router.push({ name:"Login",query:{ tenantId:tenantId }})
-      }else{
+        goLogin && (await router.push({ name: 'Login', query: { tenantId: tenantId } }));
+      } else {
         // update-begin-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
-        goLogin && (await router.push({
-          path: PageEnum.BASE_LOGIN,
-          query: {
-            // 传入当前的路由，登录成功后跳转到当前路由
-            redirect: router.currentRoute.value.fullPath,
-          }
-        }));
+        goLogin &&
+          (await router.push({
+            path: PageEnum.BASE_LOGIN,
+            query: {
+              // 传入当前的路由，登录成功后跳转到当前路由
+              redirect: router.currentRoute.value.fullPath,
+            },
+          }));
         // update-end-author:sunjianlei date:20230306 for: 修复登录成功后，没有正确重定向的问题
-
       }
       //update-end---author:wangshuai ---date:20230224  for：[QQYUN-3440]新建企业微信和钉钉配置表，通过租户模式隔离------------
     },

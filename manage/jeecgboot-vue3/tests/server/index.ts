@@ -32,7 +32,6 @@ app.ws.use(
         });
         ctx.websocket.send(data);
       }
-      console.log(message);
     });
   })
 );
@@ -58,6 +57,4 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(koaStatic(path.join(__dirname)));
 
-app.listen(PORT, () => {
-  console.log(`Application started successfully: http://localhost:${PORT}`);
-});
+app.listen(PORT, () => {});

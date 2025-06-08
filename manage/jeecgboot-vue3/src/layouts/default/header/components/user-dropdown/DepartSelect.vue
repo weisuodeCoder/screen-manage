@@ -151,7 +151,7 @@
    * 提交数据
    */
   async function handleSubmit() {
-    if (unref(isMultiTenant) && unref(tenantSelected)==null) {
+    if (unref(isMultiTenant) && unref(tenantSelected) == null) {
       validate_status.value = 'error';
       return false;
     }
@@ -165,12 +165,12 @@
           userStore.setTenant(unref(tenantSelected));
         }
         createMessage.success('切换成功');
-        
+
         //切换租户后要刷新首页
         window.location.reload();
       })
       .catch((e) => {
-        console.log('登录选择出现问题', e);
+        console.error('登录选择出现问题', e);
       })
       .finally(() => {
         if (unref(isMultiTenant)) {

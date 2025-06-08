@@ -52,11 +52,9 @@
       async function submitAll() {
         try {
           if (tableRef.value) {
-            console.log('table data:', tableRef.value.getDataSource());
           }
 
           const [values, taskValues] = await Promise.all([validate(), validateTaskForm()]);
-          console.log('form data:', values, taskValues);
         } catch (error) {}
       }
 

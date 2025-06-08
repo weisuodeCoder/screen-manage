@@ -145,7 +145,6 @@
       },
       edit(record){
         this.model = Object.assign({}, record)
-        console.log("${sub.entityName}Form-edit",this.model);
       },
       getFormData(){
         let formdata_arr = []

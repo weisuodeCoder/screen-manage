@@ -66,9 +66,7 @@
     disabled: false,
   });
 
-  function handleSubmit(values) {
-    console.log(values);
-  }
+  function handleSubmit(values) {}
 
   function setDis(flag) {
     setProps({ disabled: !!flag });
@@ -77,7 +75,6 @@
   async function getValues() {
     try {
       const values = await validate();
-      console.log(values);
       createSuccessModal({
         title: '校验通过',
         content: `${JSON.stringify(values)}`,

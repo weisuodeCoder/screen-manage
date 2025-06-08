@@ -24,9 +24,7 @@
     components: { PageWrapper, ImagePreview },
     setup() {
       function openImg() {
-        const onImgLoad = ({ index, url, dom }) => {
-          console.log(`第${index + 1}张图片已加载，URL为：${url}`, dom);
-        };
+        const onImgLoad = ({ index, url, dom }) => {};
         // 可以使用createImgPreview返回的 PreviewActions 来控制预览逻辑，实现类似幻灯片、自动旋转之类的骚操作
         let imageList = imgList.map<string>((i) => i.src);
         createImgPreview({ imageList: imageList, defaultWidth: 700, rememberState: true, onImgLoad });

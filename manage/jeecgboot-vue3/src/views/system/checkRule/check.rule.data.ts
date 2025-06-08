@@ -131,10 +131,8 @@ export const checkRuleInput: FormSchema[] = [
           validator: (_, value) => {
             return new Promise((resolve, reject) => {
               if (ruleCode && value) {
-                /*console.log({ruleCode,value})*/
                 validateCheckRule(ruleCode, value)
                   .then((res) => {
-                    //console.log(1233, res)
                     res['success'] ? resolve() : reject(res['message']);
                   })
                   .catch((err) => {

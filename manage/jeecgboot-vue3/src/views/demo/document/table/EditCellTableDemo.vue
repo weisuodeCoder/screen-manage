@@ -165,7 +165,6 @@
       const { createMessage } = useMessage();
 
       function handleEditEnd({ record, index, key, value }: Recordable) {
-        console.log(record, index, key, value);
         return false;
       }
 
@@ -198,13 +197,10 @@
       }
 
       async function beforeEditSubmit({ record, index, key, value }) {
-        console.log('单元格数据正在准备提交', { record, index, key, value });
         return await feakSave({ id: record.id, key, value });
       }
 
-      function handleEditCancel() {
-        console.log('cancel');
-      }
+      function handleEditCancel() {}
 
       return {
         registerTable,

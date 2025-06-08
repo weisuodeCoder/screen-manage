@@ -221,7 +221,6 @@
 
   // 详细信息里点了确认按钮
   function handleDetailsConfirm({ row, $table, callback }) {
-    console.log('保存的数据：', row);
     // 校验当前行
     $table.validate(row).then((errMap) => {
       // 校验通过

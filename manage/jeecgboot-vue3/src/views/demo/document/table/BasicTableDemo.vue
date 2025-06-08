@@ -60,7 +60,6 @@
   });
   //注册table数据
   const [registerTable, methods] = tableContext;
-  console.log('methods', methods);
   /**
    * 操作栏
    */
@@ -73,9 +72,7 @@
     ];
   }
 
-  function handleEdit(record) {
-    console.log(record);
-  }
+  function handleEdit(record) {}
 </script>
 
 <style scoped></style>

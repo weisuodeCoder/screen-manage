@@ -149,7 +149,6 @@
   /** 获取值，忽略表单验证 */
   function handleTableGet() {
     const values = tableRef.value!.getTableData();
-    console.log('获取值:', { values });
     createMessage.success('获取值成功，请看控制台输出');
   }
 

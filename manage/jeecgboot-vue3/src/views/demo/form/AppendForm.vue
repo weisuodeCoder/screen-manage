@@ -58,9 +58,8 @@
       async function handleSubmit() {
         try {
           const data = await validate();
-          console.log(data);
         } catch (e) {
-          console.log(e);
+          console.error(e);
         }
       }
 

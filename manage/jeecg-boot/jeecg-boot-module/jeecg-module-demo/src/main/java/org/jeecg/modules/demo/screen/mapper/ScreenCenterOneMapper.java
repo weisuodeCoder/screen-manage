@@ -1,7 +1,7 @@
 package org.jeecg.modules.demo.screen.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.jeecg.modules.demo.screen.entity.ScreenCenterOne;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +13,6 @@ import java.util.Map;
  * @Version: V1.0
  */
 @Mapper // 添加注解
-public interface ScreenLeftOneMapper {
-    List<Map<String, Object>> selectScreenLeftOne();
+public interface ScreenCenterOneMapper {
+    List<ScreenCenterOne> selectScreenCenterOne();
 }

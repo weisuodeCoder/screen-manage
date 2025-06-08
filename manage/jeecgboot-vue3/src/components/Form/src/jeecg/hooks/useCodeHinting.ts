@@ -32,7 +32,6 @@ export const useCodeHinting = (CodeMirror, keywords, language) => {
       const end = cur.ch;
       const str = token.string;
       let recordKeyword = null;
-      console.log('光标位置：', cur, '单词信息：', token, `start:${start},end:${end},str:${str}`);
 
       if (str.length) {
         if (str === '.') {
