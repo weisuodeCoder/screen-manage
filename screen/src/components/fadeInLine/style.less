@@ -1,0 +1,53 @@
+.fade_select_box {
+  position: absolute;
+  width: 3vw;
+  top: .1vh;
+  right: 0.5vw;
+  font-family: Arial, sans-serif;
+  z-index: 1;
+  font-size: 0.6vw;
+  .select_box__selected {
+    padding: 0vw .4vw;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #29b4f9;
+    &:hover {
+      border-color: #888;
+    }
+    .select_box__arrow {
+      font-size: 0.6vw;
+      transition: transform 0.2s;
+    }
+  }
+  .select_box__options {
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #29b4f9;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .select_box__option {
+      cursor: pointer;
+      &:hover {
+        background-color: #0778e1;
+      }
+      .selected {
+        background-color: #0778e1;
+        color: #1890ff;
+      }
+    }
+  }
+}
+.fade_select_box.open .select_box__arrow {
+  transform: rotate(180deg);
+}

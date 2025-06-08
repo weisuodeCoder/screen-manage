@@ -1,27 +1,11 @@
 import { useState } from "react";
 import "./style.less";
 
-export default function DataListCard() {
-  const [datas, setDatas] = useState<{ name: string; value: number }[]>([
-    { name: "总数1", value: 383 },
-    { name: "总数2", value: 383 },
-    { name: "总数3", value: 383 },
-    { name: "总数4", value: 383 },
+interface PropsImpl {
+  datas: any[];
+}
 
-    { name: "数据1", value: 383 },
-    { name: "数据1", value: 383 },
-    { name: "数据1", value: 383 },
-    { name: "数据1", value: 383 },
-    { name: "数据2", value: 383 },
-    { name: "数据2", value: 383 },
-    { name: "数据2", value: 383 },
-    { name: "数据2", value: 383 },
-    { name: "数据3", value: 383 },
-    { name: "数据3", value: 383 },
-    { name: "数据3", value: 383 },
-    { name: "数据3", value: 383 },
-  ]);
-
+export default function DataListCard({ datas }: PropsImpl) {
   return (
     <div
       style={{ width: "100%", height: "100%" }}
@@ -30,8 +14,8 @@ export default function DataListCard() {
       {datas.map((item, index) => (
         <div className="item" key={index}>
           <div className="item_icon"></div>
-          <div className="item_name">{item.name}</div>
-          <div className="item_value">{item.value}</div>
+          <div className="item_name">{item.value}</div>
+          <div className="item_value">{item.name}</div>
         </div>
       ))}
     </div>

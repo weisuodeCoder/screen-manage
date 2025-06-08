@@ -1,7 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
+import FadeSelectBox from "./FadeSelectBox";
+import { TimeRangeThreeEnum } from "@/views/home/index.api";
 
-export default function FadeLine() {
+interface YDatasImpl {
+  name: string;
+  datas: number[];
+  color: string;
+}
+
+export interface FadeLineDatas {
+  xDatas: string[];
+  yDatas: YDatasImpl[];
+}
+
+interface PropsImpl {
+  datas: FadeLineDatas;
+  defaultValue: TimeRangeThreeEnum;
+  preLeftThreeDatas: (timeRange: TimeRangeThreeEnum) => Promise<FadeLineDatas>;
+}
+
+export default function FadeLine({
+  datas,
+  defaultValue,
+  preLeftThreeDatas,
+}: PropsImpl) {
+  let chart: echarts.ECharts | null = null;
   const chartRef = useRef<HTMLDivElement>(null);
   const [option, setOption] = useState({
     backgroundColor: "transparent",
@@ -15,8 +39,7 @@ export default function FadeLine() {
       containLabel: true,
     },
     legend: {
-      top: "4%",
-      right: "5%",
+      top: "0",
       textStyle: {
         color: "#ffff",
         fontSize: 12,
@@ -72,42 +95,34 @@ export default function FadeLine() {
       axisLabel: {
         color: "#ffffff",
         fontSize: 10,
-        interval: 0,
+        interval: (index: number) =>
+          index % Math.ceil(datas.xDatas.length / 8) === 0,
         padding: [0, 0, 0, 0],
       },
-      data: ["00:00", "06:00", "12:00", "18:00", "24:00"],
+      data: datas.xDatas,
     },
     yAxis: [
       {
         type: "value",
+        min: 60, // 设置最小值
+        max: 100, // 设置最大值
         axisLabel: {
           formatter: "{value}",
           color: "#fff",
         },
       },
-      // {
-      //     type: "value",
-      //     axisLabel: {
-      //         formatter: "{value}",
-      //         color: "#fff"
-      //     }
-      // }
     ],
-    color: [
-      "rgb(21, 229, 236)", // 线上销售
-      "rgb(255, 0, 0)", // 线下门店
-    ],
-    series: [
-      {
-        name: "同比趋势",
-        data: [16, 20, 15, 20, 15],
+    color: datas.yDatas.map((item: any) => item.color),
+    series: datas.yDatas.map((item: any) => {
+      return {
+        name: item.name,
+        data: item.datas,
         type: "line",
         smooth: true,
         symbol:
           "image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAQ5JREFUOE+1la1OQ0EQRs8kCFIQdVCCxIBpCK1AInkDHC+B4QkwvASub4GsaE0NGCRpKhGFVDQZ+Mjem9vNbkphmWTMfjNnd3b2x0iYuxuwH7wNbIewBfAGzORm5nG6ElfM3QU6AXZSkzXG3oEnMxO8thWgux8DR2tAsfxiZs/VYA38Jazi1NBvYCizv+HK4vCRyrfQgIsf7Nm6+bSnjwIeAGeZaGnXQDfoE+ABmGbixwKeAoeJAMHuv3w30ubATQb6KqDKjZPEuAXOMysZAncJbS7gJbCVEAdAKwP8AK4S2vJfgMVLLt6UDtAreWx0W8od7OJXryq16OPwR2j6+WpAyz2wDagape7vARt9AZ+G3HmhiKS3xwAAAABJRU5ErkJggg==",
         symbolSize: 10,
         showSymbol: false, // 是否显示 symbol, 如果 false 则只有在 tooltip hover 的时候显示。
-        // yAxisIndex: 1,
         label: {
           show: true,
           position: "top",
@@ -123,82 +138,85 @@ export default function FadeLine() {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
             {
               offset: 0,
-              color: "rgb(48, 79, 80)",
+              color: `${item.color}88`,
             },
             {
               offset: 1,
-              color: "rgb(0, 255, 242)",
+              color: item.color,
             },
           ]),
         },
-        // areaStyle: {
-        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //         {
-        //             offset: 0,
-        //             color: "rgba(25, 227, 234, 0.4)"
-        //         },
-        //         {
-        //             color: "rgba(38, 176, 192, 0)",
-        //             offset: 1
-        //         }
-        //     ])
-        // }
-      },
-      {
-        name: "流入情况",
-        data: [12, 2, 15, 20, 5],
-        type: "line",
-        smooth: true,
-        symbol:
-          "image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAQ5JREFUOE+1la1OQ0EQRs8kCFIQdVCCxIBpCK1AInkDHC+B4QkwvASub4GsaE0NGCRpKhGFVDQZ+Mjem9vNbkphmWTMfjNnd3b2x0iYuxuwH7wNbIewBfAGzORm5nG6ElfM3QU6AXZSkzXG3oEnMxO8thWgux8DR2tAsfxiZs/VYA38Jazi1NBvYCizv+HK4vCRyrfQgIsf7Nm6+bSnjwIeAGeZaGnXQDfoE+ABmGbixwKeAoeJAMHuv3w30ubATQb6KqDKjZPEuAXOMysZAncJbS7gJbCVEAdAKwP8AK4S2vJfgMVLLt6UDtAreWx0W8od7OJXryq16OPwR2j6+WpAyz2wDagape7vARt9AZ+G3HmhiKS3xwAAAABJRU5ErkJggg==",
-        symbolSize: 10,
-        showSymbol: false, // 是否显示 symbol, 如果 false 则只有在 tooltip hover 的时候显示。
-        // yAxisIndex: 1,
-        label: {
-          show: true,
-          position: "top",
-          distance: 10,
-          color: "#ffffff",
-          fontSize: 8,
-        },
-        lineStyle: {
-          shadowColor: "rgb(0, 0, 0, 0.4)",
-          shadowBlur: 3,
-          shadowOffsetY: 10,
-          width: 3,
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-            {
-              offset: 0,
-              color: "rgb(66, 39, 39)",
-            },
-            {
-              offset: 1,
-              color: "rgb(255, 0, 0)",
-            },
-          ]),
-        },
-        // areaStyle: {
-        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //         {
-        //             offset: 0,
-        //             color: "rgba(188, 36, 168, 0.4)"
-        //         },
-        //         {
-        //             color: "rgba(211, 22, 145, 0)",
-        //             offset: 1
-        //         }
-        //     ])
-        // }
-      },
-    ],
+      };
+    }),
   });
+
+  const onChange = async (value: TimeRangeThreeEnum) => {
+    const res = await preLeftThreeDatas(value);
+    // 更新option
+    const newOption = {
+      ...option,
+      xAxis: {
+        ...option.xAxis,
+        data: res.xDatas,
+        axisLabel: {
+          ...option.xAxis.axisLabel,
+          interval: (index: number) =>
+            index % Math.ceil(res.xDatas.length / 8) === 0,
+        },
+      },
+      color: res.yDatas.map((item: any) => item.color),
+      series: res.yDatas.map((item: any) => {
+        return {
+          name: item.name,
+          data: item.datas,
+          type: "line",
+          smooth: true,
+          symbol:
+            "image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAQ5JREFUOE+1la1OQ0EQRs8kCFIQdVCCxIBpCK1AInkDHC+B4QkwvASub4GsaE0NGCRpKhGFVDQZ+Mjem9vNbkphmWTMfjNnd3b2x0iYuxuwH7wNbIewBfAGzORm5nG6ElfM3QU6AXZSkzXG3oEnMxO8thWgux8DR2tAsfxiZs/VYA38Jazi1NBvYCizv+HK4vCRyrfQgIsf7Nm6+bSnjwIeAGeZaGnXQDfoE+ABmGbixwKeAoeJAMHuv3w30ubATQb6KqDKjZPEuAXOMysZAncJbS7gJbCVEAdAKwP8AK4S2vJfgMVLLt6UDtAreWx0W8od7OJXryq16OPwR2j6+WpAyz2wDagape7vARt9AZ+G3HmhiKS3xwAAAABJRU5ErkJggg==",
+          symbolSize: 10,
+          showSymbol: false, // 是否显示 symbol, 如果 false 则只有在 tooltip hover 的时候显示。
+          label: {
+            show: true,
+            position: "top",
+            distance: 10,
+            color: "#ffffff",
+            fontSize: 8,
+          },
+          lineStyle: {
+            shadowColor: "rgb(0, 0, 0, 0.4)",
+            shadowBlur: 3,
+            shadowOffsetY: 10,
+            width: 3,
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+              {
+                offset: 0,
+                color: `${item.color}88`,
+              },
+              {
+                offset: 1,
+                color: item.color,
+              },
+            ]),
+          },
+        };
+      }),
+    };
+
+    setOption(newOption);
+    chart?.setOption(option);
+  };
 
   useEffect(() => {
     if (chartRef.current) {
-      const chart = echarts.init(chartRef.current);
+      chart = echarts.init(chartRef.current);
       chart.setOption(option);
     }
   }, [option]);
 
-  return <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>;
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <FadeSelectBox defaultValue={defaultValue} onChange={onChange} />
+      <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
+    </div>
+  );
 }

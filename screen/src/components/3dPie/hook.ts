@@ -207,26 +207,47 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
     legend: {
       data: legendData,
       icon: "none",
-      textStyle: {
-        // color: '#fff',
-        fontSize: 12,
-      },
       orient: "horizontal",
-      left: "center",
-      bottom: "0",
-      itemGap: 20, // 设置图例项之间的间距
+      right: "center",
+      top: "0",
+      pageIconColor: "#0885FA", // 翻页按钮颜色
+      pageIconInactiveColor: "#ddd", // 禁用按钮颜色
+      pageTextStyle: {
+        color: "#666",
+      },
+      formatter: (name: string) => {
+        const dataItem = pieData.find((item) => item.name === name);
+        if (!dataItem) return name;
+        const rawValue =
+          originalData[pieData.findIndex((item) => item.name === name)];
+        return `${name}\n${rawValue}`;
+      },
+      selectedMode: false, // 禁用点击选中
+      type: "scroll", // 强制启用滚动分页模式
+      pageIconSize: 14,
+      pageButtonItemGap: 10,
+      pageButtonGap: 5,
+      pageButtonPosition: "end", // 按钮位置（'start' | 'end'）
+      pageFormatter: "", // 隐藏页码文本（如需显示用 '{current}/{total}'）
+      pageIcons: {
+        horizontal: ["M0 0 L12 0 L6 12 Z", "M0 12 L12 12 L6 0 Z"], // 自定义箭头图标
+      },
+      itemHeight: 40, // 必须！单个图例项高度（含换行）
+      itemGap: 8, // 必须！项间距
+      height: "60%", // 限制legend容器高度（关键！）
     },
     animation: true,
     tooltip: {
-      formatter: (params) => {
+      formatter: (params: any) => {
         if (
           params.seriesName !== "mouseoutSeries" &&
           params.seriesName !== "pie2d"
         ) {
+          // @ts-ignore
           let value = option.series[params.seriesIndex].pieData.value;
-          let rate = (value / sum).toFixed(2);
+          let rate: number = Number((value / sum).toFixed(2));
           return `
-                  <div style="background: url(${require("../../../assets/imgs/allProductLargeScreen/pie-tool-tip.png")}) no-repeat center center / 100% 100%;padding: 10px;">
+                  <div style="padding: 10px;background-color:rgba(255,255,255,0.9);border: 1px solid #ddd; border-radius: 5px;color:#333;">
                     <div style="margin-top: 3%;margin-left: 50%;transform: translateX(-50%)">${
                       params.seriesName
                     }</div>
@@ -246,7 +267,7 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
                   `;
         }
       },
-
+      trigger: "item",
       backgroundColor: "transparent",
       padding: [0, 0],
       borderColor: "transparent",
@@ -284,8 +305,8 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
       // bottom: '20%',
 
       viewControl: {
-        distance: 280,
-        alpha: 45, // 视角绕 x 轴，即上下旋转的角度
+        distance: 200,
+        alpha: 35, // 视角绕 x 轴，即上下旋转的角度
         beta: 60,
       },
     },

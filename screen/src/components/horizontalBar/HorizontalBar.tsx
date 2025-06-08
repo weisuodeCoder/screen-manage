@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 
-export default function FadeLine() {
+interface Props {
+  datas: any[];
+}
+export default function FadeLine({ datas }: Props) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [option, setOption] = useState({
     backgroundColor: "transparent",
@@ -38,7 +41,6 @@ export default function FadeLine() {
         lineHeight: 16,
       },
     },
-    color: ["#6BC7F6", "#44E6A2"],
     xAxis: [
       {
         type: "value",
@@ -63,7 +65,6 @@ export default function FadeLine() {
         },
       },
     ],
-
     yAxis: [
       {
         type: "category",
@@ -84,7 +85,7 @@ export default function FadeLine() {
         splitLine: {
           show: false,
         },
-        data: ["扶贫资金", "医疗卫生", "渔业资金", "社区改造"],
+        data: datas?.map((item) => item.name) || [],
       },
       {
         inverse: true,
@@ -97,52 +98,21 @@ export default function FadeLine() {
         data: [],
       },
     ],
-    color: [
-      "rgba(115,208,255,1)",
-      "rgba(77, 255, 181, 1)",
-      "rgba(230, 230, 230, 1)",
-      "rgba(255, 200, 89, 1)",
-    ],
+    color: datas?.map((item) => item.colorOne) || undefined,
     series: [
       {
-        data: [
-          {
-            value: 100,
-            itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-                { offset: 0, color: "rgba(3,65,128,1)" },
-                { offset: 1, color: "rgba(115,208,255,1)" },
-              ]),
-            },
-          },
-          {
-            value: 80,
-            itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-                { offset: 0, color: "rgba(11, 77, 44, 1)" },
-                { offset: 1, color: "rgba(77, 255, 181, 1)" },
-              ]),
-            },
-          },
-          {
-            value: 60,
-            itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-                { offset: 0, color: "rgba(117, 117, 117, 1)" },
-                { offset: 1, color: "rgba(230, 230, 230, 1)" },
-              ]),
-            },
-          },
-          {
-            value: 50,
-            itemStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-                { offset: 0, color: "rgba(153, 105, 38, 1)" },
-                { offset: 1, color: "rgba(255, 200, 89, 1)" },
-              ]),
-            },
-          },
-        ],
+        data:
+          datas?.map((item) => {
+            return {
+              value: item.value,
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                  { offset: 0, color: item.colorOne },
+                  { offset: 1, color: item.colorTwo },
+                ]),
+              },
+            };
+          }) || [],
         type: "bar",
         barWidth: 7,
         yAxisIndex: 0,
@@ -154,8 +124,13 @@ export default function FadeLine() {
           padding: [-18, 0, 0, 0],
           color: "#16C1A6",
           fontSize: 12,
-          formatter:
-            "{title|{b}}                                                                              {value|{c}}  {unit|万元}",
+          formatter: (params: any) => {
+            return `{title|${
+              params.name
+            }}                                                                              {value|${
+              params.value
+            }}  {unit|${datas[params.dataIndex].unit}}`;
+          },
           rich: {
             title: {
               color: "#FFFFFF",

@@ -1,7 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
+import { TimeRangeEnum } from "@/views/home/index.api";
+import ReleaseSelectBox from "./ReleaseSelectBox";
 
-export default function ReleaseBar() {
+interface YDatasImpl {
+  name: string;
+  colors: [string, string];
+  datas: string[];
+}
+
+export interface ReleaseDatasImpl {
+  xDatas: string[];
+  yDatas: YDatasImpl[];
+}
+
+interface PropsImpl {
+  datas: ReleaseDatasImpl;
+  defaultSelected: TimeRangeEnum.M1;
+  preLeftTwoDatas: (timeRange: TimeRangeEnum) => Promise<ReleaseDatasImpl>;
+}
+
+export default function ReleaseBar({
+  datas,
+  defaultSelected,
+  preLeftTwoDatas,
+}: PropsImpl) {
+  let chart: echarts.ECharts | null = null;
   const chartRef = useRef<HTMLDivElement>(null);
   const [option, setOption] = useState({
     backgroundColor: "transparent",
@@ -60,7 +84,7 @@ export default function ReleaseBar() {
           interval: 0,
           padding: [0, 0, 0, 0],
         },
-        data: ["12:00", "14:00", "17:00", "20:00"],
+        data: datas.xDatas,
       },
     ],
     yAxis: {
@@ -86,10 +110,10 @@ export default function ReleaseBar() {
         color: "#ffff",
       },
     },
-    series: [
-      {
-        name: "一年级",
-        data: [100, 120, 130, 110],
+    series: datas.yDatas?.map((item) => {
+      return {
+        name: item.name,
+        data: item.datas,
         type: "bar",
         barWidth: 10,
         barGap: 1,
@@ -104,64 +128,60 @@ export default function ReleaseBar() {
         itemStyle: {
           borderRadius: 0,
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#79EBCF" },
-            { offset: 1, color: "#0B6360" },
+            { offset: 0, color: item.colors[0] },
+            { offset: 1, color: item.colors[1] },
           ]),
         },
-      },
-      {
-        name: "二年级",
-        data: [60, 100, 150, 90],
-        type: "bar",
-        barWidth: 10,
-        barGap: 1,
-        label: {
-          show: true,
-          position: "top",
-          distance: 10,
-          color: "#ffffff",
-          fontSize: 8,
-          formatter: "{c}",
-        },
-        itemStyle: {
-          borderRadius: 0,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#40AEFE" },
-            { offset: 1, color: "#25567A" },
-          ]),
-        },
-      },
-      {
-        name: "三年级",
-        data: [60, 100, 150, 90],
-        type: "bar",
-        barWidth: 10,
-        barGap: 1,
-        label: {
-          show: true,
-          position: "top",
-          distance: 10,
-          color: "#ffffff",
-          fontSize: 8,
-          formatter: "{c}",
-        },
-        itemStyle: {
-          borderRadius: 0,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#fac858" },
-            { offset: 1, color: "#e6cb1e" },
-          ]),
-        },
-      },
-    ],
+      };
+    }),
   });
+
+  const onChange = async (value: TimeRangeEnum) => {
+    const res = await preLeftTwoDatas(value);
+
+    // 更新option
+    const newOption = {
+      ...option,
+      xAxis: [{ ...option.xAxis[0], data: res.xDatas }],
+      series: res.yDatas?.map((item) => ({
+        name: item.name,
+        data: item.datas,
+        type: "bar",
+        barWidth: 10,
+        barGap: 1,
+        label: {
+          show: true,
+          position: "top",
+          distance: 10,
+          color: "#ffffff",
+          fontSize: 8,
+          formatter: "{c}",
+        },
+        itemStyle: {
+          borderRadius: 0,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: item.colors[0] },
+            { offset: 1, color: item.colors[1] },
+          ]),
+        },
+      })),
+    };
+
+    setOption(newOption);
+    chart?.setOption(option);
+  };
 
   useEffect(() => {
     if (chartRef.current) {
-      const chart = echarts.init(chartRef.current);
+      chart = echarts.init(chartRef.current);
       chart.setOption(option);
     }
   }, [option]);
 
-  return <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>;
+  return (
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <ReleaseSelectBox defaultValue={defaultSelected} onChange={onChange} />
+      <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
+    </div>
+  );
 }

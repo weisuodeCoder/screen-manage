@@ -1,13 +1,22 @@
-import React, { useEffect, useRef, useCallback, forwardRef } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useCallback,
+  forwardRef,
+  useState,
+} from "react";
 import * as echarts from "echarts";
 import * as turf from "@turf/turf";
 import "./ChartMap.less";
 import { createGeo } from "./hook";
+import Modal from "../modal/Modal";
+import ADCodeList from "./ADCodeList";
 
 interface MapDatasImpl {
   name: string;
   adcode: number;
   value: number;
+  id: string;
 }
 
 interface Props {
@@ -28,6 +37,8 @@ const defaultColors = [
 
 const ChartMap = forwardRef(
   ({ elementId, datas = [], colors = defaultColors }: Props, ref) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [groupId, setGroupId] = useState("");
     const chartRef = useRef<HTMLDivElement>(null);
     const chartInstance = useRef<any>(null);
     const currentMap = useRef<"china" | number>("china"); // 用来追踪当前地图
@@ -219,6 +230,8 @@ const ChartMap = forwardRef(
       }
     }
 
+    const onModalClose = () => {};
+
     useEffect(() => {
       let instance: any;
 
@@ -228,17 +241,26 @@ const ChartMap = forwardRef(
         instance = chartInstance.current;
         if (!instance) return;
 
-        // instance.off("dblclick"); // 防止重复绑定
-        // instance.on("dblclick", async (e: any) => {
-        //   const adcode = e.data?.value;
-        //   if (currentMap.current === "china" && adcode) {
-        //     console.log(adcode);
+        instance.off("dblclick"); // 防止重复绑定
+        instance.on("dblclick", async (e: any) => {
+          const adcode = e.data?.adcode;
+          const id = datas.find((item) => item.adcode === adcode)?.id;
+          if (id) {
+            setGroupId(id || "");
+            setIsModalOpen(true);
+          } else {
+            // TODO:需要调试
+            alert(`无数据${adcode}-${id}`);
+          }
 
-        //     await setOptions(adcode); // 进入省地图
-        //   } else {
-        //     await setOptions("china"); // 返回全国
-        //   }
-        // });
+          // if (currentMap.current === "china" && adcode) {
+          //   console.log(adcode);
+
+          //   await setOptions(adcode); // 进入省地图
+          // } else {
+          //   await setOptions("china"); // 返回全国
+          // }
+        });
       };
 
       setup();
@@ -250,6 +272,9 @@ const ChartMap = forwardRef(
 
     return (
       <div className="map_box">
+        <Modal isOpen={isModalOpen} onClose={onModalClose}>
+          {isModalOpen && <ADCodeList groupId={groupId} />}
+        </Modal>
         <div id={id.current} className="map_container" ref={chartRef}></div>
       </div>
     );

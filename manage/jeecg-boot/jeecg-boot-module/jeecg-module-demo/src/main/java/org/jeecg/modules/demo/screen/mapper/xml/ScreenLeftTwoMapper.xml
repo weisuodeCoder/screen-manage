@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftTwoMapper">
+    <select id="selectScreenLeftOneX" resultType="java.util.Map">
+        SELECT i.item_text AS 'name', i.item_value AS 'value'
+        FROM sys_dict d
+                 LEFT JOIN sys_dict_item i
+                           ON d.id = i.dict_id
+        WHERE d.dict_code = 'screen_left_two_class_name'
+    </select>
+    <select id="selectScreenLeftOneY" resultType="java.util.Map">
+        SELECT
+            sltd.class_name AS xData,
+            sltm.title AS NAME,
+            SUM(sltd.value) AS total_value,
+            CONCAT( sltm.color_one, ',', sltm.color_two) AS colors
+        FROM
+            screen_left_two_data sltd
+                JOIN
+            screen_left_two_main sltm ON sltd.group_id = sltm.id
+        WHERE
+            sltd.year >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+        GROUP BY
+            sltd.class_name, sltm.title, sltm.color_one, sltm.color_two
+        ORDER BY
+            sltd.class_name, sltm.title;
+    </select>
+</mapper>

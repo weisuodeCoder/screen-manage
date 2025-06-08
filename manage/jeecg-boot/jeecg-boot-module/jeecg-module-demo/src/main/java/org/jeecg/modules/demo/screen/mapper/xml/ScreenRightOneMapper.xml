@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftOneMapper">
+    <select id="selectScreenLeftOne" resultType="java.util.Map">
+        SELECT
+            m.id,
+            m.title,
+            m.unit,
+            JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                            'value', d.value,
+                            'name', d.name,
+                            'unit', m.unit,
+                            'itemStyle', JSON_OBJECT(
+                                    'colors', JSON_ARRAY(d.color_one, d.color_two)
+                                )
+                        )
+                ) AS datas
+        FROM
+            `screen_left_one_main` m
+                JOIN
+            `screen_left_one_data` d ON m.id= d.group_id
+        GROUP BY
+            m.id, m.title,m.unit
+        ORDER BY
+            m.sort ASC;
+    </select>
+</mapper>

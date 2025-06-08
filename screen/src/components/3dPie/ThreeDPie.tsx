@@ -4,9 +4,11 @@ import "echarts-gl";
 import { getPie3D, getParametricEquation } from "./hook";
 import "./style.less"; // Assuming your styles are in this file
 
-interface Props {}
+interface Props {
+  datas: any[];
+}
 
-const RightWrapper: React.FC<Props> = () => {
+const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
   const pie3DRef = useRef<HTMLDivElement | null>(null);
   const [pie3DChart, setPie3DChart] = useState<echarts.ECharts | null>(null);
   const [pipeYData, setPipeYData] = useState<number[]>([]);
@@ -33,9 +35,10 @@ const RightWrapper: React.FC<Props> = () => {
   }, [pie3DChart]);
 
   const drawPie3D = (pie3DChart: echarts.ECharts) => {
-    let colors = ["#FAD05C", "#0885FA", "#FA7F7F"];
-    let xData = ["进行中", "已用完", "已报损"];
-    let originalData = [70000, 20000, 10000];
+    let colors = datas?.map((item) => item.colorOne);
+    let xData = datas?.map((item) => item.name);
+    let originalData = datas?.map((item) => item.value);
+
     let sum = originalData.reduce(
       (accumulator, currentValue) => accumulator + currentValue,
       0
@@ -90,14 +93,17 @@ const RightWrapper: React.FC<Props> = () => {
           }
         });
         pie3DChart.setOption(option);
+
+        // 触发当前高亮扇区的 tooltip
         pie3DChart.dispatchAction({
           type: "showTip",
-          name: "进行中",
+          seriesIndex: index, // 使用当前 3D 扇形的索引
+          dataIndex: 0,
         });
 
         index = index === 2 ? 0 : index + 1;
       }
-    }, 3000);
+    }, 1000);
 
     setIntervalId(id);
   };
