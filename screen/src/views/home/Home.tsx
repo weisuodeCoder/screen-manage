@@ -143,22 +143,24 @@ export default function Home() {
   return (
     <>
       {loading && <Loading />}
-      <div className="home_main">
-        <div className="header_main">
-          <Title title={title} subTitle={subTitle} />
+      {!loading && (
+        <div className="home_main">
+          <div className="header_main">
+            <Title title={title} subTitle={subTitle} />
+          </div>
+          <div className="body_main">
+            <div className="common_lr">
+              {leftList && <Left slotList={leftList} />}
+            </div>
+            <div className="common_center">
+              {centerList && <Center slotList={centerList} />}
+            </div>
+            <div className="common_lr">
+              {rightList && <Right slotList={rightList} />}
+            </div>
+          </div>
         </div>
-        <div className="body_main">
-          <div className="common_lr">
-            {leftList && <Left slotList={leftList} />}
-          </div>
-          <div className="common_center">
-            {centerList && <Center slotList={centerList} />}
-          </div>
-          <div className="common_lr">
-            {rightList && <Right slotList={rightList} />}
-          </div>
-        </div>
-      </div>
+      )}
     </>
   );
 }
