@@ -14,6 +14,13 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
   const [pipeYData, setPipeYData] = useState<number[]>([]);
   const [option, setOption] = useState<any>({});
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [customTooltip, setCustomTooltip] = useState<{
+    show: boolean;
+    name?: string;
+    value?: number;
+    percent?: number;
+    opacity: number;
+  }>({ show: false, opacity: 0 });
 
   useEffect(() => {
     if (pie3DRef.current) {
@@ -30,30 +37,57 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
 
   useEffect(() => {
     if (pie3DChart) {
+      // 清除之前的定时器
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      
       drawPie3D(pie3DChart);
+    }
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [pie3DChart, datas]); // 添加datas作为依赖项
+
+  useEffect(() => {
+    if (pie3DChart) {
+      pie3DChart.on('mouseover', () => {
+        setCustomTooltip(prev => ({ ...prev, show: false, opacity: 0 }));
+      });
+
+      pie3DChart.on('mouseout', () => {
+        setCustomTooltip(prev => ({ ...prev, show: true, opacity: 1 }));
+      });
+
+      return () => {
+        pie3DChart.off('mouseover');
+        pie3DChart.off('mouseout');
+      };
     }
   }, [pie3DChart]);
 
   const drawPie3D = (pie3DChart: echarts.ECharts) => {
-    let colors = datas?.map((item) => item.colorOne);
-    let xData = datas?.map((item) => item.name);
-    let originalData = datas?.map((item) => item.value);
+    const colors = datas?.map((item) => item.colorOne);
+    const xData = datas?.map((item) => item.name);
+    const originalData = datas?.map((item) => item.value);
 
-    let sum = originalData.reduce(
+    const sum = originalData.reduce(
       (accumulator, currentValue) => accumulator + currentValue,
       0
     );
     const pipeData = originalData.map((value) => (value / sum) * 100);
     setPipeYData(pipeData);
 
-    const option = getPie3D(xData, originalData, colors, 0.8);
-    pie3DChart.setOption(option);
+    const currentOption = getPie3D(xData, originalData, colors, 0.8);
+    pie3DChart.setOption(currentOption);
 
-    let hoveredIndex = "";
-    let selectedIndex = "";
-    pie3DChart.on("click", (params: any) => {
+    let selectedIndex = 0;
+    pie3DChart.on("click", (params: { seriesIndex: number }) => {
       selectedIndex = params.seriesIndex;
-      option.series.forEach((item: any, index: number) => {
+      currentOption.series.forEach((item: any, index: number) => {
         if (item.pieData) {
           item.pieStatus.selected = selectedIndex === index;
           item.parametricEquation = getParametricEquation(
@@ -66,20 +100,50 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
           );
         }
       });
-      pie3DChart.setOption(option);
+      pie3DChart.setOption(currentOption);
     });
-    loopSelect(pie3DChart, option, pipeData);
+
+    // 开始轮播
+    startLoop(pie3DChart, currentOption, pipeData);
   };
 
-  const loopSelect = (
+  const startLoop = (
     pie3DChart: echarts.ECharts,
-    option: any,
+    currentOption: any,
     pipeData: number[]
   ) => {
     let index = 0;
+    let tooltipTimer: NodeJS.Timeout | null = null;
+
+    const showTooltip = (idx: number) => {
+      if (tooltipTimer) {
+        clearTimeout(tooltipTimer);
+      }
+
+      setCustomTooltip({
+        show: true,
+        name: datas[idx]?.name,
+        value: datas[idx]?.value,
+        percent: pipeData[idx],
+        opacity: 0
+      });
+
+      tooltipTimer = setTimeout(() => {
+        setCustomTooltip(prev => ({ ...prev, opacity: 1 }));
+        
+        setTimeout(() => {
+          setCustomTooltip(prev => ({ ...prev, opacity: 0 }));
+          
+          setTimeout(() => {
+            setCustomTooltip(prev => ({ ...prev, show: false }));
+          }, 200);
+        }, 800);
+      }, 50);
+    };
+
     const id = setInterval(() => {
       if (pie3DChart) {
-        option.series.forEach((item: any, i: number) => {
+        currentOption.series.forEach((item: any, i: number) => {
           if (item.pieData) {
             item.pieStatus.selected = i === index;
             item.parametricEquation = getParametricEquation(
@@ -92,30 +156,54 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
             );
           }
         });
-        pie3DChart.setOption(option);
-
-        // 触发当前高亮扇区的 tooltip
-        pie3DChart.dispatchAction({
-          type: "showTip",
-          seriesIndex: index, // 使用当前 3D 扇形的索引
-          dataIndex: 0,
-        });
-
-        index = index === 2 ? 0 : index + 1;
+        pie3DChart.setOption(currentOption);
+        showTooltip(index);
+        index = index === datas.length - 1 ? 0 : index + 1;
       }
-    }, 1000);
+    }, 1500);
 
     setIntervalId(id);
+
+    return () => {
+      if (tooltipTimer) {
+        clearTimeout(tooltipTimer);
+      }
+    };
   };
 
   return (
-    <div className="threeD_pie_main">
+    <div className="threeD_pie_main" style={{ position: "relative" }}>
       <div className="threeD_pie_bg"></div>
       <div
         ref={pie3DRef}
         style={{ width: "100%", height: "100%" }}
         className="threeD_pie_chart"
       ></div>
+      {customTooltip.show && (
+        <div
+          className="custom-tooltip"
+          style={{
+            position: "absolute",
+            left: "5%",
+            top: "10%",
+            transform: "translate(-50%, 0)",
+            background: "rgba(255,255,255,0.95)",
+            border: "1px solid #eee",
+            borderRadius: 8,
+            padding: "12px 20px",
+            color: "#333",
+            minWidth: 120,
+            zIndex: 10,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            opacity: customTooltip.opacity,
+            transition: "opacity 0.3s ease-in-out"
+          }}
+        >
+          <div style={{ fontWeight: 600, marginBottom: 6 }}>{customTooltip.name}</div>
+          <div>数量：{customTooltip.value}</div>
+          <div>占比：{customTooltip.percent?.toFixed(2)}%</div>
+        </div>
+      )}
     </div>
   );
 };
