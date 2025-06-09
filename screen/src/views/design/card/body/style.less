@@ -1,8 +1,16 @@
 .card_body_main {
+    position: relative;
     width: calc(100% - 1vw);
     height: 100%;
     background: url(@/assets/images/sub_bg.png) no-repeat;
     background-size: 100% 100%;
+    .card_body_filter {
+        z-index: 1;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #0b3e6599;
+    }
 }
 .card_body_main_left {
     margin-left: 1vw;
