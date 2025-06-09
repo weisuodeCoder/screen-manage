@@ -230,7 +230,9 @@ const ChartMap = forwardRef(
       }
     }
 
-    const onModalClose = () => {};
+    const onModalClose = () => {
+      setIsModalOpen(false);
+    };
 
     useEffect(() => {
       let instance: any;
@@ -241,16 +243,14 @@ const ChartMap = forwardRef(
         instance = chartInstance.current;
         if (!instance) return;
 
-        instance.off("dblclick"); // 防止重复绑定
-        instance.on("dblclick", async (e: any) => {
-          const adcode = e.data?.adcode;
-          const id = datas.find((item) => item.adcode === adcode)?.id;
+        instance.off("click"); // 防止重复绑定
+        instance.on("click", async (e: any) => {
+          const adcode = e.data?.adcode || e.data?.value;
+          const id = datas.find((item) => item.adcode == adcode)?.id;
           if (id) {
             setGroupId(id || "");
             setIsModalOpen(true);
           } else {
-            // TODO:需要调试
-            alert(`无数据${adcode}-${id}`);
           }
 
           // if (currentMap.current === "china" && adcode) {
