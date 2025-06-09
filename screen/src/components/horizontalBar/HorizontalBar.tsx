@@ -1,11 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
+import "./style.less";
 
 interface Props {
   datas: any[];
 }
+
 export default function FadeLine({ datas }: Props) {
   const chartRef = useRef<HTMLDivElement>(null);
+  const [chart, setChart] = useState<echarts.ECharts | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const itemHeight = 50;
+  const visibleCount = Math.floor(containerHeight / itemHeight);
+
+  useEffect(() => {
+    /** 计算父盒子高度 */
+    const updateContainerHeight = () => {
+      const parentElement = chartRef.current?.closest('.card_main');
+      if (parentElement) {
+        const height = parentElement.clientHeight;
+        setContainerHeight(height);
+      }
+    };
+
+    updateContainerHeight();
+
+    window.addEventListener('resize', updateContainerHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateContainerHeight);
+    };
+  }, []);
+
   const [option, setOption] = useState({
     backgroundColor: "transparent",
     grid: {
@@ -13,6 +40,7 @@ export default function FadeLine({ datas }: Props) {
       top: "10%",
       width: "90%",
       height: "86%",
+      containLabel: true
     },
     legend: {
       top: "8%",
@@ -73,8 +101,9 @@ export default function FadeLine({ datas }: Props) {
           color: "#CFDAE6",
           fontSize: 10,
           interval: 0,
-          show: false,
-          verticalAlign: "top",
+          show: true,
+          verticalAlign: "middle",
+          margin: 16,
         },
         axisLine: {
           show: false,
@@ -171,10 +200,95 @@ export default function FadeLine({ datas }: Props) {
 
   useEffect(() => {
     if (chartRef.current) {
-      const chart = echarts.init(chartRef.current);
-      chart.setOption(option);
+      const newChart = echarts.init(chartRef.current);
+      setChart(newChart);
+      
+      updateChartData(newChart, 0);
+      
+      return () => {
+        newChart.dispose();
+      };
     }
-  }, [option]);
+  }, []);
 
-  return <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>;
+  const updateChartData = (chartInstance: echarts.ECharts, startIndex: number) => {
+    const displayData = [];
+    for (let i = 0; i < visibleCount; i++) {
+      const dataIndex = (startIndex + i) % datas.length;
+      displayData.push(datas[dataIndex]);
+    }
+
+    const newOption = {
+      ...option,
+      yAxis: [{
+        ...option.yAxis[0],
+        data: displayData.map(item => item.name)
+      }],
+      series: [{
+        ...option.series[0],
+        data: displayData.map((item) => ({
+          value: item.value,
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+              { offset: 0, color: item.colorOne },
+              { offset: 1, color: item.colorTwo },
+            ]),
+          },
+        }))
+      }]
+    };
+
+    chartInstance.setOption(newOption);
+  };
+
+  useEffect(() => {
+    if (!chart || datas.length <= visibleCount) return;
+
+    let isScrolling = true;
+    let scrollInterval: NodeJS.Timeout;
+
+    const startScroll = () => {
+      scrollInterval = setInterval(() => {
+        setCurrentIndex((prevIndex) => {
+          const nextIndex = (prevIndex + 1) % datas.length;
+          updateChartData(chart, nextIndex);
+          return nextIndex;
+        });
+      }, 3000);
+    };
+
+    const handleMouseEnter = () => {
+      isScrolling = false;
+      clearInterval(scrollInterval);
+    };
+
+    const handleMouseLeave = () => {
+      if (!isScrolling) {
+        isScrolling = true;
+        startScroll();
+      }
+    };
+
+    const container = chartRef.current?.parentElement;
+    if (container) {
+      container.addEventListener('mouseenter', handleMouseEnter);
+      container.addEventListener('mouseleave', handleMouseLeave);
+    }
+
+    startScroll();
+
+    return () => {
+      clearInterval(scrollInterval);
+      if (container) {
+        container.removeEventListener('mouseenter', handleMouseEnter);
+        container.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
+  }, [chart, datas, visibleCount]);
+
+  return (
+    <div className="horizontal-bar-container" style={{ height: '100%' }}>
+      <div ref={chartRef} className="chart-wrapper"></div>
+    </div>
+  );
 }
