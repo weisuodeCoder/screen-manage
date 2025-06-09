@@ -4,21 +4,23 @@
     <AppDarkModeToggle class="absolute top-3 right-7 enter-x" />
     <div class="aui-logo" v-if="!getIsMobile">
       <div>
-        <h3>
-          <img :src="logoImg" alt="jeecg" />
-        </h3>
+        <h3> </h3>
       </div>
     </div>
-    <div v-else class="aui-phone-logo">
-      <img :src="logoImg" alt="jeecg" />
-    </div>
+    <div v-else class="aui-phone-logo"> </div>
     <div v-show="type === 'login'">
       <div class="aui-content">
         <div class="aui-container">
           <div class="aui-form">
-            <div class="aui-image">
+            <div class="aui-image" style="padding-top: 100px">
               <div class="aui-image-text">
-                <img :src="adTextImg" />
+                <div style="color: #fff">
+                  <h1>数据可视化管理平台</h1>
+                  <br />
+                  <br />
+                  <br />
+                  <h3>让数据说话，用视觉思考</h3>
+                </div>
               </div>
             </div>
             <div class="aui-formBox">
@@ -132,7 +134,7 @@
   const formData = reactive<any>({
     // inputCode: '',
     username: 'admin',
-    password: '123456',
+    password: '',
   });
   //手机登录表单字段
   const phoneFormData = reactive<any>({
