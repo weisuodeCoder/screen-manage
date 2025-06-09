@@ -42,6 +42,8 @@ const ChartMap = forwardRef(
     const chartRef = useRef<HTMLDivElement>(null);
     const chartInstance = useRef<any>(null);
     const currentMap = useRef<"china" | number>("china"); // 用来追踪当前地图
+    const tooltipInterval = useRef<NodeJS.Timeout | null>(null);
+    const currentTooltipIndex = useRef(0);
 
     const id = useRef(elementId || String(Math.floor(Math.random() * 1e6)));
 
@@ -49,6 +51,31 @@ const ChartMap = forwardRef(
       const path = `/resources/${adcode}.geojson`;
       const res = await fetch(path).then((r) => r.json());
       return res;
+    }, []);
+
+    const showNextTooltip = useCallback(() => {
+      if (!chartInstance.current) return;
+
+      const instance = chartInstance.current;
+      const option = instance.getOption();
+
+      // 获取当前地图的所有数据点
+      const scatterData = option.series[1].data;
+      if (!scatterData || scatterData.length === 0) return;
+
+      // 循环显示 tooltip
+      currentTooltipIndex.current =
+        (currentTooltipIndex.current + 1) % scatterData.length;
+
+      const dataIndex = currentTooltipIndex.current;
+      const dataItem = scatterData[dataIndex];
+
+      // 显示 tooltip
+      instance.dispatchAction({
+        type: "showTip",
+        seriesIndex: 1,
+        dataIndex: dataIndex,
+      });
     }, []);
 
     const setOptions = useCallback(
@@ -79,6 +106,18 @@ const ChartMap = forwardRef(
         // const maxValue = Math.max(...values);
 
         const option = {
+          tooltip: {
+            formatter: (params: any) => {
+              const pData = params.data;
+              let name = pData?.name;
+              if (!name) {
+                const d = data.find((item: any) => item.value == pData.adcode);
+                name = d?.name;
+                return `${name}: ${pData?.value?.[2] || ""}`;
+              }
+              return "";
+            },
+          },
           backgroundColor: "transparent",
           geo: createGeo(mapKey),
           series: [
@@ -113,9 +152,13 @@ const ChartMap = forwardRef(
               zoom: 1,
               map: mapKey,
               data: data,
+              toolTip: {
+                show: true,
+              },
             },
             {
               type: "effectScatter",
+
               coordinateSystem: "geo",
               showEffectOn: "render",
               zlevel: 1,
@@ -170,8 +213,19 @@ const ChartMap = forwardRef(
         };
         chartInstance.current.setOption(option);
         currentMap.current = adcode;
+
+        // 设置完选项后，清除旧的定时器并启动新的
+        if (tooltipInterval.current) {
+          clearInterval(tooltipInterval.current);
+        }
+
+        // 每秒(1000毫秒)切换一次 tooltip
+        tooltipInterval.current = setInterval(showNextTooltip, 3000);
+
+        // 立即显示第一个 tooltip
+        setTimeout(showNextTooltip, 500);
       },
-      [loadMap]
+      [loadMap, showNextTooltip]
     );
 
     function getEffectScatterData(
@@ -250,16 +304,7 @@ const ChartMap = forwardRef(
           if (id) {
             setGroupId(id || "");
             setIsModalOpen(true);
-          } else {
           }
-
-          // if (currentMap.current === "china" && adcode) {
-          //   console.log(adcode);
-
-          //   await setOptions(adcode); // 进入省地图
-          // } else {
-          //   await setOptions("china"); // 返回全国
-          // }
         });
       };
 
