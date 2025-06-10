@@ -42,7 +42,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 左二数据
  * @Author: jeecg-boot
- * @Date:   2025-06-07
+ * @Date:   2025-06-10
  * @Version: V1.0
  */
 @Tag(name="左二数据")
@@ -73,6 +73,7 @@ public class ScreenLeftTwoDataController extends JeecgController<ScreenLeftTwoDa
         Map<String, QueryRuleEnum> customeRuleMap = new HashMap<>();
         // 自定义多选的查询规则为：LIKE_WITH_OR
         customeRuleMap.put("groupId", QueryRuleEnum.LIKE_WITH_OR);
+        customeRuleMap.put("type", QueryRuleEnum.LIKE_WITH_OR);
         customeRuleMap.put("className", QueryRuleEnum.LIKE_WITH_OR);
         QueryWrapper<ScreenLeftTwoData> queryWrapper = QueryGenerator.initQueryWrapper(screenLeftTwoData, req.getParameterMap(),customeRuleMap);
 		Page<ScreenLeftTwoData> page = new Page<ScreenLeftTwoData>(pageNo, pageSize);

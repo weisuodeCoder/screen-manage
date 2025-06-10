@@ -6,6 +6,11 @@ import { getWeekMonthQuarterYear } from '/@/utils';
 //列表数据
 export const columns: BasicColumn[] = [
   {
+    title: '分类',
+    align: 'center',
+    dataIndex: 'type_dictText',
+  },
+  {
     title: '名称',
     align: 'center',
     dataIndex: 'name',
@@ -34,6 +39,15 @@ export const columns: BasicColumn[] = [
 //查询数据
 export const searchFormSchema: FormSchema[] = [
   {
+    label: '分类',
+    field: 'type',
+    component: 'JSelectMultiple',
+    componentProps: {
+      dictCode: 'screen_right_three_type',
+    },
+    //colProps: {span: 6},
+  },
+  {
     label: '名称',
     field: 'name',
     component: 'Input',
@@ -42,6 +56,17 @@ export const searchFormSchema: FormSchema[] = [
 ];
 //表单数据
 export const formSchema: FormSchema[] = [
+  {
+    label: '分类',
+    field: 'type',
+    component: 'JDictSelectTag',
+    componentProps: {
+      dictCode: 'screen_right_three_type',
+    },
+    dynamicRules: () => {
+      return [{ required: true, message: '请输入分类!' }];
+    },
+  },
   {
     label: '名称',
     field: 'name',
@@ -84,11 +109,12 @@ export const formSchema: FormSchema[] = [
 
 // 高级查询数据
 export const superQuerySchema = {
-  name: { title: '名称', order: 0, view: 'text', type: 'string' },
-  value: { title: '数值', order: 1, view: 'number', type: 'number' },
-  unit: { title: '单位', order: 2, view: 'text', type: 'string' },
-  colorOne: { title: '颜色1', order: 3, view: 'text', type: 'string' },
-  colorTwo: { title: '颜色2', order: 4, view: 'text', type: 'string' },
+  type: { title: '分类', order: 0, view: 'list', type: 'string', dictCode: 'screen_right_three_type' },
+  name: { title: '名称', order: 1, view: 'text', type: 'string' },
+  value: { title: '数值', order: 2, view: 'number', type: 'number' },
+  unit: { title: '单位', order: 3, view: 'text', type: 'string' },
+  colorOne: { title: '颜色1', order: 4, view: 'text', type: 'string' },
+  colorTwo: { title: '颜色2', order: 5, view: 'text', type: 'string' },
 };
 
 /**

@@ -81,8 +81,8 @@ public class AnonScreen {
 
     @Operation(summary="大屏-左2数据")
     @GetMapping(value = "/getLeftTwoDatas")
-    public Result<ScreenLeftTwo> getLeftTwoDatas(@RequestParam(name="timeRange", defaultValue="M1")String timeRange) {
-        ScreenLeftTwo leftTwoDatas = screenLeftTwoService.getLeftTwoDatas(timeRange);
+    public Result<ScreenLeftTwo> getLeftTwoDatas(@RequestParam(name="type", defaultValue="1")String type) {
+        ScreenLeftTwo leftTwoDatas = screenLeftTwoService.getLeftTwoDatas(type);
         return Result.OK(leftTwoDatas);
     };
 
@@ -100,7 +100,7 @@ public class AnonScreen {
         return Result.OK(rightOneDatas);
     };
 
-    @Operation(summary="大屏-分页列表查询")
+    @Operation(summary="大屏右2-分页列表查询")
     @GetMapping(value = "/getRightTwoDatas")
     public Result<IPage<ScreenRightTwoData>> queryPageList(ScreenRightTwoData screenRightTwoData,
                                                            @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -112,13 +112,17 @@ public class AnonScreen {
         return Result.OK(pageList);
     }
 
-    @Operation(summary="大屏-分页列表查询")
+    @Operation(summary="大屏右3-分页列表查询")
     @GetMapping(value = "/getRightThreeDatas")
-    public Result<IPage<ScreenRightThree>> getRightThreeDatas(ScreenRightThree screenRightThree,
+    public Result<IPage<ScreenRightThree>> queryPageList(ScreenRightThree screenRightThree,
                                                          @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
-                                                         @RequestParam(name="pageSize", defaultValue="100") Integer pageSize,
+                                                         @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
                                                          HttpServletRequest req) {
-        QueryWrapper<ScreenRightThree> queryWrapper = QueryGenerator.initQueryWrapper(screenRightThree, req.getParameterMap());
+        // 自定义查询规则
+        Map<String, QueryRuleEnum> customeRuleMap = new HashMap<>();
+        // 自定义多选的查询规则为：LIKE_WITH_OR
+        customeRuleMap.put("type", QueryRuleEnum.LIKE_WITH_OR);
+        QueryWrapper<ScreenRightThree> queryWrapper = QueryGenerator.initQueryWrapper(screenRightThree, req.getParameterMap(),customeRuleMap);
         Page<ScreenRightThree> page = new Page<ScreenRightThree>(pageNo, pageSize);
         IPage<ScreenRightThree> pageList = screenRightThreeService.page(page, queryWrapper);
         return Result.OK(pageList);

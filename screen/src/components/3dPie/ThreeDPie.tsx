@@ -41,7 +41,7 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
       if (intervalId) {
         clearInterval(intervalId);
       }
-      
+
       drawPie3D(pie3DChart);
     }
 
@@ -54,17 +54,17 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
 
   useEffect(() => {
     if (pie3DChart) {
-      pie3DChart.on('mouseover', () => {
-        setCustomTooltip(prev => ({ ...prev, show: false, opacity: 0 }));
+      pie3DChart.on("mouseover", () => {
+        setCustomTooltip((prev) => ({ ...prev, show: false, opacity: 0 }));
       });
 
-      pie3DChart.on('mouseout', () => {
-        setCustomTooltip(prev => ({ ...prev, show: true, opacity: 1 }));
+      pie3DChart.on("mouseout", () => {
+        setCustomTooltip((prev) => ({ ...prev, show: true, opacity: 1 }));
       });
 
       return () => {
-        pie3DChart.off('mouseover');
-        pie3DChart.off('mouseout');
+        pie3DChart.off("mouseover");
+        pie3DChart.off("mouseout");
       };
     }
   }, [pie3DChart]);
@@ -116,31 +116,54 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
     let tooltipTimer: NodeJS.Timeout | null = null;
 
     const showTooltip = (idx: number) => {
+      // 清除之前的定时器
       if (tooltipTimer) {
         clearTimeout(tooltipTimer);
       }
 
+      // 立即显示tooltip
       setCustomTooltip({
         show: true,
         name: datas[idx]?.name,
         value: datas[idx]?.value,
         percent: pipeData[idx],
-        opacity: 0
+        opacity: 1,
       });
 
+      // 3秒后隐藏tooltip
       tooltipTimer = setTimeout(() => {
-        setCustomTooltip(prev => ({ ...prev, opacity: 1 }));
-        
+        setCustomTooltip((prev) => ({ ...prev, opacity: 0 }));
+
+        // 淡出动画完成后隐藏
         setTimeout(() => {
-          setCustomTooltip(prev => ({ ...prev, opacity: 0 }));
-          
-          setTimeout(() => {
-            setCustomTooltip(prev => ({ ...prev, show: false }));
-          }, 200);
-        }, 800);
-      }, 50);
+          setCustomTooltip((prev) => ({ ...prev, show: false }));
+        }, 300);
+      }, 2600);
     };
 
+    // 初始显示第一个tooltip（500毫秒后）
+    const initialTimer = setTimeout(() => {
+      if (pie3DChart) {
+        currentOption.series.forEach((item: any, i: number) => {
+          if (item.pieData) {
+            item.pieStatus.selected = i === index;
+            item.parametricEquation = getParametricEquation(
+              item.pieData.startRatio,
+              item.pieData.endRatio,
+              item.pieStatus.selected,
+              false,
+              1,
+              pipeData[index]
+            );
+          }
+        });
+        pie3DChart.setOption(currentOption);
+        showTooltip(index);
+        index = index === datas.length - 1 ? 0 : index + 1;
+      }
+    }, 500);
+
+    // 设置循环（每3秒切换一次）
     const id = setInterval(() => {
       if (pie3DChart) {
         currentOption.series.forEach((item: any, i: number) => {
@@ -160,11 +183,12 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
         showTooltip(index);
         index = index === datas.length - 1 ? 0 : index + 1;
       }
-    }, 1500);
+    }, 3000);
 
     setIntervalId(id);
 
     return () => {
+      clearTimeout(initialTimer);
       if (tooltipTimer) {
         clearTimeout(tooltipTimer);
       }
@@ -196,10 +220,12 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
             zIndex: 10,
             boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
             opacity: customTooltip.opacity,
-            transition: "opacity 0.3s ease-in-out"
+            transition: "opacity 0.3s ease-in-out",
           }}
         >
-          <div style={{ fontWeight: 600, marginBottom: 6 }}>{customTooltip.name}</div>
+          <div style={{ fontWeight: 600, marginBottom: 6 }}>
+            {customTooltip.name}
+          </div>
           <div>数量：{customTooltip.value}</div>
           <div>占比：{customTooltip.percent?.toFixed(2)}%</div>
         </div>

@@ -18,5 +18,5 @@ public interface ScreenLeftTwoMapper {
     List<ScreenLeftTwoX> selectScreenLeftOneX();
 
     // 添加参数timeRange，用于指定时间区间
-    List<ScreenLeftTwoY> selectScreenLeftOneY(@Param("timeRange") String timeRange);
+    List<ScreenLeftTwoY> selectScreenLeftOneY(@Param("type") String timeRange);
 }

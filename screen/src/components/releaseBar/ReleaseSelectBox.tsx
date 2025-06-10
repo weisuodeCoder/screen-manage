@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "./style.less"; // 假设我们有一个样式文件
-import { TimeRangeEnum } from "@/views/home/index.api";
 
 interface PropsImpl {
-  onChange: (value: TimeRangeEnum) => void;
-  defaultValue: TimeRangeEnum;
+  onChange: (value: "1" | "2" | "3") => void;
+  defaultValue: "1" | "2" | "3";
 }
 
 interface OptionsImpl {
-  value: TimeRangeEnum;
+  value: "1" | "2" | "3";
   label: string;
 }
 
@@ -17,22 +16,20 @@ export default function ReleaseSelectBox({
   defaultValue,
 }: PropsImpl) {
   const options: OptionsImpl[] = [
-    // { value: TimeRangeEnum.M6, label: "近6个月" },
-    // { value: TimeRangeEnum.M3, label: "近3个月" },
-    { value: TimeRangeEnum.M1, label: "余1" },
-    { value: TimeRangeEnum.Y1, label: "余2" },
-    { value: TimeRangeEnum.Y3, label: "余3" },
+    { value: "1", label: "余1" },
+    { value: "2", label: "余2" },
+    { value: "3", label: "余3" },
   ];
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue || "");
-  const getSelectedName = (value: TimeRangeEnum): string => {
+  const getSelectedName = (value: "1" | "2" | "3"): string => {
     return options.find((item) => item.value === value)?.label || "";
   };
   const [selectedName, setSelectedName] = useState(
     getSelectedName(defaultValue)
   );
 
-  const handleSelect = (value: TimeRangeEnum) => {
+  const handleSelect = (value: "1" | "2" | "3") => {
     setSelectedValue(value);
     const name = getSelectedName(value);
     setSelectedName(name);

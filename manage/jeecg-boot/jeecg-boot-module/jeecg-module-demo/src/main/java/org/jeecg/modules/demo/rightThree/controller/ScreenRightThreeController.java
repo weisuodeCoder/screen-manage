@@ -42,7 +42,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 右三数据
  * @Author: jeecg-boot
- * @Date:   2025-06-07
+ * @Date:   2025-06-11
  * @Version: V1.0
  */
 @Tag(name="右三数据")
@@ -69,7 +69,11 @@ public class ScreenRightThreeController extends JeecgController<ScreenRightThree
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-        QueryWrapper<ScreenRightThree> queryWrapper = QueryGenerator.initQueryWrapper(screenRightThree, req.getParameterMap());
+        // 自定义查询规则
+        Map<String, QueryRuleEnum> customeRuleMap = new HashMap<>();
+        // 自定义多选的查询规则为：LIKE_WITH_OR
+        customeRuleMap.put("type", QueryRuleEnum.LIKE_WITH_OR);
+        QueryWrapper<ScreenRightThree> queryWrapper = QueryGenerator.initQueryWrapper(screenRightThree, req.getParameterMap(),customeRuleMap);
 		Page<ScreenRightThree> page = new Page<ScreenRightThree>(pageNo, pageSize);
 		IPage<ScreenRightThree> pageList = screenRightThreeService.page(page, queryWrapper);
 		return Result.OK(pageList);

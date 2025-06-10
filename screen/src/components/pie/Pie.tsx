@@ -11,6 +11,9 @@ export default function Pie({ datas }: PropsImpl) {
   const { setChartColor } = usePieHooks();
   const chartRef1 = useRef<HTMLDivElement>(null);
   const chartRef2 = useRef<HTMLDivElement>(null);
+  const tooltipInterval = useRef<NodeJS.Timeout>();
+  const currentTooltipIndex1 = useRef(0); // 为第一个图表单独创建索引
+  const currentTooltipIndex2 = useRef(0); // 为第二个图表单独创建索引
 
   // 检查数据是否有效
   const isValidData =
@@ -188,6 +191,40 @@ export default function Pie({ datas }: PropsImpl) {
     ],
   };
 
+  // 自动切换Tooltip的函数 - 为第一个图表
+  const showNextTooltip1 = (chart: echarts.ECharts | null) => {
+    if (!chart) return;
+
+    // 隐藏上一个Tooltip
+    chart.dispatchAction({ type: "hideTip" });
+
+    // 显示下一个Tooltip
+    currentTooltipIndex1.current =
+      (currentTooltipIndex1.current + 1) % pieData1.length;
+    chart.dispatchAction({
+      type: "showTip",
+      seriesIndex: 0,
+      dataIndex: currentTooltipIndex1.current,
+    });
+  };
+
+  // 自动切换Tooltip的函数 - 为第二个图表
+  const showNextTooltip2 = (chart: echarts.ECharts | null) => {
+    if (!chart) return;
+
+    // 隐藏上一个Tooltip
+    chart.dispatchAction({ type: "hideTip" });
+
+    // 显示下一个Tooltip
+    currentTooltipIndex2.current =
+      (currentTooltipIndex2.current + 1) % pieData2.length;
+    chart.dispatchAction({
+      type: "showTip",
+      seriesIndex: 0,
+      dataIndex: currentTooltipIndex2.current,
+    });
+  };
+
   useEffect(() => {
     const resizeCharts = () => {
       if (chartRef1.current) {
@@ -204,27 +241,39 @@ export default function Pie({ datas }: PropsImpl) {
       }
     };
 
+    let chart1: echarts.ECharts | null = null;
+    let chart2: echarts.ECharts | null = null;
+
     if (chartRef1.current) {
-      const chart1 = echarts.init(chartRef1.current);
+      chart1 = echarts.init(chartRef1.current);
       chart1.setOption(option1);
     }
     if (chartRef2.current) {
-      const chart2 = echarts.init(chartRef2.current);
+      chart2 = echarts.init(chartRef2.current);
       chart2.setOption(option2);
+    }
+
+    // 设置定时器自动切换Tooltip - 分别处理两个图表
+    if (chart1 && chart2) {
+      tooltipInterval.current = setInterval(() => {
+        showNextTooltip1(chart1);
+        showNextTooltip2(chart2);
+      }, 3000);
+      setTimeout(() => {
+        showNextTooltip1(chart1);
+        showNextTooltip2(chart2);
+      }, 500);
     }
 
     window.addEventListener("resize", resizeCharts);
 
     return () => {
       window.removeEventListener("resize", resizeCharts);
-      if (chartRef1.current) {
-        echarts.getInstanceByDom(chartRef1.current)?.dispose();
-      }
-      if (chartRef2.current) {
-        echarts.getInstanceByDom(chartRef2.current)?.dispose();
-      }
+      if (chart1) chart1.dispose();
+      if (chart2) chart2.dispose();
+      if (tooltipInterval.current) clearInterval(tooltipInterval.current);
     };
-  }, [option1, option2]);
+  }, [option1, option2, pieData1.length, pieData2.length]);
 
   return (
     <div

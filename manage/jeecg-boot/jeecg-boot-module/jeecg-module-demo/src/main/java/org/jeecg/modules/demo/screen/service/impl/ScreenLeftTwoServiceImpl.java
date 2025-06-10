@@ -30,9 +30,9 @@ public class ScreenLeftTwoServiceImpl implements IScreenLeftTwoService {
     private final ScreenLeftTwoMapper screenLeftTwoMapper;
 
     @Override
-    public ScreenLeftTwo getLeftTwoDatas(String timeRange) {
+    public ScreenLeftTwo getLeftTwoDatas(String type) {
         List<ScreenLeftTwoX> screenLeftTwoXES = screenLeftTwoMapper.selectScreenLeftOneX();
-        List<ScreenLeftTwoY> screenLeftTwoYS = screenLeftTwoMapper.selectScreenLeftOneY(timeRange);
+        List<ScreenLeftTwoY> screenLeftTwoYS = screenLeftTwoMapper.selectScreenLeftOneY(type);
         ScreenLeftTwo screenLeftTwo = new ScreenLeftTwo();
         screenLeftTwo.setScreenLeftTwoXs(screenLeftTwoXES);
         screenLeftTwo.setScreenLeftTwoYs(screenLeftTwoYS);

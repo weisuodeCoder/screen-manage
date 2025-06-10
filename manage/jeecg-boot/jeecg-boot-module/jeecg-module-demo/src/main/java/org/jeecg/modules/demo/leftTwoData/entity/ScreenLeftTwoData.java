@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 左二数据
  * @Author: jeecg-boot
- * @Date:   2025-06-07
+ * @Date:   2025-06-10
  * @Version: V1.0
  */
 @Data
@@ -61,6 +61,11 @@ public class ScreenLeftTwoData implements Serializable {
 	@Dict(dictTable = "screen_left_two_main", dicText = "title", dicCode = "id")
     @Schema(description = "分组id")
     private java.lang.String groupId;
+	/**搜索余*/
+	@Excel(name = "搜索余", width = 15, dicCode = "screen_left_two_type")
+	@Dict(dicCode = "screen_left_two_type")
+    @Schema(description = "搜索余")
+    private java.lang.String type;
 	/**类型*/
 	@Excel(name = "类型", width = 15, dicCode = "screen_left_two_class_name")
 	@Dict(dicCode = "screen_left_two_class_name")
@@ -74,10 +79,4 @@ public class ScreenLeftTwoData implements Serializable {
 	@Excel(name = "单位", width = 15)
     @Schema(description = "单位")
     private java.lang.String unit;
-	/**日期*/
-	@Excel(name = "日期", width = 15, format = "yyyy-MM-dd")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "日期")
-    private java.util.Date year;
 }

@@ -32,7 +32,7 @@ export const getTitles = (params: Record<string, any>) =>
 
 export const getLeftOneDatas = () => defHttp.get(Api.getLeftOneDatas);
 
-export const getLeftTwoDatas = (params: Record<"timeRange", TimeRangeEnum>) => {
+export const getLeftTwoDatas = (params: any) => {
   return defHttp.get(Api.getLeftTwoDatas, { params });
 };
 

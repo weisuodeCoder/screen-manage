@@ -3,7 +3,7 @@ import type { GlobEnvConfig } from '/#/config';
 import { warn } from '/@/utils/log';
 import pkg from '../../package.json';
 import { getConfigFileName } from '../../build/getConfigFileName';
-import { getGlobal } from "@/qiankun/micro";
+import { getGlobal } from '@/qiankun/micro';
 
 export function getCommonStoragePrefix() {
   const { VITE_GLOB_APP_SHORT_NAME } = getAppEnvConfig();
@@ -23,7 +23,10 @@ export function getAppEnvConfig() {
   const ENV = (import.meta.env.DEV
     ? // Get the global configuration (the configuration will be extracted independently when packaging)
       (import.meta.env as unknown as GlobEnvConfig)
-    : global[ENV_NAME as any]) as unknown as GlobEnvConfig;
+    : window[ENV_NAME as any]
+      ? window[ENV_NAME as any]
+      : (import.meta.env as unknown as GlobEnvConfig)) as unknown as GlobEnvConfig;
+  // : global[ENV_NAME as any]) as unknown as GlobEnvConfig;
 
   const {
     VITE_GLOB_APP_TITLE,
@@ -107,7 +110,7 @@ export function isProdMode(): boolean {
 }
 
 export function getHideLayoutTypes(): string[] {
-  const {VITE_GLOB_HIDE_LAYOUT_TYPES} = getAppEnvConfig();
+  const { VITE_GLOB_HIDE_LAYOUT_TYPES } = getAppEnvConfig();
   if (typeof VITE_GLOB_HIDE_LAYOUT_TYPES !== 'string') {
     return [];
   }

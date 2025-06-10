@@ -39,8 +39,9 @@ export default function Home() {
     preCenterTwoDatas,
   } = usePreData();
 
-  const LEFT_TWO_DEFAULT_SELECTED = TimeRangeEnum.M1;
+  const LEFT_TWO_DEFAULT_SELECTED = "1";
   const LEFT_THREE_DEFAULT_SELECTED = TimeRangeThreeEnum.year;
+  const RIGHT_THREE_DEFAULT_SELECTED = "1";
 
   const [leftList, setLeftList] = useState<SlotListType>();
   const [centerList, setCenterList] = useState<CenterListType>();
@@ -65,7 +66,9 @@ export default function Home() {
         );
         const rightOneRes = await preRightOneDatas();
         const reghtTwoRes = await preRightTwoDatas();
-        const reghtThreeRes = await preRightThreeDatas();
+        const reghtThreeRes = await preRightThreeDatas(
+          RIGHT_THREE_DEFAULT_SELECTED
+        );
         const centerOneRes = await preCenterOneDatas();
         const centerTwoRes = await preCenterTwoDatas();
 
@@ -127,7 +130,13 @@ export default function Home() {
           {
             title: rightTitleArr[2].title,
             subtitle: rightTitleArr[2].subTitle,
-            slot: <HorizontalBar datas={reghtThreeRes} />,
+            slot: (
+              <HorizontalBar
+                datas={reghtThreeRes}
+                defaultValue={RIGHT_THREE_DEFAULT_SELECTED}
+                preRightThreeDatas={preRightThreeDatas}
+              />
+            ),
           },
         ]);
         setLoading(false);

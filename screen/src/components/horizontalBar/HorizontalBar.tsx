@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 import "./style.less";
+import HorizontalSelectBox from "./HorizontalSelectBox";
 
 interface Props {
   datas: any[];
+  defaultValue: "1" | "2";
+  preRightThreeDatas: (value: "1" | "2") => Promise<any[]>;
 }
 
-export default function FadeLine({ datas }: Props) {
+export default function FadeLine({
+  datas,
+  defaultValue,
+  preRightThreeDatas,
+}: Props) {
   const chartRef = useRef<HTMLDivElement>(null);
   const [chart, setChart] = useState<echarts.ECharts | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,7 +24,7 @@ export default function FadeLine({ datas }: Props) {
   useEffect(() => {
     /** 计算父盒子高度 */
     const updateContainerHeight = () => {
-      const parentElement = chartRef.current?.closest('.card_main');
+      const parentElement = chartRef.current?.closest(".card_main");
       if (parentElement) {
         const height = parentElement.clientHeight;
         setContainerHeight(height);
@@ -26,10 +33,10 @@ export default function FadeLine({ datas }: Props) {
 
     updateContainerHeight();
 
-    window.addEventListener('resize', updateContainerHeight);
+    window.addEventListener("resize", updateContainerHeight);
 
     return () => {
-      window.removeEventListener('resize', updateContainerHeight);
+      window.removeEventListener("resize", updateContainerHeight);
     };
   }, []);
 
@@ -40,7 +47,7 @@ export default function FadeLine({ datas }: Props) {
       top: "10%",
       width: "90%",
       height: "86%",
-      containLabel: true
+      containLabel: true,
     },
     legend: {
       top: "8%",
@@ -198,20 +205,58 @@ export default function FadeLine({ datas }: Props) {
     ],
   });
 
+  const onChange = async (value: "1" | "2") => {
+    const res = await preRightThreeDatas(value);
+
+    setCurrentIndex(0);
+    const series_0_data =
+      res?.map((item) => {
+        return {
+          value: item.value,
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+              { offset: 0, color: item.colorOne },
+              { offset: 1, color: item.colorTwo },
+            ]),
+          },
+        };
+      }) || [];
+    const newOption = {
+      ...option,
+      yAxis: [
+        { ...option.yAxis[0], data: res?.map((item) => item.name) || [] },
+        { ...option.yAxis[1] },
+      ],
+      color: datas?.map((item) => item.colorOne) || undefined,
+      series: [
+        { ...option.series[0], data: series_0_data },
+        { ...option.series[1] },
+      ],
+    };
+
+    setOption(newOption);
+    chart?.setOption(newOption);
+
+    // 数据更新后重新初始化轮播
+  };
+
   useEffect(() => {
     if (chartRef.current) {
       const newChart = echarts.init(chartRef.current);
       setChart(newChart);
-      
+
       updateChartData(newChart, 0);
-      
+
       return () => {
         newChart.dispose();
       };
     }
   }, []);
 
-  const updateChartData = (chartInstance: echarts.ECharts, startIndex: number) => {
+  const updateChartData = (
+    chartInstance: echarts.ECharts,
+    startIndex: number
+  ) => {
     const displayData = [];
     for (let i = 0; i < visibleCount; i++) {
       const dataIndex = (startIndex + i) % datas.length;
@@ -220,22 +265,26 @@ export default function FadeLine({ datas }: Props) {
 
     const newOption = {
       ...option,
-      yAxis: [{
-        ...option.yAxis[0],
-        data: displayData.map(item => item.name)
-      }],
-      series: [{
-        ...option.series[0],
-        data: displayData.map((item) => ({
-          value: item.value,
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-              { offset: 0, color: item.colorOne },
-              { offset: 1, color: item.colorTwo },
-            ]),
-          },
-        }))
-      }]
+      yAxis: [
+        {
+          ...option.yAxis[0],
+          data: displayData.map((item) => item.name),
+        },
+      ],
+      series: [
+        {
+          ...option.series[0],
+          data: displayData.map((item) => ({
+            value: item.value,
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                { offset: 0, color: item.colorOne },
+                { offset: 1, color: item.colorTwo },
+              ]),
+            },
+          })),
+        },
+      ],
     };
 
     chartInstance.setOption(newOption);
@@ -248,6 +297,12 @@ export default function FadeLine({ datas }: Props) {
     let scrollInterval: NodeJS.Timeout;
 
     const startScroll = () => {
+      setCurrentIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % datas.length;
+        updateChartData(chart, nextIndex);
+        return nextIndex;
+      });
+
       scrollInterval = setInterval(() => {
         setCurrentIndex((prevIndex) => {
           const nextIndex = (prevIndex + 1) % datas.length;
@@ -271,8 +326,8 @@ export default function FadeLine({ datas }: Props) {
 
     const container = chartRef.current?.parentElement;
     if (container) {
-      container.addEventListener('mouseenter', handleMouseEnter);
-      container.addEventListener('mouseleave', handleMouseLeave);
+      container.addEventListener("mouseenter", handleMouseEnter);
+      container.addEventListener("mouseleave", handleMouseLeave);
     }
 
     startScroll();
@@ -280,15 +335,18 @@ export default function FadeLine({ datas }: Props) {
     return () => {
       clearInterval(scrollInterval);
       if (container) {
-        container.removeEventListener('mouseenter', handleMouseEnter);
-        container.removeEventListener('mouseleave', handleMouseLeave);
+        container.removeEventListener("mouseenter", handleMouseEnter);
+        container.removeEventListener("mouseleave", handleMouseLeave);
       }
     };
   }, [chart, datas, visibleCount]);
 
   return (
-    <div className="horizontal-bar-container" style={{ height: '100%' }}>
-      <div ref={chartRef} className="chart-wrapper"></div>
+    <div className="horizontal-bar-container" style={{ height: "100%" }}>
+      <HorizontalSelectBox defaultValue={defaultValue} onChange={onChange} />
+      <div style={{ width: "100%", height: "100%", paddingTop: "1.8vh" }}>
+        <div ref={chartRef} className="chart-wrapper"></div>
+      </div>
     </div>
   );
 }

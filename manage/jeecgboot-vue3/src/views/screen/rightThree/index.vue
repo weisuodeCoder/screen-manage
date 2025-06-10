@@ -160,7 +160,6 @@
       {
         label: '编辑',
         onClick: handleEdit.bind(null, record),
-        auth: 'rightThree:screen_right_three:edit',
       },
     ];
   }
@@ -180,7 +179,6 @@
           confirm: handleDelete.bind(null, record),
           placement: 'topLeft',
         },
-        auth: 'rightThree:screen_right_three:delete',
       },
     ];
   }

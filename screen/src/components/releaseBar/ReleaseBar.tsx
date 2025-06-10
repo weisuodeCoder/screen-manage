@@ -16,8 +16,8 @@ export interface ReleaseDatasImpl {
 
 interface PropsImpl {
   datas: ReleaseDatasImpl;
-  defaultSelected: TimeRangeEnum.M1;
-  preLeftTwoDatas: (timeRange: TimeRangeEnum) => Promise<ReleaseDatasImpl>;
+  defaultSelected: "1" | "2" | "3";
+  preLeftTwoDatas: (timeRange: "1" | "2" | "3") => Promise<ReleaseDatasImpl>;
 }
 
 export default function ReleaseBar({
@@ -27,6 +27,9 @@ export default function ReleaseBar({
 }: PropsImpl) {
   let chart: echarts.ECharts | null = null;
   const chartRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  // @ts-ignore
+  const intervalRef = useRef<NodeJS.Timeout>();
   const [option, setOption] = useState({
     backgroundColor: "transparent",
     grid: {
@@ -52,15 +55,16 @@ export default function ReleaseBar({
         type: "shadow",
         shadowStyle: { opacity: 0 },
       },
-      backgroundColor: "rgba(0,0,0,1)",
+      backgroundColor: "#fff",
       borderWidth: 1,
-      borderColor: "#999999",
+      borderColor: "#aaa",
       textStyle: {
-        color: "#ffffff",
+        color: "#333",
         fontSize: 10,
       },
       extraCssText: "z-index: 9999;",
       appendToBody: true,
+      // 保留原有的tooltip配置，不添加show: false等限制
     },
     xAxis: [
       {
@@ -136,8 +140,88 @@ export default function ReleaseBar({
     }),
   });
 
-  const onChange = async (value: TimeRangeEnum) => {
+  // 显示指定数据点的tooltip
+  const showTooltip = (dataIndex: number) => {
+    if (chart && datas.xDatas.length > 0) {
+      // 先隐藏所有tooltip
+      chart.dispatchAction({
+        type: "hideTip",
+      });
+
+      // 显示指定tooltip
+      chart.dispatchAction({
+        type: "showTip",
+        seriesIndex: 0, // 显示第一个系列的tooltip
+        dataIndex: dataIndex,
+      });
+    }
+  };
+
+  const cycleTooltips = () => {
+    if (datas.xDatas.length === 0) return;
+
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % datas.xDatas.length;
+      showTooltip(nextIndex);
+      return nextIndex;
+    });
+  };
+
+  // 初始化轮播
+  const initTooltipCycle = () => {
+    // 清除已有定时器
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      // @ts-ignore
+      intervalRef.current = undefined; // 确保引用被清除
+    }
+
+    // 500ms后开始显示
+    setTimeout(() => {
+      if (datas.xDatas.length > 0) {
+        showTooltip(0);
+      }
+
+      // 设置3秒轮播（确保只有一个 interval）
+      intervalRef.current = setInterval(cycleTooltips, 3000);
+    }, 500);
+  };
+
+  useEffect(() => {
+    if (chartRef.current) {
+      chart = echarts.init(chartRef.current);
+      chart.setOption(option);
+
+      // 初始化tooltip轮播
+      initTooltipCycle();
+
+      // 鼠标进入时暂停轮播
+      chart.getZr().on("mouseover", () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+      });
+
+      // 鼠标离开时恢复轮播
+      chart.getZr().on("mouseout", () => {
+        initTooltipCycle();
+      });
+
+      return () => {
+        // 清除定时器
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+        chart?.dispose();
+      };
+    }
+  }, [option, datas.xDatas]);
+
+  const onChange = async (value: "1" | "2" | "3") => {
     const res = await preLeftTwoDatas(value);
+
+    // 重置当前索引
+    setCurrentIndex(0);
 
     // 更新option
     const newOption = {
@@ -168,15 +252,11 @@ export default function ReleaseBar({
     };
 
     setOption(newOption);
-    chart?.setOption(option);
-  };
+    chart?.setOption(newOption);
 
-  useEffect(() => {
-    if (chartRef.current) {
-      chart = echarts.init(chartRef.current);
-      chart.setOption(option);
-    }
-  }, [option]);
+    // 数据更新后重新初始化轮播
+    initTooltipCycle();
+  };
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>

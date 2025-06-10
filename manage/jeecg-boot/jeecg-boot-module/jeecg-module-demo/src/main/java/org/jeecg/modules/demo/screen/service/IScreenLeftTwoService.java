@@ -12,5 +12,5 @@ import java.util.List;
  * @Version: V1.0
  */
 public interface IScreenLeftTwoService {
-    ScreenLeftTwo getLeftTwoDatas(String timeRange);
+    ScreenLeftTwo getLeftTwoDatas(String type);
 }

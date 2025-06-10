@@ -1,4 +1,4 @@
-const projectName = import.meta.env.VITE_GLOB_APP_TITLE;
+const projectName = '数据可视化管理平台';
 
 export function warn(message: string) {
   console.warn(`[${projectName} warn]:${message}`);

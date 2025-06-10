@@ -57,8 +57,10 @@ export function usePreData() {
   }, []);
 
   const preLeftTwoDatas = useCallback(
-    async (timeRange: TimeRangeEnum): Promise<ReleaseDatasImpl> => {
-      const res: any = await getLeftTwoDatas({ timeRange: timeRange });
+    async (type: "1" | "2" | "3"): Promise<ReleaseDatasImpl> => {
+      const res: any = await getLeftTwoDatas({
+        type: type,
+      });
       const data: ReleaseDatasImpl = {
         xDatas: [],
         yDatas: [],
@@ -90,7 +92,7 @@ export function usePreData() {
             datas: x.map((xItem) => {
               return (
                 names[key].find(
-                  (nameItem: any) => nameItem.xdata === xItem.value
+                  (nameItem: any) => nameItem.xdata === xItem.name
                 )?.value || 0
               );
             }),
@@ -171,12 +173,13 @@ export function usePreData() {
     return res.result.records || [];
   }, []);
 
-  const preRightThreeDatas = useCallback(async () => {
+  const preRightThreeDatas = useCallback(async (type: "1" | "2") => {
     const res: any = await getRightThreeDatas({
       column: "value",
       order: "asc",
       pageNo: 1,
       pageSize: 99999,
+      type: type,
     });
 
     return res?.result?.records || [];

@@ -27,15 +27,15 @@ interface PropsImpl {
 
 export default function DataCard({ datas }: PropsImpl) {
   const chartRef = useRef<HTMLDivElement>(null);
+  const chartInstance = useRef<echarts.ECharts | null>(null);
+  const tooltipInterval = useRef<NodeJS.Timeout | null>(null);
+  const currentTooltipIndex = useRef<number>(0);
 
   const [option, setOption] = useState({
     tooltip: {
-      trigger: "item", // 或 'axis' 根据你的需求
+      trigger: "item",
       formatter: function (params: any) {
-        // params 是当前触发项的数据对象
-        const data = params.data; // 获取当前数据项
-
-        // 构建 tooltip 内容
+        const data = params.data;
         let tipContent = `
           <div style="font-weight:bold;margin-bottom:5px;">${data.title}</div>
           <div style="display:flex;justify-content:space-between;">
@@ -43,10 +43,8 @@ export default function DataCard({ datas }: PropsImpl) {
             <span style="font-weight:bold;margin-left:10px;">${data.value}</span>
           </div>
         `;
-
         return tipContent;
       },
-      // 可选样式配置
       backgroundColor: "rgba(255,255,255,0.9)",
       borderColor: "#ddd",
       borderWidth: 1,
@@ -65,7 +63,7 @@ export default function DataCard({ datas }: PropsImpl) {
         data: datas.datas.map((item) => ({
           ...item,
           itemStyle: {
-            color: item.color, // 使用数据项中的color字段
+            color: item.color,
           },
         })),
         emphasis: {
@@ -76,7 +74,7 @@ export default function DataCard({ datas }: PropsImpl) {
           },
         },
         label: {
-          color: "#fff", // 白色文字
+          color: "#fff",
           fontSize: 12,
           formatter: "{b}",
         },
@@ -84,12 +82,55 @@ export default function DataCard({ datas }: PropsImpl) {
     ],
   });
 
+  const showTooltip = (index: number) => {
+    if (chartInstance.current) {
+      chartInstance.current.dispatchAction({
+        type: "showTip",
+        seriesIndex: 0,
+        dataIndex: index,
+      });
+    }
+  };
+
+  const startTooltipCycle = () => {
+    if (datas.datas.length === 0) return;
+
+    // Clear any existing interval
+    if (tooltipInterval.current) {
+      clearInterval(tooltipInterval.current);
+    }
+
+    // Show first tooltip after 500ms
+    setTimeout(() => {
+      showTooltip(0);
+      currentTooltipIndex.current = 0;
+
+      // Then cycle every 3 seconds
+      tooltipInterval.current = setInterval(() => {
+        currentTooltipIndex.current =
+          (currentTooltipIndex.current + 1) % datas.datas.length;
+        showTooltip(currentTooltipIndex.current);
+      }, 3000);
+    }, 500);
+  };
+
   useEffect(() => {
     if (chartRef.current) {
-      const chart = echarts.init(chartRef.current);
-      chart.setOption(option);
+      chartInstance.current = echarts.init(chartRef.current);
+      chartInstance.current.setOption(option);
+      startTooltipCycle();
     }
-  }, [option]);
+
+    return () => {
+      if (tooltipInterval.current) {
+        clearInterval(tooltipInterval.current);
+      }
+      if (chartInstance.current) {
+        chartInstance.current.dispose();
+      }
+    };
+  }, [option, datas.datas]);
+
   return (
     <div className="data_card_main">
       <div className="data_card_1">

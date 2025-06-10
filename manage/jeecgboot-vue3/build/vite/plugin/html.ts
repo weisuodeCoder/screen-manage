@@ -8,7 +8,7 @@ import pkg from '../../../package.json';
 import { GLOB_CONFIG_FILE_NAME } from '../../constant';
 
 export function configHtmlPlugin(env: ViteEnv, isBuild: boolean, isQiankunMicro: boolean) {
-  const { VITE_GLOB_APP_TITLE, VITE_PUBLIC_PATH } = env;
+  const { VITE_PUBLIC_PATH } = env;
 
   const path = VITE_PUBLIC_PATH.endsWith('/') ? VITE_PUBLIC_PATH : `${VITE_PUBLIC_PATH}/`;
 
@@ -17,7 +17,7 @@ export function configHtmlPlugin(env: ViteEnv, isBuild: boolean, isQiankunMicro:
   };
 
   // 【JEECG作为乾坤子应用】补充静态资源前缀
-  const {VITE_GLOB_QIANKUN_MICRO_APP_ENTRY} = env;
+  const { VITE_GLOB_QIANKUN_MICRO_APP_ENTRY } = env;
   const basePublicPath = isQiankunMicro ? VITE_GLOB_QIANKUN_MICRO_APP_ENTRY : '';
 
   const htmlPlugin: PluginOption[] = createHtmlPlugin({
@@ -25,7 +25,7 @@ export function configHtmlPlugin(env: ViteEnv, isBuild: boolean, isQiankunMicro:
     inject: {
       // 修改模板html的标题
       data: {
-        title: VITE_GLOB_APP_TITLE,
+        title: '数据可视化管理平台',
         basePublicPath: basePublicPath,
       },
       // 将app.config.js文件注入到模板html中
