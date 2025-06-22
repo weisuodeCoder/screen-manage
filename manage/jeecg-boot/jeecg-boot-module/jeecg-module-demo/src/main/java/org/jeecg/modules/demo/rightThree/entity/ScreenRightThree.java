@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 右三数据
  * @Author: jeecg-boot
- * @Date:   2025-06-11
+ * @Date:   2025-06-14
  * @Version: V1.0
  */
 @Data
@@ -62,7 +62,8 @@ public class ScreenRightThree implements Serializable {
     @Schema(description = "分类")
     private java.lang.String type;
 	/**名称*/
-	@Excel(name = "名称", width = 15)
+	@Excel(name = "名称", width = 15, dicCode = "screen_center_region_code")
+	@Dict(dicCode = "screen_center_region_code")
     @Schema(description = "名称")
     private java.lang.String name;
 	/**数值*/

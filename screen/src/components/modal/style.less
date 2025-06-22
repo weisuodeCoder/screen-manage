@@ -4,11 +4,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #0009;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 99999999;
 
     .modal-content {
         background: url(../../assets/modal.svg);
@@ -19,6 +19,17 @@
         min-width: 40vw;
         min-height: 40vh;
         position: relative;
+        .modal-title {
+            position: absolute;
+            color: #f3a33c;
+            font-size: 3vh;
+            line-height: 3vh;
+            top: 1.6vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            text-shadow: .2vh .2vw .3vw #000000;
+        }
         .modal-close {
             background: none;
             border: none;

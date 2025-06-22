@@ -8,4 +8,5 @@ public class ScreenCenterOne {
     private String title;
     private Integer value;
     private String id;
+    private String unit;
 }

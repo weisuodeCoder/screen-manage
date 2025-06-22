@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenRightOneMapper">
-    <select id="selectScreenRightOne" resultType="org.jeecg.modules.demo.screen.entity.ScreenRightOne">
+    <select id="selectScreenRightOneList" resultType="org.jeecg.modules.demo.screen.entity.ScreenRightOneList">
         SELECT d.value,d.unit,d.name,d.color_one AS color,m.title,d.`group_id` AS gid
         FROM `screen_right_one_data` d
                  LEFT JOIN `screen_right_one_main` m
                            ON d.`group_id` = m.`id`
         ORDER BY m.sort;
+    </select>
+    <select id="selectScreenRightOneConf" resultType="org.jeecg.modules.demo.screen.entity.ScreenRightOneConf">
+        SELECT id,title,unit FROM `screen_right_one_main` WHERE TYPE = 2;
     </select>
 </mapper>

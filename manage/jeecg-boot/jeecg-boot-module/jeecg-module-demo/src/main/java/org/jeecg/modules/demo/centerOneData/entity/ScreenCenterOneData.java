@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 中一数据
  * @Author: jeecg-boot
- * @Date:   2025-06-09
+ * @Date:   2025-06-14
  * @Version: V1.0
  */
 @Data
@@ -57,26 +57,24 @@ public class ScreenCenterOneData implements Serializable {
     @Schema(description = "所属部门")
     private java.lang.String sysOrgCode;
 	/**地区*/
-	@Excel(name = "地区", width = 15, dictTable = "screen_center_one_main", dicText = "title", dicCode = "id")
-	@Dict(dictTable = "screen_center_one_main", dicText = "title", dicCode = "id")
+	@Excel(name = "地区", width = 15, dicCode = "screen_center_region_code")
+	@Dict(dicCode = "screen_center_region_code")
     @Schema(description = "地区")
     private java.lang.String groupId;
 	/**名称*/
 	@Excel(name = "名称", width = 15)
     @Schema(description = "名称")
     private java.lang.String name;
-	/**数据*/
-	@Excel(name = "数据", width = 15)
-    @Schema(description = "数据")
+	/**数量*/
+	@Excel(name = "数量", width = 15)
+    @Schema(description = "数量")
     private java.lang.Integer value;
 	/**单位*/
 	@Excel(name = "单位", width = 15)
     @Schema(description = "单位")
     private java.lang.String unit;
-	/**日期*/
-	@Excel(name = "日期", width = 15, format = "yyyy-MM-dd")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @Schema(description = "日期")
-    private java.util.Date time;
+	/**备注*/
+	@Excel(name = "备注", width = 15)
+    @Schema(description = "备注")
+    private java.lang.String remark;
 }

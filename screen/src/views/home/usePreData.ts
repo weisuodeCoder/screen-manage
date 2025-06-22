@@ -136,14 +136,15 @@ export function usePreData() {
     const datas: DataCardDatasImpl = {
       datas: [],
       group: [
+        { title: "", unit: "" },
         { title: "", value: 0 },
         { title: "", value: 0 },
       ],
     };
-    if (res.result) {
+    if (res?.result?.screenRightOneList && res?.result?.screenRightOneConf) {
       const map: Record<string, any> = {};
       let index = 1;
-      for (const item of res.result) {
+      for (const item of res.result.screenRightOneList) {
         if (map[item.gid]) {
           map[item.gid].value += Number(item.value);
         } else {
@@ -155,12 +156,14 @@ export function usePreData() {
           index++;
         }
       }
-      datas.datas = res.result;
+      datas.datas = res.result.screenRightOneList;
       const arr = Object.values(map).sort((a, b) => a.index - b.index);
-      if (arr?.[0]?.title) datas.group[0].title = arr[0].title;
-      if (arr?.[0]?.value) datas.group[0].value = arr[0].value;
-      if (arr?.[1]?.title) datas.group[1].title = arr[1].title;
-      if (arr?.[1]?.value) datas.group[1].value = arr[1].value;
+      datas.group[0].title = res.result.screenRightOneConf.title;
+      datas.group[0].unit = res.result.screenRightOneConf.unit;
+      if (arr?.[0]?.title) datas.group[1].title = arr[0].title;
+      if (arr?.[0]?.value) datas.group[1].value = arr[0].value;
+      if (arr?.[1]?.title) datas.group[2].title = arr[1].title;
+      if (arr?.[1]?.value) datas.group[2].value = arr[1].value;
     }
     return datas;
   }, []);
@@ -176,7 +179,7 @@ export function usePreData() {
   const preRightThreeDatas = useCallback(async (type: "1" | "2") => {
     const res: any = await getRightThreeDatas({
       column: "value",
-      order: "asc",
+      order: "desc",
       pageNo: 1,
       pageSize: 99999,
       type: type,

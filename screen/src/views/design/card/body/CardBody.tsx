@@ -6,9 +6,14 @@ import classNames from "classnames";
 interface PropsImpl {
   direction: DirectionEnum;
   slot: ReactNode;
+  overflowScroll?: boolean;
 }
 
-export default function CardBody({ direction, slot }: PropsImpl) {
+export default function CardBody({
+  direction,
+  slot,
+  overflowScroll,
+}: PropsImpl) {
   const [show, setShow] = useState(true);
   const [showSlot, setShowSlot] = useState(false);
 
@@ -20,7 +25,11 @@ export default function CardBody({ direction, slot }: PropsImpl) {
   }, []);
   return (
     <div
-      className={classNames("card_body_main", `card_body_main_${direction}`)}
+      className={classNames(
+        "card_body_main",
+        `card_body_main_${direction}`,
+        `${overflowScroll && "overflow_scroll"}`
+      )}
     >
       {show && (
         <div

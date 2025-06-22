@@ -1,6 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import "./style.less";
 import * as echarts from "echarts";
+import { IntervalWorkRef } from "@/views/type";
 
 interface DatasImpl {
   value: number;
@@ -11,6 +18,10 @@ interface DatasImpl {
   unit: string;
 }
 
+interface CountConfImpl {
+  title: string;
+  unit: string;
+}
 interface GroupImpl {
   title: string;
   value: number;
@@ -18,30 +29,36 @@ interface GroupImpl {
 
 export interface DataCardDatasImpl {
   datas: DatasImpl[];
-  group: [GroupImpl, GroupImpl];
+  group: [CountConfImpl, GroupImpl, GroupImpl];
 }
 
 interface PropsImpl {
   datas: DataCardDatasImpl;
 }
 
-export default function DataCard({ datas }: PropsImpl) {
+const DataCard = forwardRef<IntervalWorkRef, PropsImpl>(({ datas }, ref) => {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartInstance = useRef<echarts.ECharts | null>(null);
-  const tooltipInterval = useRef<NodeJS.Timeout | null>(null);
   const currentTooltipIndex = useRef<number>(0);
+  const titleCountMap = useRef<Record<string, number>>({});
+  const isMouseEnter = useRef(false);
 
   const [option, setOption] = useState({
     tooltip: {
       trigger: "item",
       formatter: function (params: any) {
         const data = params.data;
+        const total = titleCountMap.current[data.title] || 0;
+
         let tipContent = `
-          <div style="font-weight:bold;margin-bottom:5px;">${data.title}</div>
+          <div style="font-weight:bold;margin-bottom:0.5vh;">${data.title}</div>
           <div style="display:flex;justify-content:space-between;">
             <span>${data.name}:</span>
-            <span style="font-weight:bold;margin-left:10px;">${data.value}</span>
+            <span style=";margin-left:1vh;">${data.value}${
+          data.unit ? data.unit : ""
+        }</span>
           </div>
+          <div>占比: ${((Number(data.value) / total) * 100).toFixed(2)}%</div>
         `;
         return tipContent;
       },
@@ -92,66 +109,77 @@ export default function DataCard({ datas }: PropsImpl) {
     }
   };
 
-  const startTooltipCycle = () => {
-    if (datas.datas.length === 0) return;
+  const intervalWork = () => {
+    if (isMouseEnter.current) return;
+    if (!datas?.datas?.length || !chartInstance.current) return;
+    currentTooltipIndex.current =
+      (currentTooltipIndex.current + 1) % datas.datas.length;
+    showTooltip(currentTooltipIndex.current);
+  };
 
-    // Clear any existing interval
-    if (tooltipInterval.current) {
-      clearInterval(tooltipInterval.current);
-    }
+  const onMouseEnter = () => {
+    isMouseEnter.current = true;
+  };
 
-    // Show first tooltip after 500ms
-    setTimeout(() => {
-      showTooltip(0);
-      currentTooltipIndex.current = 0;
-
-      // Then cycle every 3 seconds
-      tooltipInterval.current = setInterval(() => {
-        currentTooltipIndex.current =
-          (currentTooltipIndex.current + 1) % datas.datas.length;
-        showTooltip(currentTooltipIndex.current);
-      }, 3000);
-    }, 500);
+  const onMouseLeave = () => {
+    isMouseEnter.current = false;
+    intervalWork();
   };
 
   useEffect(() => {
     if (chartRef.current) {
       chartInstance.current = echarts.init(chartRef.current);
       chartInstance.current.setOption(option);
-      startTooltipCycle();
+      const map: Record<string, number> = {};
+      datas?.datas?.forEach?.((item) => {
+        if (map[item.title]) {
+          map[item.title] += Number(item.value);
+        } else {
+          map[item.title] = Number(item.value);
+        }
+      });
+      titleCountMap.current = map;
     }
 
     return () => {
-      if (tooltipInterval.current) {
-        clearInterval(tooltipInterval.current);
-      }
       if (chartInstance.current) {
         chartInstance.current.dispose();
       }
     };
   }, [option, datas.datas]);
 
+  useImperativeHandle(ref, () => ({
+    intervalWork,
+  }));
+
   return (
-    <div className="data_card_main">
+    <div
+      className="data_card_main"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className="data_card_1">
-        <div className="c_1_title">总数</div>
+        <div className="c_1_title">{datas.group[0].title}</div>
         <div className="c_1_content">
-          <span style={{ color: "#f3b155" }}>
-            {(datas.group?.[0].value || 0) + (datas.group?.[1].value || 0)}
+          <span style={{ color: "#f3b155", fontSize: "2.5vh" }}>
+            {(datas.group?.[1].value || 0) + (datas.group?.[2].value || 0)}
+          </span>
+          <span style={{ color: "#547795", fontSize: "2.5vh" }}>
+            {datas.group[0].unit}
           </span>
         </div>
       </div>
       <div className="data_card_2">
         <div className="card_item">
-          <div className="i_title">{datas.group?.[0].title}</div>
-          <div className="i_content">
-            <span style={{ color: "#f3b155" }}>{datas.group?.[0].value}</span>
-          </div>
-        </div>
-        <div className="card_item">
           <div className="i_title">{datas.group?.[1].title}</div>
           <div className="i_content">
             <span style={{ color: "#f3b155" }}>{datas.group?.[1].value}</span>
+          </div>
+        </div>
+        <div className="card_item">
+          <div className="i_title">{datas.group?.[2].title}</div>
+          <div className="i_content">
+            <span style={{ color: "#f3b155" }}>{datas.group?.[2].value}</span>
           </div>
         </div>
       </div>
@@ -160,4 +188,6 @@ export default function DataCard({ datas }: PropsImpl) {
       </div>
     </div>
   );
-}
+});
+
+export default DataCard;

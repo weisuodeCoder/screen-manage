@@ -1,19 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import * as echarts from "echarts";
 import "echarts-gl";
 import { getPie3D, getParametricEquation } from "./hook";
-import "./style.less"; // Assuming your styles are in this file
+import "./style.less";
+import { IntervalWorkRef } from "@/views/type";
 
 interface Props {
   datas: any[];
 }
 
-const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
+const RightWrapper = forwardRef<IntervalWorkRef, Props>(({ datas }, ref) => {
   const pie3DRef = useRef<HTMLDivElement | null>(null);
-  const [pie3DChart, setPie3DChart] = useState<echarts.ECharts | null>(null);
-  const [pipeYData, setPipeYData] = useState<number[]>([]);
-  const [option, setOption] = useState<any>({});
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const pie3DChart = useRef<echarts.ECharts | null>(null);
+  const currentIndexRef = useRef(0);
   const [customTooltip, setCustomTooltip] = useState<{
     show: boolean;
     name?: string;
@@ -21,189 +26,153 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
     percent?: number;
     opacity: number;
   }>({ show: false, opacity: 0 });
+  const currentOption = useRef<Record<string, any> | null>(null);
+  const pipeData = useRef<Record<string, any> | null>(null);
+  const isMouseEnter = useRef(false);
+  const lastName = useRef("");
 
-  useEffect(() => {
-    if (pie3DRef.current) {
-      const chart = echarts.init(pie3DRef.current);
-      setPie3DChart(chart);
-    }
+  const drawPie3D = () => {
+    if (!pie3DChart.current) return;
 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [intervalId]);
-
-  useEffect(() => {
-    if (pie3DChart) {
-      // 清除之前的定时器
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-
-      drawPie3D(pie3DChart);
-    }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [pie3DChart, datas]); // 添加datas作为依赖项
-
-  useEffect(() => {
-    if (pie3DChart) {
-      pie3DChart.on("mouseover", () => {
-        setCustomTooltip((prev) => ({ ...prev, show: false, opacity: 0 }));
-      });
-
-      pie3DChart.on("mouseout", () => {
-        setCustomTooltip((prev) => ({ ...prev, show: true, opacity: 1 }));
-      });
-
-      return () => {
-        pie3DChart.off("mouseover");
-        pie3DChart.off("mouseout");
-      };
-    }
-  }, [pie3DChart]);
-
-  const drawPie3D = (pie3DChart: echarts.ECharts) => {
     const colors = datas?.map((item) => item.colorOne);
     const xData = datas?.map((item) => item.name);
-    const originalData = datas?.map((item) => item.value);
 
-    const sum = originalData.reduce(
-      (accumulator, currentValue) => accumulator + currentValue,
-      0
-    );
-    const pipeData = originalData.map((value) => (value / sum) * 100);
-    setPipeYData(pipeData);
+    // 确保所有值为数字
+    const originalData = datas?.map((item) => Number(item.value) || 0);
 
-    const currentOption = getPie3D(xData, originalData, colors, 0.8);
-    pie3DChart.setOption(currentOption);
+    // 添加验证
+    if (originalData.some(isNaN)) {
+      console.error("存在非数字值", datas);
+      return;
+    }
 
-    let selectedIndex = 0;
-    pie3DChart.on("click", (params: { seriesIndex: number }) => {
-      selectedIndex = params.seriesIndex;
-      currentOption.series.forEach((item: any, index: number) => {
-        if (item.pieData) {
-          item.pieStatus.selected = selectedIndex === index;
-          item.parametricEquation = getParametricEquation(
-            item.pieData.startRatio,
-            item.pieData.endRatio,
-            item.pieStatus.selected,
-            false,
-            1,
-            pipeData[selectedIndex]
-          );
-        }
-      });
-      pie3DChart.setOption(currentOption);
+    const sum = originalData.reduce((a, b) => a + b, 0);
+
+    // 处理sum为0的情况
+    pipeData.current =
+      sum > 0
+        ? originalData.map((value) => (value / sum) * 100)
+        : originalData.map(() => 0);
+
+    currentOption.current = getPie3D(xData, originalData, colors, 0.8);
+    pie3DChart.current.setOption(currentOption.current);
+  };
+
+  const showTooltip = (index: number) => {
+    setCustomTooltip({
+      show: true,
+      name: datas[index]?.name,
+      value: datas[index]?.value,
+      percent: pipeData.current?.[index],
+      opacity: 1,
     });
 
-    // 开始轮播
-    startLoop(pie3DChart, currentOption, pipeData);
+    // 3秒后淡出
+    setTimeout(() => {
+      setCustomTooltip((prev) => ({ ...prev, opacity: 0 }));
+      setTimeout(() => {
+        setCustomTooltip((prev) => ({ ...prev, show: false }));
+      }, 300);
+    }, 2600);
   };
 
-  const startLoop = (
-    pie3DChart: echarts.ECharts,
-    currentOption: any,
-    pipeData: number[]
-  ) => {
-    let index = 0;
-    let tooltipTimer: NodeJS.Timeout | null = null;
+  const updateChartSelection = (index: number) => {
+    if (!pie3DChart.current || !currentOption.current?.series) return;
 
-    const showTooltip = (idx: number) => {
-      // 清除之前的定时器
-      if (tooltipTimer) {
-        clearTimeout(tooltipTimer);
+    currentOption.current.series.forEach((item: any, i: number) => {
+      if (item.pieData) {
+        item.pieStatus.selected = i === index;
+        item.parametricEquation = getParametricEquation(
+          item.pieData.startRatio,
+          item.pieData.endRatio,
+          item.pieStatus.selected,
+          false,
+          1,
+          pipeData.current?.[index]
+        );
       }
+    });
 
-      // 立即显示tooltip
-      setCustomTooltip({
-        show: true,
-        name: datas[idx]?.name,
-        value: datas[idx]?.value,
-        percent: pipeData[idx],
-        opacity: 1,
-      });
+    pie3DChart.current.setOption(currentOption.current);
+    showTooltip(index);
+  };
 
-      // 3秒后隐藏tooltip
-      tooltipTimer = setTimeout(() => {
-        setCustomTooltip((prev) => ({ ...prev, opacity: 0 }));
+  const intervalWork = () => {
+    if (isMouseEnter.current) return;
+    // 立即显示第一个tooltip
+    updateChartSelection(currentIndexRef.current);
+    currentIndexRef.current = (currentIndexRef.current + 1) % datas.length;
+  };
 
-        // 淡出动画完成后隐藏
-        setTimeout(() => {
-          setCustomTooltip((prev) => ({ ...prev, show: false }));
-        }, 300);
-      }, 2600);
-    };
+  const onMouseEnter = () => {
+    isMouseEnter.current = true;
+  };
 
-    // 初始显示第一个tooltip（500毫秒后）
-    const initialTimer = setTimeout(() => {
-      if (pie3DChart) {
-        currentOption.series.forEach((item: any, i: number) => {
-          if (item.pieData) {
-            item.pieStatus.selected = i === index;
-            item.parametricEquation = getParametricEquation(
-              item.pieData.startRatio,
-              item.pieData.endRatio,
-              item.pieStatus.selected,
-              false,
-              1,
-              pipeData[index]
-            );
-          }
-        });
-        pie3DChart.setOption(currentOption);
-        showTooltip(index);
-        index = index === datas.length - 1 ? 0 : index + 1;
-      }
-    }, 500);
+  const onMouseLeave = () => {
+    isMouseEnter.current = false;
+    intervalWork();
+  };
 
-    // 设置循环（每3秒切换一次）
-    const id = setInterval(() => {
-      if (pie3DChart) {
-        currentOption.series.forEach((item: any, i: number) => {
-          if (item.pieData) {
-            item.pieStatus.selected = i === index;
-            item.parametricEquation = getParametricEquation(
-              item.pieData.startRatio,
-              item.pieData.endRatio,
-              item.pieStatus.selected,
-              false,
-              1,
-              pipeData[index]
-            );
-          }
-        });
-        pie3DChart.setOption(currentOption);
-        showTooltip(index);
-        index = index === datas.length - 1 ? 0 : index + 1;
-      }
-    }, 3000);
+  // 鼠标移入扇形时触发
+  const handleMouseOver = (params: any) => {
+    if (
+      params.seriesType === "surface" &&
+      params.seriesName !== lastName.current
+    ) {
+      updateChartSelection(params.seriesIndex);
+      lastName.current = params.seriesName;
+    }
+  };
 
-    setIntervalId(id);
+  // 初始化图表
+  useEffect(() => {
+    if (pie3DRef.current) {
+      pie3DChart.current = echarts.init(pie3DRef.current);
+      drawPie3D();
+
+      return () => {
+        pie3DChart.current?.dispose();
+      };
+    }
+  }, []);
+
+  // 数据变化时重新绘制
+  useEffect(() => {
+    if (pie3DChart.current) {
+      drawPie3D();
+    }
+  }, [datas]);
+
+  // 鼠标事件处理
+  useEffect(() => {
+    const chart = pie3DChart.current;
+    if (!chart) return;
+
+    chart.on("mouseover", handleMouseOver);
 
     return () => {
-      clearTimeout(initialTimer);
-      if (tooltipTimer) {
-        clearTimeout(tooltipTimer);
-      }
+      chart.off("mouseover", handleMouseOver);
     };
-  };
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    intervalWork,
+  }));
 
   return (
-    <div className="threeD_pie_main" style={{ position: "relative" }}>
+    <div
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="threeD_pie_main"
+      style={{ position: "relative" }}
+    >
       <div className="threeD_pie_bg"></div>
       <div
         ref={pie3DRef}
         style={{ width: "100%", height: "100%" }}
         className="threeD_pie_chart"
       ></div>
-      {customTooltip.show && (
+      {customTooltip.show && !isMouseEnter.current && (
         <div
           className="custom-tooltip"
           style={{
@@ -211,7 +180,7 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
             left: "5%",
             top: "10%",
             transform: "translate(-50%, 0)",
-            background: "rgba(255,255,255,0.95)",
+            background: "#fffc",
             border: "1px solid #eee",
             borderRadius: 8,
             padding: "12px 20px",
@@ -232,6 +201,6 @@ const RightWrapper: React.FC<Props> = ({ datas }: Props) => {
       )}
     </div>
   );
-};
+});
 
 export default RightWrapper;

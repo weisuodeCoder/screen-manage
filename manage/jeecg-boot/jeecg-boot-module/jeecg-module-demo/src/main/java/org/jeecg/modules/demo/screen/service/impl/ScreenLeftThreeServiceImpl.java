@@ -21,29 +21,13 @@ public class ScreenLeftThreeServiceImpl implements IScreenLeftThreeService {
 
     @Override
     public ScreenLeftThree getLeftThreeDatas(String timeRange) {
-        // 'year', 'last12', 'currentYear'
+        // '36', '12', 'currentYear'
         ScreenLeftThree screenLeftThree = new ScreenLeftThree();
-        if(timeRange.equals("year")) {
-            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_1();
-            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_1();
-            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
-            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
-        }else if(timeRange.equals("last12")) {
-            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_2();
-            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_2();
-            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
-            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
-        }else if(timeRange.equals("currentYear")) {
-            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_3();
-            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_3();
-            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
-            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
-        }else {
-            List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX_1();
-            List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY_1();
-            screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
-            screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
-        }
+        List<ScreenLeftThreeX> screenLeftThreeXES = screenLeftThreeMapper.selectScreenLeftThreeX(timeRange);
+        List<ScreenLeftThreeY> screenLeftThreeYS =  screenLeftThreeMapper.selectScreenLeftThreeY(timeRange);
+        screenLeftThree.setScreenLeftThreeXES(screenLeftThreeXES);
+        screenLeftThree.setScreenLeftThreeYS(screenLeftThreeYS);
+
         return screenLeftThree;
     }
 }

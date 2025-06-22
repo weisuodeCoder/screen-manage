@@ -4,9 +4,7 @@
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <!--插槽:table标题-->
       <template #tableTitle>
-        <a-button type="primary" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
-        <a-button type="primary" preIcon="ant-design:export-outlined" @click="onExportXls"> 导出</a-button>
-        <j-upload-button type="primary" preIcon="ant-design:import-outlined" @click="onImportXls">导入</j-upload-button>
+        <a-button type="primary" v-auth="AUTHS.leftTwo.main.delete" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
         <a-dropdown v-if="selectedRowKeys.length > 0">
           <template #overlay>
             <a-menu>
@@ -16,7 +14,7 @@
               </a-menu-item>
             </a-menu>
           </template>
-          <a-button
+          <a-button v-auth="AUTHS.leftTwo.main.delete"
             >批量操作
             <Icon icon="mdi:chevron-down"></Icon>
           </a-button>
@@ -52,6 +50,8 @@
   import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from './ScreenLeftTwoMain.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import { useUserStore } from '/@/store/modules/user';
+  import { AUTHS } from '/@/views/auth';
+
   const queryParam = reactive<any>({
     column: 'sort',
     order: 'asc',
@@ -176,6 +176,7 @@
         onClick: handleDetail.bind(null, record),
       },
       {
+        auth: AUTHS.leftTwo.main.delete,
         label: '删除',
         popConfirm: {
           title: '是否确认删除',

@@ -8,4 +8,5 @@ export interface SlotListImpl {
   title: string;
   subtitle: string;
   slot: ReactNode;
+  overflowScroll?: boolean;
 }

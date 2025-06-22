@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 左二数据
  * @Author: jeecg-boot
- * @Date:   2025-06-10
+ * @Date:   2025-06-14
  * @Version: V1.0
  */
 @Data
@@ -67,8 +67,8 @@ public class ScreenLeftTwoData implements Serializable {
     @Schema(description = "搜索余")
     private java.lang.String type;
 	/**类型*/
-	@Excel(name = "类型", width = 15, dicCode = "screen_left_two_class_name")
-	@Dict(dicCode = "screen_left_two_class_name")
+	@Excel(name = "类型", width = 15, dictTable = "screen_left_two_type", dicText = "title", dicCode = "id")
+	@Dict(dictTable = "screen_left_two_type", dicText = "title", dicCode = "id")
     @Schema(description = "类型")
     private java.lang.String className;
 	/**数值*/

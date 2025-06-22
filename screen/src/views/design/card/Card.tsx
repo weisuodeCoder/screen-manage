@@ -9,6 +9,7 @@ interface PropsImpl {
   subtitle: string;
   slot: ReactNode;
   style?: Record<string, any>;
+  overflowScroll?: boolean;
 }
 
 export enum DirectionEnum {
@@ -23,6 +24,7 @@ export default function Card({
   slot,
   subtitle,
   style,
+  overflowScroll,
 }: PropsImpl) {
   return (
     <div className="card_main" style={style}>
@@ -30,7 +32,11 @@ export default function Card({
         <CardHeader direction={direction} title={title} subtitle={subtitle} />
       </div>
       <div className="card_body">
-        <CardBody direction={direction} slot={slot} />
+        <CardBody
+          overflowScroll={overflowScroll}
+          direction={direction}
+          slot={slot}
+        />
       </div>
     </div>
   );

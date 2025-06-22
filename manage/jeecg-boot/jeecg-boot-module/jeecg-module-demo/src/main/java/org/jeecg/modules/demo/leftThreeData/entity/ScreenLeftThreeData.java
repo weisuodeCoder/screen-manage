@@ -62,9 +62,9 @@ public class ScreenLeftThreeData implements Serializable {
     @Schema(description = "分组id")
     private java.lang.String groupId;
 	/**日期*/
-	@Excel(name = "日期", width = 15, format = "yyyy-MM-dd")
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+	@Excel(name = "日期", width = 15, format = "yyyy-MM")
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM")
+    @DateTimeFormat(pattern="yyyy-MM")
     @Schema(description = "日期")
     private java.util.Date time;
 	/**数值*/

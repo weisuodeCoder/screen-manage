@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
  * @Description: 右一分组
  * @Author: jeecg-boot
- * @Date:   2025-06-07
+ * @Date:   2025-06-14
  * @Version: V1.0
  */
 public interface ScreenRightOneMainMapper extends BaseMapper<ScreenRightOneMain> {

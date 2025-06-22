@@ -1,11 +1,11 @@
 // 获取每个部分扇形的曲线方程
 export function getParametricEquation(
-  startRatio, // 开始角度
-  endRatio, // 结束角度
-  isSelected,
-  isHovered,
-  k,
-  height
+  startRatio: number, // 开始角度
+  endRatio: number, // 结束角度
+  isSelected: boolean,
+  isHovered: boolean,
+  k: number,
+  height: number
 ) {
   // 计算
   let midRatio = (startRatio + endRatio) / 2;
@@ -26,8 +26,8 @@ export function getParametricEquation(
   // 计算选中效果分别在 x 轴、y 轴方向上的位移（未选中，则位移均为 0）
   let offsetX = isSelected ? Math.cos(midRadian) * 0.1 : 0;
   let offsetY = isSelected ? Math.sin(midRadian) * 0.1 : 0;
-  offsetX -= 0.75; // 向左移动
-  offsetY += 0.5;
+  offsetX -= 0.7; // 向左移动
+  offsetY += 0.7;
 
   // 计算高亮效果的放大比例（未高亮，则比例为 1）
   let hoverRate = isSelected ? 1.05 : 1;
@@ -47,7 +47,7 @@ export function getParametricEquation(
       step: Math.PI / 20,
     },
 
-    x: function (u, v) {
+    x: function (u: number, v: number) {
       if (u < startRadian) {
         return (
           offsetX + Math.cos(startRadian) * (1 + Math.cos(v) * k) * hoverRate
@@ -61,7 +61,7 @@ export function getParametricEquation(
       return offsetX + Math.cos(u) * (1 + Math.cos(v) * k) * hoverRate;
     },
 
-    y: function (u, v) {
+    y: function (u: number, v: number) {
       if (u < startRadian) {
         return (
           offsetY + Math.sin(startRadian) * (1 + Math.cos(v) * k) * hoverRate
@@ -75,7 +75,7 @@ export function getParametricEquation(
       return offsetY + Math.sin(u) * (1 + Math.cos(v) * k) * hoverRate;
     },
 
-    z: function (u, v) {
+    z: function (u: number, v: number) {
       if (u < -Math.PI * 0.5) {
         return Math.sin(u);
       }
@@ -88,7 +88,12 @@ export function getParametricEquation(
 }
 
 // 生成模拟 3D 饼图的配置项
-export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
+export function getPie3D(
+  xData: string[],
+  originalData: number[],
+  colors: string[],
+  internalDiameterRatio: number
+) {
   // 透明的空心占比
   let series = [];
   let sumValue = 0;
@@ -100,18 +105,15 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
       : 1 / 3;
   // -------------------
-  let pieData = [];
+  let pieData: any[] = [];
   let sum = originalData.reduce(
     (accumulator, currentValue) => accumulator + currentValue,
     0
   );
-  let yData = originalData.map((value) => {
-    return (value / sum) * 100;
-  });
   for (let i = 0; i < xData.length; i++) {
     pieData.push({
       name: xData[i],
-      value: yData[i],
+      value: originalData[i],
       itemStyle: {
         color: colors[i],
       },
@@ -128,7 +130,7 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
   for (let i = 0; i < pieData.length; i++) {
     sumValue += pieData[i].value;
 
-    let seriesItem = {
+    const seriesItem: Record<string, any> = {
       name:
         typeof pieData[i].name === "undefined" ? `series${i}` : pieData[i].name,
       type: "surface",
@@ -145,7 +147,7 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
     };
 
     if (typeof pieData[i].itemStyle !== "undefined") {
-      let itemStyle = {};
+      const itemStyle: Record<string, any> = {};
 
       typeof pieData[i].itemStyle.color !== "undefined"
         ? (itemStyle.color = pieData[i].itemStyle.color)
@@ -204,37 +206,46 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
     },
   });
   let option = {
+    // legend: {
+    //   data: legendData,
+    //   icon: "none",
+    //   orient: "horizontal",
+    //   right: "center",
+    //   top: "0",
+    //   pageIconColor: "#0885FA", // 翻页按钮颜色
+    //   pageIconInactiveColor: "#ddd", // 禁用按钮颜色
+    //   pageTextStyle: {
+    //     color: "#666",
+    //   },
+    //   formatter: (name: string) => {
+    //     const dataItem = pieData.find((item) => item.name === name);
+    //     if (!dataItem) return name;
+    //     const rawValue =
+    //       originalData[pieData.findIndex((item) => item.name === name)];
+    //     return `${name}\n${rawValue}`;
+    //   },
+    //   selectedMode: false, // 禁用点击选中
+    //   type: "scroll", // 强制启用滚动分页模式
+    //   pageIconSize: 14,
+    //   pageButtonItemGap: 10,
+    //   pageButtonGap: 5,
+    //   pageButtonPosition: "end", // 按钮位置（'start' | 'end'）
+    //   pageFormatter: "", // 隐藏页码文本（如需显示用 '{current}/{total}'）
+    //   pageIcons: {
+    //     horizontal: ["M0 0 L12 0 L6 12 Z", "M0 12 L12 12 L6 0 Z"], // 自定义箭头图标
+    //   },
+    //   itemHeight: 40, // 必须！单个图例项高度（含换行）
+    //   itemGap: 8, // 必须！项间距
+    //   height: "60%", // 限制legend容器高度（关键！）
+    // },
     legend: {
-      data: legendData,
-      icon: "none",
+      type: "scroll",
       orient: "horizontal",
       right: "center",
-      top: "0",
-      pageIconColor: "#0885FA", // 翻页按钮颜色
-      pageIconInactiveColor: "#ddd", // 禁用按钮颜色
-      pageTextStyle: {
-        color: "#666",
+      top: 0,
+      textStyle: {
+        color: "#fff",
       },
-      formatter: (name: string) => {
-        const dataItem = pieData.find((item) => item.name === name);
-        if (!dataItem) return name;
-        const rawValue =
-          originalData[pieData.findIndex((item) => item.name === name)];
-        return `${name}\n${rawValue}`;
-      },
-      selectedMode: false, // 禁用点击选中
-      type: "scroll", // 强制启用滚动分页模式
-      pageIconSize: 14,
-      pageButtonItemGap: 10,
-      pageButtonGap: 5,
-      pageButtonPosition: "end", // 按钮位置（'start' | 'end'）
-      pageFormatter: "", // 隐藏页码文本（如需显示用 '{current}/{total}'）
-      pageIcons: {
-        horizontal: ["M0 0 L12 0 L6 12 Z", "M0 12 L12 12 L6 0 Z"], // 自定义箭头图标
-      },
-      itemHeight: 40, // 必须！单个图例项高度（含换行）
-      itemGap: 8, // 必须！项间距
-      height: "60%", // 限制legend容器高度（关键！）
     },
     animation: true,
     tooltip: {
@@ -244,14 +255,12 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
           params.seriesName !== "pie2d"
         ) {
           // @ts-ignore
-          let value = option.series[params.seriesIndex].pieData.value;
-          let rate: number = Number((value / sum).toFixed(2));
+          const value = Number(option.series[params.seriesIndex].pieData.value);
+          let rate: number = Number(((value / sum) * 100).toFixed(2));
           return `
-                  <div style="padding: 10px;background-color:rgba(255,255,255,0.9);border: 1px solid #ddd; border-radius: 5px;color:#333;">
-                    <div style="margin-top: 3%;margin-left: 50%;transform: translateX(-50%)">${
-                      params.seriesName
-                    }</div>
-                    <div style="margin: 10% 10px 0 0px">
+                  <div style="padding: 1vh;background-color:#fffc;border: 0.2vh solid #ddd; border-radius: 5px;color:#333;font-size:1.5vh;">
+                    <div style="margin-top: 3%;">${params.seriesName}</div>
+                    <div style="margin: 2% 1vh 0 0px">
                        <div>
                         数量：
                         <span style="margin-left: 2%">${
@@ -260,7 +269,7 @@ export function getPie3D(xData, originalData, colors, internalDiameterRatio) {
                       </div>
                       <div>
                         占比：
-                        <span style="margin-left: 2%">${rate * 100 + "%"}</span>
+                        <span style="margin-left: 2%">${rate}%</span>
                       </div>
                     </div>
                   </div>

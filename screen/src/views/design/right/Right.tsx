@@ -13,6 +13,7 @@ export default function Right({ slotList }: L_R_PropsImpl) {
           title={item.title}
           subtitle={item.subtitle}
           slot={item.slot}
+          overflowScroll={item.overflowScroll}
         />
       ))}
     </div>

@@ -42,7 +42,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
  /**
  * @Description: 左二数据
  * @Author: jeecg-boot
- * @Date:   2025-06-10
+ * @Date:   2025-06-14
  * @Version: V1.0
  */
 @Tag(name="左二数据")

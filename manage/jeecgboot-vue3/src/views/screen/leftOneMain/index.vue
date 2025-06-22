@@ -3,7 +3,23 @@
     <!--引用表格-->
     <BasicTable @register="registerTable" :rowSelection="rowSelection">
       <!--插槽:table标题-->
-      <template #tableTitle> </template>
+      <template #tableTitle>
+        <a-button type="primary" v-auth="AUTHS.leftOne.main.add" @click="handleAdd" preIcon="ant-design:plus-outlined"> 新增</a-button>
+        <a-dropdown v-if="selectedRowKeys.length > 0">
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="1" @click="batchHandleDelete">
+                <Icon icon="ant-design:delete-outlined"></Icon>
+                删除
+              </a-menu-item>
+            </a-menu>
+          </template>
+          <a-button v-auth="AUTHS.leftOne.main.delete"
+            >批量操作
+            <Icon icon="mdi:chevron-down"></Icon>
+          </a-button>
+        </a-dropdown>
+      </template>
       <!--操作栏-->
       <template #action="{ record }">
         <TableAction :actions="getTableAction(record)" :dropDownActions="getDropDownAction(record)" />
@@ -24,6 +40,8 @@
   import { list, deleteOne, batchDelete, getImportUrl, getExportUrl } from './ScreenLeftOneMain.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import { useUserStore } from '/@/store/modules/user';
+  import { AUTHS } from '/@/views/auth';
+
   const queryParam = reactive<any>({});
   const checkedKeys = ref<Array<string | number>>([]);
   const userStore = useUserStore();
@@ -143,6 +161,15 @@
       {
         label: '详情',
         onClick: handleDetail.bind(null, record),
+      },
+      {
+        auth: AUTHS.leftOne.main.delete,
+        label: '删除',
+        popConfirm: {
+          title: '是否确认删除',
+          confirm: handleDelete.bind(null, record),
+          placement: 'topLeft',
+        },
       },
     ];
   }

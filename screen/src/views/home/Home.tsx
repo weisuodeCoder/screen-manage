@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./style.less";
 
 // 组件
@@ -22,6 +22,8 @@ import Right from "../design/right/Right";
 import { SlotListImpl } from "../design/types";
 import { usePreData } from "./usePreData";
 import { TimeRangeEnum, TimeRangeThreeEnum } from "./index.api";
+import { IntervalWorkRef } from "../type";
+import { Modal } from "antd";
 
 type SlotListType = [SlotListImpl, SlotListImpl, SlotListImpl];
 type CenterListType = [SlotListImpl, SlotListImpl];
@@ -50,103 +52,173 @@ export default function Home() {
   const [subTitle, setSubTitle] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const leftOneRef = useRef<IntervalWorkRef>(null);
+  const leftTwoRef = useRef<IntervalWorkRef>(null);
+  const leftThreeRef = useRef<IntervalWorkRef>(null);
+  const rightOneRef = useRef<IntervalWorkRef>(null);
+  const rightTwoRef = useRef<IntervalWorkRef>(null);
+  const rightThreeRef = useRef<IntervalWorkRef>(null);
+  const centerOneRef = useRef<IntervalWorkRef>(null);
+
+  const interval = useRef<NodeJS.Timeout>(null);
+
+  const intervalWork = () => {
+    leftOneRef.current?.intervalWork?.();
+    leftTwoRef.current?.intervalWork?.();
+    leftThreeRef.current?.intervalWork?.();
+    rightOneRef.current?.intervalWork?.();
+    rightTwoRef.current?.intervalWork?.();
+    rightThreeRef.current?.intervalWork?.();
+    centerOneRef.current?.intervalWork?.();
+  };
+
+  const fetchData = async () => {
+    try {
+      const [{ title, subTitle }, leftTitleArr, rightTitleArr] =
+        await preTitles();
+      setTitle(title);
+      setSubTitle(subTitle);
+
+      // TODO: 不管什么情况，都要返回数据，根据数据判断是否渲染组件
+      const leftOneRes = await preLeftOneDatas();
+      const leftTwoRes = await preLeftTwoDatas(LEFT_TWO_DEFAULT_SELECTED);
+      const leftThreeRes = await preLeftThreeDatas(LEFT_THREE_DEFAULT_SELECTED);
+      const rightOneRes = await preRightOneDatas();
+      const reghtTwoRes = await preRightTwoDatas();
+      const reghtThreeRes = await preRightThreeDatas(
+        RIGHT_THREE_DEFAULT_SELECTED
+      );
+      const centerOneRes = await preCenterOneDatas();
+      const centerTwoRes = await preCenterTwoDatas();
+
+      // 更新leftList，确保Pie组件能获取到最新数据
+      setLeftList([
+        {
+          title: leftTitleArr[0].title,
+          subtitle: leftTitleArr[0].subTitle,
+          slot: <Pie ref={leftOneRef} datas={leftOneRes} />,
+        },
+        {
+          title: leftTitleArr[1].title,
+          subtitle: leftTitleArr[1].subTitle,
+          slot: (
+            <ReleaseBar
+              ref={leftTwoRef}
+              datas={leftTwoRes}
+              defaultSelected={LEFT_TWO_DEFAULT_SELECTED}
+              preLeftTwoDatas={preLeftTwoDatas}
+            />
+          ),
+        },
+        {
+          title: leftTitleArr[2].title,
+          subtitle: leftTitleArr[2].subTitle,
+          slot: (
+            <FadeLine
+              ref={leftThreeRef}
+              datas={leftThreeRes}
+              defaultValue={LEFT_THREE_DEFAULT_SELECTED}
+              preLeftThreeDatas={preLeftThreeDatas}
+            />
+          ),
+        },
+      ]);
+
+      setCenterList([
+        {
+          title: "",
+          subtitle: "",
+          slot: (
+            <ChartMap
+              ref={centerOneRef}
+              elementId="mapContainer"
+              datas={centerOneRes}
+            />
+          ),
+        },
+        {
+          title: "",
+          subtitle: "",
+          slot: <DataListCard datas={centerTwoRes} />,
+        },
+      ]);
+
+      setRightList([
+        {
+          title: rightTitleArr[0].title,
+          subtitle: rightTitleArr[0].subTitle,
+          slot: <DataCard ref={rightOneRef} datas={rightOneRes} />,
+        },
+        {
+          title: rightTitleArr[1].title,
+          subtitle: rightTitleArr[1].subTitle,
+          slot: <ThreeDPie ref={rightTwoRef} datas={reghtTwoRes} />,
+        },
+        {
+          title: rightTitleArr[2].title,
+          subtitle: rightTitleArr[2].subTitle,
+          overflowScroll: true,
+          slot: (
+            <HorizontalBar
+              ref={rightThreeRef}
+              datas={reghtThreeRes}
+              defaultValue={RIGHT_THREE_DEFAULT_SELECTED}
+              preRightThreeDatas={preRightThreeDatas}
+            />
+          ),
+        },
+      ]);
+      setLoading(false);
+    } catch (e) {
+      console.error("数据加载失败:", e);
+      setLoading(false);
+    }
+  };
+
+  const isFullscreen = () => {
+    const d = document as any;
+    return !!(
+      d.fullscreenElement ||
+      d.webkitFullscreenElement ||
+      d.mozFullScreenElement ||
+      d.msFullscreenElement
+    );
+  };
+
+  const requestFullscreen = () => {
+    const element = document.documentElement as any;
+    element?.requestFullscreen?.();
+    element?.webkitRequestFullscreen?.();
+    element?.mozRequestFullScreen?.();
+    element?.msRequestFullscreen?.();
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [{ title, subTitle }, leftTitleArr, rightTitleArr] =
-          await preTitles();
-        setTitle(title);
-        setSubTitle(subTitle);
+    if (!isFullscreen()) {
+      Modal.confirm({
+        title: "温馨提示",
+        content: "全屏体验更佳，是否立即全屏？",
+        okText: "全屏",
+        cancelText: "取消",
+        onOk: () => {
+          requestFullscreen();
+          return Promise.resolve();
+        },
+        onCancel: () => {
+          return Promise.resolve();
+        },
+        afterClose: () => {
+          fetchData();
+          intervalWork();
+          interval.current = setInterval(intervalWork, 3000);
+        },
+      });
+    }
 
-        // TODO: 不管什么情况，都要返回数据，根据数据判断是否渲染组件
-        const leftOneRes = await preLeftOneDatas();
-        const leftTwoRes = await preLeftTwoDatas(LEFT_TWO_DEFAULT_SELECTED);
-        const leftThreeRes = await preLeftThreeDatas(
-          LEFT_THREE_DEFAULT_SELECTED
-        );
-        const rightOneRes = await preRightOneDatas();
-        const reghtTwoRes = await preRightTwoDatas();
-        const reghtThreeRes = await preRightThreeDatas(
-          RIGHT_THREE_DEFAULT_SELECTED
-        );
-        const centerOneRes = await preCenterOneDatas();
-        const centerTwoRes = await preCenterTwoDatas();
-
-        // 更新leftList，确保Pie组件能获取到最新数据
-        setLeftList([
-          {
-            title: leftTitleArr[0].title,
-            subtitle: leftTitleArr[0].subTitle,
-            slot: <Pie datas={leftOneRes} />,
-          },
-          {
-            title: leftTitleArr[1].title,
-            subtitle: leftTitleArr[1].subTitle,
-            slot: (
-              <ReleaseBar
-                datas={leftTwoRes}
-                defaultSelected={LEFT_TWO_DEFAULT_SELECTED}
-                preLeftTwoDatas={preLeftTwoDatas}
-              />
-            ),
-          },
-          {
-            title: leftTitleArr[2].title,
-            subtitle: leftTitleArr[2].subTitle,
-            slot: (
-              <FadeLine
-                datas={leftThreeRes}
-                defaultValue={LEFT_THREE_DEFAULT_SELECTED}
-                preLeftThreeDatas={preLeftThreeDatas}
-              />
-            ),
-          },
-        ]);
-
-        setCenterList([
-          {
-            title: "",
-            subtitle: "",
-            slot: <ChartMap elementId="mapContainer" datas={centerOneRes} />,
-          },
-          {
-            title: "",
-            subtitle: "",
-            slot: <DataListCard datas={centerTwoRes} />,
-          },
-        ]);
-
-        setRightList([
-          {
-            title: rightTitleArr[0].title,
-            subtitle: rightTitleArr[0].subTitle,
-            slot: <DataCard datas={rightOneRes} />,
-          },
-          {
-            title: rightTitleArr[1].title,
-            subtitle: rightTitleArr[1].subTitle,
-            slot: <ThreeDPie datas={reghtTwoRes} />,
-          },
-          {
-            title: rightTitleArr[2].title,
-            subtitle: rightTitleArr[2].subTitle,
-            slot: (
-              <HorizontalBar
-                datas={reghtThreeRes}
-                defaultValue={RIGHT_THREE_DEFAULT_SELECTED}
-                preRightThreeDatas={preRightThreeDatas}
-              />
-            ),
-          },
-        ]);
-        setLoading(false);
-      } catch (e) {
-        console.error("数据加载失败:", e);
-        setLoading(false);
-      }
+    return () => {
+      if (interval.current) clearInterval(interval.current);
+      interval.current = null;
     };
-
-    fetchData();
   }, []);
 
   return (

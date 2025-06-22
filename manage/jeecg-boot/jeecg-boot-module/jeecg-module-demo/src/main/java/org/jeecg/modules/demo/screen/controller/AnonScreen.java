@@ -95,8 +95,8 @@ public class AnonScreen {
 
     @Operation(summary="大屏-右1数据")
     @GetMapping(value = "/getRightOneDatas")
-    public Result<List<ScreenRightOne>> getRightOneDatas() {
-        List<ScreenRightOne> rightOneDatas = screenRightOneService.getRightOneDatas();
+    public Result<ScreenRightOne> getRightOneDatas() {
+        ScreenRightOne rightOneDatas = screenRightOneService.getRightOneDatas();
         return Result.OK(rightOneDatas);
     };
 

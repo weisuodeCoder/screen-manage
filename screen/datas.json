@@ -1,0 +1,767 @@
+[
+    {
+        "url":"anon/screen/getLeftOneDatas",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": [
+                {
+                    "id": "1931293464020103170",
+                    "title": "教学队伍",
+                    "unit": "人",
+                    "datas": [
+                        {
+                            "name": "语文",
+                            "unit": "人",
+                            "value": 31,
+                            "itemStyle": {
+                                "colors": [
+                                    "#61b9ea",
+                                    "#61b9ea55"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "美术",
+                            "unit": "人",
+                            "value": 26,
+                            "itemStyle": {
+                                "colors": [
+                                    "#ffe100",
+                                    "#ffe10055"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "数学",
+                            "unit": "人",
+                            "value": 33,
+                            "itemStyle": {
+                                "colors": [
+                                    "#40dd9b",
+                                    "#40dd9b55"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "体育",
+                            "unit": "人",
+                            "value": 22,
+                            "itemStyle": {
+                                "colors": [
+                                    "#ff0000",
+                                    "#ff000055"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "id": "1931293426187481089",
+                    "title": "教育队伍",
+                    "unit": "人",
+                    "datas": [
+                        {
+                            "name": "体育",
+                            "unit": "人",
+                            "value": 12,
+                            "itemStyle": {
+                                "colors": [
+                                    "#ff0000",
+                                    "#ff000055"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "美术",
+                            "unit": "人",
+                            "value": 31,
+                            "itemStyle": {
+                                "colors": [
+                                    "#ffe100",
+                                    "#ffe10055"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "数学",
+                            "unit": "人",
+                            "value": 23,
+                            "itemStyle": {
+                                "colors": [
+                                    "#48f1aa",
+                                    "#48f1aa55"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "语文",
+                            "unit": "人",
+                            "value": 19,
+                            "itemStyle": {
+                                "colors": [
+                                    "#5fb6e8",
+                                    "#5fb6e855"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "timestamp": 1749885445998
+        }
+    }, {
+        "url": "anon/screen/getLeftTwoDatas?type=1",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": {
+                "screenLeftTwoXs": [
+                    {
+                        "name": "老",
+                        "value": "1"
+                    },
+                    {
+                        "name": "病",
+                        "value": "2"
+                    },
+                    {
+                        "name": "残",
+                        "value": "3"
+                    },
+                    {
+                        "name": "初",
+                        "value": "4"
+                    },
+                    {
+                        "name": "中",
+                        "value": "5"
+                    },
+                    {
+                        "name": "高",
+                        "value": "6"
+                    }
+                ],
+                "screenLeftTwoYs": [
+                    {
+                        "name": "班级1",
+                        "value": "46",
+                        "colors": "#3f8dc4ff,#3f8dc455",
+                        "xdata": "中"
+                    },
+                    {
+                        "name": "班级1",
+                        "value": "75",
+                        "colors": "#3f8dc4ff,#3f8dc455",
+                        "xdata": "初"
+                    },
+                    {
+                        "name": "班级1",
+                        "value": "66",
+                        "colors": "#3f8dc4ff,#3f8dc455",
+                        "xdata": "残"
+                    },
+                    {
+                        "name": "班级1",
+                        "value": "96",
+                        "colors": "#3f8dc4ff,#3f8dc455",
+                        "xdata": "病"
+                    },
+                    {
+                        "name": "班级1",
+                        "value": "98",
+                        "colors": "#3f8dc4ff,#3f8dc455",
+                        "xdata": "高"
+                    },
+                    {
+                        "name": "班级1",
+                        "value": "56",
+                        "colors": "#3f8dc4ff,#3f8dc455",
+                        "xdata": "老"
+                    },
+                    {
+                        "name": "班级2",
+                        "value": "46",
+                        "colors": "#efc93bff,#efc93b55",
+                        "xdata": "老"
+                    },
+                    {
+                        "name": "班级2",
+                        "value": "56",
+                        "colors": "#efc93bff,#efc93b55",
+                        "xdata": "病"
+                    },
+                    {
+                        "name": "班级2",
+                        "value": "67",
+                        "colors": "#efc93bff,#efc93b55",
+                        "xdata": "残"
+                    },
+                    {
+                        "name": "班级2",
+                        "value": "31",
+                        "colors": "#efc93bff,#efc93b55",
+                        "xdata": "初"
+                    },
+                    {
+                        "name": "班级2",
+                        "value": "85",
+                        "colors": "#efc93bff,#efc93b55",
+                        "xdata": "中"
+                    },
+                    {
+                        "name": "班级2",
+                        "value": "38",
+                        "colors": "#efc93bff,#efc93b55",
+                        "xdata": "高"
+                    }
+                ]
+            },
+            "timestamp": 1749885446016
+        }
+    }, {
+        "url": "/anon/screen/getLeftThreeDatas?timeRange=year",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": {
+                "screenLeftThreeXES": [
+                    {
+                        "name": "2025年",
+                        "value": "2025"
+                    }
+                ],
+                "screenLeftThreeYS": [
+                    {
+                        "id": "1931320128284381185",
+                        "name": "班组1",
+                        "datas": "[72.00]",
+                        "color": "#ff0000ff"
+                    },
+                    {
+                        "id": "1931320222396174338",
+                        "name": "班组2",
+                        "datas": "[65.00]",
+                        "color": "#15e5ecff"
+                    }
+                ]
+            },
+            "timestamp": 1749885446047
+        }
+    }, {
+        "url": "anon/screen/getRightOneDatas",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": [
+                {
+                    "name": "1班数据4",
+                    "value": "35",
+                    "unit": null,
+                    "color": "#0ce3d4ff",
+                    "title": "班组1",
+                    "gid": "1931328362759987202"
+                },
+                {
+                    "name": "1班数据1",
+                    "value": "23",
+                    "unit": null,
+                    "color": "#fc0505ff",
+                    "title": "班组1",
+                    "gid": "1931328362759987202"
+                },
+                {
+                    "name": "1班数据2",
+                    "value": "62",
+                    "unit": null,
+                    "color": "#f8bd0dff",
+                    "title": "班组1",
+                    "gid": "1931328362759987202"
+                },
+                {
+                    "name": "1班数据3",
+                    "value": "41",
+                    "unit": null,
+                    "color": "#96f10dff",
+                    "title": "班组1",
+                    "gid": "1931328362759987202"
+                },
+                {
+                    "name": "2班数据1",
+                    "value": "63",
+                    "unit": null,
+                    "color": "#1771e0ff",
+                    "title": "班组2",
+                    "gid": "1931328401024622594"
+                },
+                {
+                    "name": "2班数据2",
+                    "value": "57",
+                    "unit": null,
+                    "color": "#a410e3ff",
+                    "title": "班组2",
+                    "gid": "1931328401024622594"
+                }
+            ],
+            "timestamp": 1749885446062
+        }
+    }, {
+        "url": "/anon/screen/getRightTwoDatas?pageSize=99999&pageNo=1",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": {
+                "records": [
+                    {
+                        "id": "1929528271026323457",
+                        "createBy": "admin",
+                        "createTime": "2025-06-02 21:19:23",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-07 20:56:46",
+                        "sysOrgCode": "A01",
+                        "name": "电工",
+                        "value": 123,
+                        "unit": "人",
+                        "colorOne": "#f40808ff"
+                    },
+                    {
+                        "id": "1931334344860966913",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 20:56:05",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-07 20:56:23",
+                        "sysOrgCode": "A01",
+                        "name": "烹饪",
+                        "value": 56,
+                        "unit": "人",
+                        "colorOne": "#efb508ff"
+                    },
+                    {
+                        "id": "1931334602693222402",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 20:57:06",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "name": "钳工",
+                        "value": 68,
+                        "unit": "人",
+                        "colorOne": "#eeea0cff"
+                    },
+                    {
+                        "id": "1931334716493078529",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 20:57:34",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "name": "美容",
+                        "value": 68,
+                        "unit": "人",
+                        "colorOne": "#73f510ff"
+                    },
+                    {
+                        "id": "1931334881681547265",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 20:58:13",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "name": "瓦工",
+                        "value": 34,
+                        "unit": "人",
+                        "colorOne": "#0cfba3ff"
+                    }
+                ],
+                "total": 5,
+                "size": 99999,
+                "current": 1,
+                "orders": [],
+                "optimizeCountSql": true,
+                "searchCount": true,
+                "maxLimit": null,
+                "countId": null,
+                "pages": 1
+            },
+            "timestamp": 1749885446082
+        }
+    }, {
+        "url": "/anon/screen/getRightThreeDatas?column=value&order=asc&pageNo=1&pageSize=99999&type=1",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": {
+                "records": [
+                    {
+                        "id": "1931336927642083329",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:06:21",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:39",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "和田地图",
+                        "value": 65,
+                        "unit": "次",
+                        "colorOne": "#0d4f92ff",
+                        "colorTwo": "#71cbefff",
+                        "type_dictText": "大走访"
+                    },
+                    {
+                        "id": "1931337591768178689",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:08:59",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:25",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "阿勒泰地区",
+                        "value": 68,
+                        "unit": "次",
+                        "colorOne": "#c26565ff",
+                        "colorTwo": "#ff9c9cff",
+                        "type_dictText": "大走访"
+                    },
+                    {
+                        "id": "1931338393702326273",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:12:10",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:12",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "吐鲁番市",
+                        "value": 77,
+                        "unit": "次",
+                        "colorOne": "#ff0000ff",
+                        "colorTwo": "#980000ff",
+                        "type_dictText": "大走访"
+                    },
+                    {
+                        "id": "1931337934631559169",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:10:21",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:21",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "石河子市",
+                        "value": 78,
+                        "unit": "次",
+                        "colorOne": "#04868bff",
+                        "colorTwo": "#09ecf5ff",
+                        "type_dictText": "大走访"
+                    },
+                    {
+                        "id": "1931337129878839297",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:07:09",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:35",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "阿克苏地区",
+                        "value": 84,
+                        "unit": "次",
+                        "colorOne": "#155e3bff",
+                        "colorTwo": "#4cfdb3ff",
+                        "type_dictText": "大走访"
+                    },
+                    {
+                        "id": "1931338203079598082",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:11:25",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:16",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "巴州",
+                        "value": 89,
+                        "unit": "次",
+                        "colorOne": "#777777ff",
+                        "colorTwo": "#f2f2f2ff",
+                        "type_dictText": "大走访"
+                    },
+                    {
+                        "id": "1931337348297220098",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:08:01",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-11 00:42:30",
+                        "sysOrgCode": "A01",
+                        "type": "1",
+                        "name": "乌鲁木齐市",
+                        "value": 94,
+                        "unit": "次",
+                        "colorOne": "#ab7a32ff",
+                        "colorTwo": "#fad663ff",
+                        "type_dictText": "大走访"
+                    }
+                ],
+                "total": 7,
+                "size": 99999,
+                "current": 1,
+                "orders": [],
+                "optimizeCountSql": true,
+                "searchCount": true,
+                "maxLimit": null,
+                "countId": null,
+                "pages": 1
+            },
+            "timestamp": 1749885446117
+        }
+    }, {
+        "url": "/anon/screen/getCenterOneDatas",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": [
+                {
+                    "adcode": "650100",
+                    "title": "乌鲁木齐市",
+                    "value": 442,
+                    "id": "1931352178219462657"
+                },
+                {
+                    "adcode": "650200",
+                    "title": "克拉玛依市",
+                    "value": 34,
+                    "id": "1931353172030435329"
+                },
+                {
+                    "adcode": "650500",
+                    "title": "哈密市",
+                    "value": 24,
+                    "id": "1931353172038823937"
+                },
+                {
+                    "adcode": "652700",
+                    "title": "博尔塔拉蒙古自治州",
+                    "value": 173,
+                    "id": "1931353172038823939"
+                }
+            ],
+            "timestamp": 1749885446132
+        }
+    }, {
+        "url": "/anon/screen/getCenterTwoDatas?column=sort&order=asc&pageNo=1&pageSize=99999",
+        "datas": {
+            "success": true,
+            "message": "",
+            "code": 200,
+            "result": {
+                "records": [
+                    {
+                        "id": "1931339740967297026",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:17:31",
+                        "updateBy": "admin",
+                        "updateTime": "2025-06-10 05:11:27",
+                        "sysOrgCode": "A01",
+                        "value": 56,
+                        "unit": "个",
+                        "name": "总数1",
+                        "sort": 1
+                    },
+                    {
+                        "id": "1931339803156242434",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:17:46",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 88,
+                        "unit": "个",
+                        "name": "总数2",
+                        "sort": 2
+                    },
+                    {
+                        "id": "1931339876200046594",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:18:04",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 51,
+                        "unit": "个",
+                        "name": "总数3",
+                        "sort": 3
+                    },
+                    {
+                        "id": "1931339961860317186",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:18:24",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 84,
+                        "unit": "个",
+                        "name": "总数4",
+                        "sort": 4
+                    },
+                    {
+                        "id": "1931340683771338754",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 345,
+                        "unit": "个",
+                        "name": "分组1",
+                        "sort": 5
+                    },
+                    {
+                        "id": "1931340683779727361",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 15,
+                        "unit": "个",
+                        "name": "分组1",
+                        "sort": 6
+                    },
+                    {
+                        "id": "1931340683779727362",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 38,
+                        "unit": "个",
+                        "name": "分组1",
+                        "sort": 7
+                    },
+                    {
+                        "id": "1931340683779727363",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 51,
+                        "unit": "个",
+                        "name": "分组1",
+                        "sort": 8
+                    },
+                    {
+                        "id": "1931340683779727364",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 69,
+                        "unit": "个",
+                        "name": "分组2",
+                        "sort": 9
+                    },
+                    {
+                        "id": "1931340683779727365",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 26,
+                        "unit": "个",
+                        "name": "分组2",
+                        "sort": 10
+                    },
+                    {
+                        "id": "1931340683779727366",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 18,
+                        "unit": "个",
+                        "name": "分组2",
+                        "sort": 11
+                    },
+                    {
+                        "id": "1931340683779727367",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 45,
+                        "unit": "个",
+                        "name": "分组2",
+                        "sort": 12
+                    },
+                    {
+                        "id": "1931340683779727368",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 49,
+                        "unit": "个",
+                        "name": "分组3",
+                        "sort": 13
+                    },
+                    {
+                        "id": "1931340683779727369",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 68,
+                        "unit": "个",
+                        "name": "分组3",
+                        "sort": 14
+                    },
+                    {
+                        "id": "1931340683779727370",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 26,
+                        "unit": "个",
+                        "name": "分组3",
+                        "sort": 15
+                    },
+                    {
+                        "id": "1931340683779727371",
+                        "createBy": "admin",
+                        "createTime": "2025-06-07 21:21:16",
+                        "updateBy": null,
+                        "updateTime": null,
+                        "sysOrgCode": "A01",
+                        "value": 77,
+                        "unit": "个",
+                        "name": "分组3",
+                        "sort": 16
+                    }
+                ],
+                "total": 16,
+                "size": 99999,
+                "current": 1,
+                "orders": [],
+                "optimizeCountSql": true,
+                "searchCount": true,
+                "maxLimit": null,
+                "countId": null,
+                "pages": 1
+            },
+            "timestamp": 1749885446157
+        }
+    }
+]

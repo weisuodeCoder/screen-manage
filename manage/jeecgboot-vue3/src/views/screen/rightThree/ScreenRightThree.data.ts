@@ -13,7 +13,7 @@ export const columns: BasicColumn[] = [
   {
     title: '名称',
     align: 'center',
-    dataIndex: 'name',
+    dataIndex: 'name_dictText',
   },
   {
     title: '数值',
@@ -50,7 +50,10 @@ export const searchFormSchema: FormSchema[] = [
   {
     label: '名称',
     field: 'name',
-    component: 'Input',
+    component: 'JSelectMultiple',
+    componentProps: {
+      dictCode: 'screen_center_region_code',
+    },
     //colProps: {span: 6},
   },
 ];
@@ -70,7 +73,10 @@ export const formSchema: FormSchema[] = [
   {
     label: '名称',
     field: 'name',
-    component: 'Input',
+    component: 'JDictSelectTag',
+    componentProps: {
+      dictCode: 'screen_center_region_code',
+    },
     dynamicRules: () => {
       return [{ required: true, message: '请输入名称!' }];
     },
@@ -110,7 +116,7 @@ export const formSchema: FormSchema[] = [
 // 高级查询数据
 export const superQuerySchema = {
   type: { title: '分类', order: 0, view: 'list', type: 'string', dictCode: 'screen_right_three_type' },
-  name: { title: '名称', order: 1, view: 'text', type: 'string' },
+  name: { title: '名称', order: 1, view: 'list', type: 'string', dictCode: 'screen_center_region_code' },
   value: { title: '数值', order: 2, view: 'number', type: 'number' },
   unit: { title: '单位', order: 3, view: 'text', type: 'string' },
   colorOne: { title: '颜色1', order: 4, view: 'text', type: 'string' },

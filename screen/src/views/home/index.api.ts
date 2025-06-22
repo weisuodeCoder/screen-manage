@@ -22,9 +22,9 @@ export enum TimeRangeEnum {
 }
 
 export enum TimeRangeThreeEnum {
-  year = "year", // 自有数据以来的年
-  last12 = "last12", // 往前推12个月
-  currentYear = "currentYear", // 1月到当前月
+  year = "36", // 自有数据以来的年
+  last12 = "12", // 往前推12个月
+  currentYear = "6", // 1月到当前月
 }
 
 export const getTitles = (params: Record<string, any>) =>

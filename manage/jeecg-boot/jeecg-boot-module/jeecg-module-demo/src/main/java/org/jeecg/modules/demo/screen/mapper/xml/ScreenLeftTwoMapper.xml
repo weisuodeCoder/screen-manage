@@ -2,33 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftTwoMapper">
     <select id="selectScreenLeftOneX" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftTwoX">
-        SELECT item_text as name, item_value as `value`
-        FROM `sys_dict_item`
-        WHERE dict_id = (
-            SELECT id
-            FROM sys_dict
-            WHERE dict_code='screen_left_two_class_name'
-            )
-        ORDER BY sort_order ASC;
+        SELECT title AS `name`, `sort` AS `value` FROM screen_left_two_type ORDER BY sort ASC;
     </select>
     <select id="selectScreenLeftOneY" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftTwoY">
         SELECT
-            sdi.item_text AS xData,
+            sdi.title AS xData,
             sm.title AS `name`,
             CONCAT(sm.color_one, ',', sm.color_two) AS colors,
             IFNULL(SUM(sd.value), 0) AS `value`
-        FROM
-            sys_dict_item sdi
-                LEFT JOIN
-            screen_left_two_data sd ON sdi.item_value = sd.class_name
-                LEFT JOIN
-            screen_left_two_main sm ON sd.group_id = sm.id
-        WHERE
-                sdi.dict_id = (SELECT id FROM sys_dict WHERE dict_code='screen_left_two_class_name')
-          AND `type` = #{type}
+        FROM screen_left_two_type sdi
+                 LEFT JOIN screen_left_two_data sd ON sdi.id = sd.class_name
+                 LEFT JOIN screen_left_two_main sm ON sd.group_id = sm.id
+        WHERE `type` = #{type}
         GROUP BY
-            sdi.item_text, sm.title, sm.color_one, sm.color_two, sm.sort
-        ORDER BY
-            sm.sort ASC;
+            sdi.title, sm.title, sm.color_one, sm.color_two, sm.sort
+        ORDER BY sm.sort ASC;
     </select>
 </mapper>

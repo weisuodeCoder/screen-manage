@@ -51,7 +51,7 @@ export const formSchema: FormSchema[] = [
     field: 'groupId',
     component: 'JDictSelectTag',
     componentProps: {
-      dictCode: 'screen_right_one_main,title,id',
+      dictCode: 'screen_right_one_main,title,id,type=1',
     },
     dynamicRules: () => {
       return [{ required: true, message: '请输入分组id!' }];

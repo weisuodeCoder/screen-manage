@@ -4,6 +4,7 @@ import React, {
   useCallback,
   forwardRef,
   useState,
+  useImperativeHandle,
 } from "react";
 import * as echarts from "echarts";
 import * as turf from "@turf/turf";
@@ -11,12 +12,14 @@ import "./ChartMap.less";
 import { createGeo } from "./hook";
 import Modal from "../modal/Modal";
 import ADCodeList from "./ADCodeList";
+import { IntervalWorkRef } from "@/views/type";
 
 interface MapDatasImpl {
   name: string;
   adcode: number;
   value: number;
   id: string;
+  title: string;
 }
 
 interface Props {
@@ -35,15 +38,15 @@ const defaultColors = [
   "#c62828",
 ];
 
-const ChartMap = forwardRef(
-  ({ elementId, datas = [], colors = defaultColors }: Props, ref) => {
+const ChartMap = forwardRef<IntervalWorkRef, Props>(
+  ({ elementId, datas = [], colors = defaultColors }, ref) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [groupId, setGroupId] = useState("");
     const chartRef = useRef<HTMLDivElement>(null);
     const chartInstance = useRef<any>(null);
     const currentMap = useRef<"china" | number>("china"); // 用来追踪当前地图
-    const tooltipInterval = useRef<NodeJS.Timeout | null>(null);
     const currentTooltipIndex = useRef(0);
+    const [title, setTitle] = useState("");
 
     const id = useRef(elementId || String(Math.floor(Math.random() * 1e6)));
 
@@ -60,7 +63,7 @@ const ChartMap = forwardRef(
       const option = instance.getOption();
 
       // 获取当前地图的所有数据点
-      const scatterData = option.series[1].data;
+      const scatterData = option?.series?.[1]?.data;
       if (!scatterData || scatterData.length === 0) return;
 
       // 循环显示 tooltip
@@ -97,7 +100,66 @@ const ChartMap = forwardRef(
             center: centerFeature.geometry.coordinates,
           };
         });
+
+        const getEffectScatterData = (
+          mapLevel: string | number,
+          allPoints: any[],
+          data: { name: string; value: string; center: [number, number] }[]
+        ): { name: string; value: number[]; adcode: string }[] => {
+          if (mapLevel === "china") {
+            // 聚合为省
+            const groups: { [key: string]: any[] } = {};
+
+            allPoints.forEach((point) => {
+              const provinceCode = String(point.adcode).slice(0, 2) + "0000";
+              if (!groups[provinceCode]) groups[provinceCode] = [];
+              groups[provinceCode].push(point);
+            });
+
+            const aggregated = Object.entries(groups).map(
+              ([provinceAdcode, points]) => {
+                let lnglat = [0, 0];
+                let name = "";
+
+                data.forEach((item) => {
+                  if (`${provinceAdcode}` === `${item.value}`) {
+                    lnglat = item.center;
+                    name = item.name;
+                  }
+                });
+                const count = points.reduce((sum, p) => sum + p.value, 0);
+
+                return {
+                  name, // 可自定义
+                  value: [...lnglat, count],
+                  adcode: provinceAdcode,
+                };
+              }
+            );
+
+            return aggregated;
+          } else {
+            const prefix = String(mapLevel).slice(0, 2);
+            const filterData = allPoints.filter((p) =>
+              String(p.adcode).startsWith(prefix)
+            );
+            return filterData.map((item) => {
+              let lnglat = [0, 0];
+              data.forEach((d) => {
+                if (`${d.value}` === `${item.adcode}`) lnglat = d.center;
+              });
+              return {
+                name: item.title,
+                value: [...lnglat, item.value],
+                adcode: item.adcode,
+                unit: item.unit,
+              };
+            });
+          }
+        };
+
         const effectScatterData = getEffectScatterData(adcode, datas, data);
+
         /** 后续需要的话添加，定义圆形的大小 */
         // const minSize = 8;
         // const maxSize = 20;
@@ -107,15 +169,15 @@ const ChartMap = forwardRef(
 
         const option = {
           tooltip: {
+            z: 9,
             formatter: (params: any) => {
-              const pData = params.data;
-              let name = pData?.name;
-              if (!name) {
-                const d = data.find((item: any) => item.value == pData.adcode);
-                name = d?.name;
-                return `${name}: ${pData?.value?.[2] || ""}`;
+              if (params.componentSubType === "effectScatter") {
+                return `${params.data.name}: ${params.data.value[2]} ${
+                  params.data.unit || ""
+                }`;
+              } else {
+                return "";
               }
-              return "";
             },
           },
           backgroundColor: "transparent",
@@ -124,7 +186,7 @@ const ChartMap = forwardRef(
             {
               type: "map",
               roam: false,
-              layoutCenter: ["50%", "55%"],
+              layoutCenter: ["50%", "50%"],
               layoutSize: "100%",
               itemStyle: {
                 normal: {
@@ -139,7 +201,7 @@ const ChartMap = forwardRef(
                 },
               },
               label: {
-                show: true,
+                show: false,
                 textStyle: {
                   color: "#ffffff",
                 },
@@ -158,7 +220,6 @@ const ChartMap = forwardRef(
             },
             {
               type: "effectScatter",
-
               coordinateSystem: "geo",
               showEffectOn: "render",
               zlevel: 1,
@@ -171,9 +232,11 @@ const ChartMap = forwardRef(
               label: {
                 show: true,
                 formatter: "{b}",
-                position: "right",
-                offset: [15, 0],
+                position: "bottom",
+                offset: [0, 10],
                 color: "#e9b61d",
+                fontSize: 14,
+                fontWeight: "bold",
               },
               /** 颜色自定义 */
               itemStyle: {
@@ -213,94 +276,31 @@ const ChartMap = forwardRef(
         };
         chartInstance.current.setOption(option);
         currentMap.current = adcode;
-
-        // 设置完选项后，清除旧的定时器并启动新的
-        if (tooltipInterval.current) {
-          clearInterval(tooltipInterval.current);
-        }
-
-        // 每秒(1000毫秒)切换一次 tooltip
-        tooltipInterval.current = setInterval(showNextTooltip, 3000);
-
-        // 立即显示第一个 tooltip
-        setTimeout(showNextTooltip, 500);
       },
-      [loadMap, showNextTooltip]
+      [loadMap]
     );
-
-    function getEffectScatterData(
-      mapLevel: string | number,
-      allPoints: any[],
-      data: { name: string; value: string; center: [number, number] }[]
-    ): { name: string; value: number[]; adcode: string }[] {
-      if (mapLevel === "china") {
-        // 聚合为省
-        const groups: { [key: string]: any[] } = {};
-
-        allPoints.forEach((point) => {
-          const provinceCode = String(point.adcode).slice(0, 2) + "0000";
-          if (!groups[provinceCode]) groups[provinceCode] = [];
-          groups[provinceCode].push(point);
-        });
-
-        const aggregated = Object.entries(groups).map(
-          ([provinceAdcode, points]) => {
-            let lnglat = [0, 0];
-            let name = "";
-
-            data.forEach((item) => {
-              if (`${provinceAdcode}` === `${item.value}`) {
-                lnglat = item.center;
-                name = item.name;
-              }
-            });
-            const count = points.reduce((sum, p) => sum + p.value, 0);
-
-            return {
-              name, // 可自定义
-              value: [...lnglat, count],
-              adcode: provinceAdcode,
-            };
-          }
-        );
-
-        return aggregated;
-      } else {
-        const prefix = String(mapLevel).slice(0, 2);
-        const filterData = allPoints.filter((p) =>
-          String(p.adcode).startsWith(prefix)
-        );
-        return filterData.map((item) => {
-          let lnglat = [0, 0];
-          data.forEach((d) => {
-            if (`${d.value}` === `${item.adcode}`) lnglat = d.center;
-          });
-          return {
-            name: item.name,
-            value: [...lnglat, item.value],
-            adcode: item.adcode,
-          };
-        });
-      }
-    }
 
     const onModalClose = () => {
       setIsModalOpen(false);
     };
 
-    useEffect(() => {
-      let instance: any;
+    const intervalWork = () => {
+      showNextTooltip();
+    };
 
+    useEffect(() => {
       const setup = async () => {
         // await setOptions("china");
         await setOptions(650000);
-        instance = chartInstance.current;
-        if (!instance) return;
+        if (!chartInstance.current) return;
 
-        instance.off("click"); // 防止重复绑定
-        instance.on("click", async (e: any) => {
+        chartInstance.current.off("click"); // 防止重复绑定
+        chartInstance.current.on("click", async (e: any) => {
           const adcode = e.data?.adcode || e.data?.value;
-          const id = datas.find((item) => item.adcode == adcode)?.id;
+          const data = datas.find((item) => item.adcode == adcode);
+          console.log(data);
+          setTitle(data.title);
+          const id = data?.adcode.toString();
           if (id) {
             setGroupId(id || "");
             setIsModalOpen(true);
@@ -311,13 +311,16 @@ const ChartMap = forwardRef(
       setup();
 
       return () => {
-        instance?.dispose();
+        chartInstance.current?.dispose();
       };
     }, [setOptions]);
 
+    useImperativeHandle(ref, () => ({
+      intervalWork,
+    }));
     return (
       <div className="map_box">
-        <Modal isOpen={isModalOpen} onClose={onModalClose}>
+        <Modal isOpen={isModalOpen} onClose={onModalClose} title={title}>
           {isModalOpen && <ADCodeList groupId={groupId} />}
         </Modal>
         <div id={id.current} className="map_container" ref={chartRef}></div>

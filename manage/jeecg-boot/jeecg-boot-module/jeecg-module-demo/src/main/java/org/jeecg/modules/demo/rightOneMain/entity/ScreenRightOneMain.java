@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 /**
  * @Description: 右一分组
  * @Author: jeecg-boot
- * @Date:   2025-06-07
+ * @Date:   2025-06-14
  * @Version: V1.0
  */
 @Data
@@ -60,6 +60,15 @@ public class ScreenRightOneMain implements Serializable {
 	@Excel(name = "名称", width = 15)
     @Schema(description = "名称")
     private java.lang.String title;
+	/**类型*/
+	@Excel(name = "类型", width = 15, dicCode = "screen_right_one_type")
+	@Dict(dicCode = "screen_right_one_type")
+    @Schema(description = "类型")
+    private java.lang.String type;
+	/**单位*/
+	@Excel(name = "单位", width = 15)
+    @Schema(description = "单位")
+    private java.lang.String unit;
 	/**排序*/
 	@Excel(name = "排序", width = 15)
     @Schema(description = "排序")

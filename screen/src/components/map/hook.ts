@@ -3,7 +3,7 @@ export const createGeo = (mapKey: string) => [
     map: mapKey,
     zoom: 1,
     roam: false,
-    layoutCenter: ["50%", "57%"],
+    layoutCenter: ["50%", "51.5%"],
     layoutSize: "100%",
     itemStyle: {
       normal: {
@@ -21,7 +21,7 @@ export const createGeo = (mapKey: string) => [
     map: mapKey,
     zoom: 1,
     roam: false,
-    layoutCenter: ["50%", "56%"],
+    layoutCenter: ["50%", "53%"],
     layoutSize: "100%",
     itemStyle: {
       normal: {

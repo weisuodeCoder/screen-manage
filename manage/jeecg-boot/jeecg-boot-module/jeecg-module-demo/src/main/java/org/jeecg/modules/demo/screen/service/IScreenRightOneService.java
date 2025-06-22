@@ -1,7 +1,7 @@
 package org.jeecg.modules.demo.screen.service;
 
-import org.jeecg.modules.demo.screen.entity.ScreenLeftOne;
 import org.jeecg.modules.demo.screen.entity.ScreenRightOne;
+import org.jeecg.modules.demo.screen.entity.ScreenRightOneList;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ import java.util.List;
  * @Version: V1.0
  */
 public interface IScreenRightOneService {
-    List<ScreenRightOne> getRightOneDatas();
+    ScreenRightOne getRightOneDatas();
 }

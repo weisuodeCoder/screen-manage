@@ -14,9 +14,9 @@ interface OptionsImpl {
 
 export default function FadeSelectBox({ onChange, defaultValue }: PropsImpl) {
   const options: OptionsImpl[] = [
-    { value: TimeRangeThreeEnum.year, label: "年" },
-    { value: TimeRangeThreeEnum.last12, label: "12月" },
-    { value: TimeRangeThreeEnum.currentYear, label: "月" },
+    { value: TimeRangeThreeEnum.year, label: "近3年" },
+    { value: TimeRangeThreeEnum.last12, label: "近1年" },
+    { value: TimeRangeThreeEnum.currentYear, label: "近半年" },
   ];
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(defaultValue || "");

@@ -1,126 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.demo.screen.mapper.ScreenLeftThreeMapper">
-    <select id="selectScreenLeftThreeX_1" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
+    <select id="selectScreenLeftThreeX" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
         SELECT
-        min_year + n AS `value`,
-        CONCAT(min_year + n, '年') AS `name`
+        DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%y年%m月') AS `name`,
+        DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%y年%m月') AS `value`
         FROM (
-        SELECT
-        (SELECT MIN(YEAR(TIME)) FROM screen_left_three_data) AS min_year,
-        YEAR(CURDATE()) AS max_year
-        ) AS year_range
-        JOIN (
+        SELECT n FROM (
+        -- 支持最多36个月(3年)的数据
         SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
         UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-        ) AS numbers
-        WHERE min_year + n &lt;= max_year
+        UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14
+        UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19
+        UNION SELECT 20 UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24
+        UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29
+        UNION SELECT 30 UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34
+        UNION SELECT 35
+        ) numbers
+        WHERE n &lt; #{timeRange}  -- 使用传入的6、12、36等参数
+        ) AS month_numbers
         ORDER BY `value`;
     </select>
-    <select id="selectScreenLeftThreeX_2" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
-        SELECT
-            DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y-%m') AS `value`,
-            DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y年%m月') AS `name`
-        FROM (
-                 SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
-                 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-                 UNION SELECT 10 UNION SELECT 11
-             ) numbers
-        ORDER BY `value`;
-    </select>
-    <select id="selectScreenLeftThreeX_3" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeX">
-        SELECT
-            DATE_FORMAT(DATE(CONCAT(YEAR(CURDATE()), '-', n, '-01')), '%Y-%m') AS `value`,
-            DATE_FORMAT(DATE(CONCAT(YEAR(CURDATE()), '-', n, '-01')), '%Y年%m月') AS `name`
-        FROM (
-                 SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
-                 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-                 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12
-             ) numbers
-        WHERE n &lt;= MONTH(CURDATE())
-        ORDER BY `value`;
-    </select>
-    <select id="selectScreenLeftThreeY_1" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
+
+    <select id="selectScreenLeftThreeY" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
         SELECT
         gd.id,
         gd.title AS `name`,
-        CONCAT('[', GROUP_CONCAT(gd.year_value ORDER BY gd.year), ']') AS datas,
-        gd.color
-        FROM (
-        SELECT
-        m.id,
-        m.title,
-        m.color_one AS color,
-        y.year,
-        IFNULL(ROUND(AVG(d.value), 2), 0) AS year_value
-        FROM
-        screen_left_three_main m
-        CROSS JOIN (
-        SELECT min_year + n AS YEAR
-        FROM (
-        SELECT
-        (SELECT MIN(YEAR(TIME)) FROM screen_left_three_data) AS min_year,
-        YEAR(CURDATE()) AS max_year
-        ) AS year_range
-        JOIN (
-        SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
-        UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-        ) AS numbers
-        WHERE min_year + n &lt;= max_year
-        ) AS Y
-        LEFT JOIN
-        screen_left_three_data d ON d.group_id = m.id AND YEAR(d.time) = y.year
-        WHERE
-        m.id IN (SELECT DISTINCT group_id FROM screen_left_three_data)
-        GROUP BY
-        m.id, m.title, m.color_one, y.year
-        ORDER BY
-        m.id, y.year
-        ) AS gd
-        GROUP BY
-        gd.id, gd.title, gd.color;
-    </select>
-    <select id="selectScreenLeftThreeY_2" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
-        SELECT
-            gd.id,
-            gd.title AS NAME,
-            CONCAT('[', GROUP_CONCAT(gd.month_value ORDER BY gd.month_start), ']') AS datas,
-            gd.color
-        FROM (
-                 SELECT
-                     m.id,
-                     m.title,
-                     m.color_one AS color,
-                     l.month_start,
-                     IFNULL(ROUND(AVG(d.value), 2), 0) AS month_value
-                 FROM
-                     screen_left_three_main m
-                         CROSS JOIN (
-                         SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL n MONTH), '%Y-%m-01') AS month_start
-                         FROM (
-                                  SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
-                                  UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-                                  UNION SELECT 10 UNION SELECT 11
-                              ) AS numbers
-                         ORDER BY month_start DESC
-                     ) AS l
-                         LEFT JOIN
-                     screen_left_three_data d ON d.group_id = m.id
-                         AND DATE_FORMAT(d.time, '%Y-%m-01') = l.month_start
-                 WHERE
-                     m.id IN (SELECT DISTINCT group_id FROM screen_left_three_data)
-                 GROUP BY
-                     m.id, m.title, m.color_one, l.month_start
-                 ORDER BY
-                     m.id, l.month_start
-             ) AS gd
-        GROUP BY
-            gd.id, gd.title, gd.color;
-    </select>
-    <select id="selectScreenLeftThreeY_3" resultType="org.jeecg.modules.demo.screen.entity.ScreenLeftThreeY">
-        SELECT
-        gd.id,
-        gd.title AS name,
         CONCAT('[', GROUP_CONCAT(gd.month_value ORDER BY gd.month_start), ']') AS datas,
         gd.color
         FROM (
@@ -128,29 +33,37 @@
         m.id,
         m.title,
         m.color_one AS color,
-        c.month_start,
+        DATE_FORMAT(date_range.month_start, '%Y-%m-01') AS month_start,
         IFNULL(ROUND(AVG(d.value), 2), 0) AS month_value
         FROM
         screen_left_three_main m
         CROSS JOIN (
-        SELECT DATE_FORMAT(DATE(CONCAT(YEAR(CURDATE()), '-', n, '-01')), '%Y-%m-01') AS month_start
+        SELECT
+        DATE_SUB(
+        DATE_FORMAT(CURDATE(), '%Y-%m-01'),
+        INTERVAL n MONTH
+        ) AS month_start
         FROM (
-        SELECT 1 AS n UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5
-        UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-        UNION SELECT 10 UNION SELECT 11 UNION SELECT 12
+        SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4
+        UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+        UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14
+        UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19
+        UNION SELECT 20 UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24
+        UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29
+        UNION SELECT 30 UNION SELECT 31 UNION SELECT 32 UNION SELECT 33 UNION SELECT 34
+        UNION SELECT 35
         ) AS numbers
-        WHERE n &lt;= MONTH(CURDATE())
-        ORDER BY month_start
-        ) AS c
+        WHERE n &lt; #{timeRange}  -- 这里使用传入的6、12、36等参数
+        ) AS date_range
         LEFT JOIN
         screen_left_three_data d ON d.group_id = m.id
-        AND DATE_FORMAT(d.time, '%Y-%m-01') = c.month_start
+        AND DATE_FORMAT(d.time, '%Y-%m-01') = date_range.month_start
         WHERE
         m.id IN (SELECT DISTINCT group_id FROM screen_left_three_data)
         GROUP BY
-        m.id, m.title, m.color_one, c.month_start
+        m.id, m.title, m.color_one, date_range.month_start
         ORDER BY
-        m.id, c.month_start
+        m.id, date_range.month_start
         ) AS gd
         GROUP BY
         gd.id, gd.title, gd.color;
